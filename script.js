@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalDesc.innerText = desc + " This is a premium product from Anqah Group, ensuring the highest quality and satisfaction.";
             modalPrice.innerText = price;
             modalImg.src = img;
+            modalImg.alt = title;
 
             // Update WhatsApp link with product details
             const message = `Hello Anqah Group, I am interested in inquiring about "${title}" priced at ${price}. Could you provide more details?`;

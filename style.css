@@ -155,6 +155,43 @@ ul {
     to { transform: rotate(360deg); }
 }
 
+/* Trust Badges */
+.trust-badges {
+    padding: 60px 20px;
+    background: var(--bg-color);
+}
+
+.badge-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    gap: 30px;
+    flex-wrap: wrap;
+    text-align: center;
+}
+
+.badge-item {
+    flex: 1;
+    min-width: 250px;
+}
+
+.badge-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.badge-item h3 {
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.badge-item p {
+    font-size: 0.9rem;
+    color: #888;
+}
+
 /* Products Section */
 .products {
     padding: 100px 10%;
@@ -219,6 +256,50 @@ ul {
     font-weight: 700;
     color: var(--primary);
     margin-bottom: 20px;
+}
+
+/* FAQ Section */
+.faq-section {
+    padding: 100px 20px;
+    background: var(--bg-color);
+}
+
+.faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+}
+
+.faq-container details {
+    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    padding: 15px 0;
+}
+
+.faq-container summary {
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    list-style: none;
+    position: relative;
+    padding-right: 30px;
+}
+
+.faq-container summary::after {
+    content: '+';
+    position: absolute;
+    right: 0;
+    color: var(--primary-color);
+}
+
+.faq-container details[open] summary::after {
+    content: '-';
+}
+
+.faq-container p {
+    padding: 15px 0;
+    color: #888;
+    line-height: 1.6;
 }
 
 /* Contact Section */
