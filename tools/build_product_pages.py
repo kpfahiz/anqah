@@ -529,8 +529,10 @@ def page(base, lang):
 {hreflang}
     <meta name="geo.region" content="AE-AZ">
     <meta name="geo.placename" content="Abu Dhabi">
-    <link rel="icon" type="image/png" href="{root}images/favicon.png">
-    <link rel="apple-touch-icon" href="{root}images/favicon.png">
+    <link rel="icon" href="{root}favicon.ico" sizes="48x48">
+    <link rel="icon" type="image/png" sizes="48x48" href="{root}images/favicon-48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="{root}images/favicon.png">
+    <link rel="apple-touch-icon" href="{root}images/apple-touch-icon.png">
     <link rel="manifest" href="{root}site.webmanifest">
     <meta property="og:type" content="product">
     <meta property="og:site_name" content="Anqah Tech">
