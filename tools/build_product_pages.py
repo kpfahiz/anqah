@@ -337,10 +337,11 @@ def wa_link(text):
     return f'https://wa.me/{WHATSAPP}?text={quote(text)}'
 
 
-def header(lang, root, switch_href):
+def header(lang, root, switch_href, active='#products'):
     t = UI[lang]
     current = ' aria-current="page"'
-    nav = ''.join(f'<li><a href="../index.html{h}"{current if h == "#products" else ""}>{label}</a></li>' for h, label in t['nav'])
+    nav = ''.join(f'<li><a href="{h if h[0] != "#" else "../index.html" + h}"{current if h == active else ""}>{label}</a></li>'
+                  for h, label in t['nav'])
     sw_label, sw_lang = t['switch']
     return f'''    <div class="scanlines" aria-hidden="true"></div>
     <header id="header">
@@ -367,9 +368,9 @@ def header(lang, root, switch_href):
     </header>'''
 
 
-def footer(lang, root, switch_href):
+def footer(lang, root, switch_href, product_dir=''):
     t = UI[lang]
-    links = ''.join(f'<a href="{p["slug"]}.html">{localize(p, lang)["name"]}</a>' for p in PRODUCTS)
+    links = ''.join(f'<a href="{product_dir}{p["slug"]}.html">{localize(p, lang)["name"]}</a>' for p in PRODUCTS)
     services = ''.join(f'<a href="../index.html#services">{s}</a>' for s in t['services_links'])
     sw_label, sw_lang = t['switch']
     return f'''    <footer>
@@ -387,7 +388,7 @@ def footer(lang, root, switch_href):
             </div>
             <div>
                 <h4>{t['services']}</h4>
-                {services}
+                {services}<a href="../blog/">{t['guides']}</a>
             </div>
             <div>
                 <h4>{t['contact']}</h4>

@@ -7,7 +7,7 @@ Image file names in tabs / gallery / photos stay the same as the English ones.
 # Page-template strings
 UI = {
     'en': {
-        'nav': [('#products', 'Products'), ('#services', 'Services'), ('#about', 'About'), ('#why', 'Why Us'), ('#contact', 'Contact')],
+        'nav': [('#products', 'Products'), ('#services', 'Services'), ('#about', 'About'), ('#why', 'Why Us'), ('../blog/', 'Guides'), ('#contact', 'Contact')],
         'talk': 'Talk to us', 'menu': 'Open menu', 'home_label': 'Anqah Tech home', 'logo_alt': 'Anqah Tech logo',
         'home': 'Home', 'products': 'Products', 'enquire': 'Enquire on WhatsApp', 'call': 'Call us',
         'hover': '[ hover to interact ]', 'model': 'Interactive 3D model of {name}', 'facts': 'Key facts',
@@ -29,11 +29,16 @@ UI = {
         'smart': 'Smart solutions.<br>Reliable service.', 'start': 'Start a project',
         'services': 'Services', 'services_links': ['Web Development', 'Mobile Apps', 'CCTV &amp; Security', 'Home Automation', 'IT Infrastructure'],
         'contact': 'Contact', 'whatsapp': 'WhatsApp', 'city': 'Abu Dhabi, UAE',
+        'guides': 'Guides', 'guides_h': 'Guides &amp; insights',
+        'guides_p': 'Practical guides on POS systems, school bells and water tank monitoring for businesses, schools and homes in the UAE, Saudi Arabia and India.',
+        'guides_title': 'Guides: POS Software, School Bells &amp; Tank Monitoring | Anqah Tech',
+        'read': 'Read guide', 'published': 'Published', 'related': 'Related product', 'see': 'See {name}',
+        'more_guides': 'More guides', 'all_guides': 'All guides', 'min': '{n} min read',
         'rights': 'Anqah Tech. All rights reserved.', 'switch': ('عربي', 'ar'), 'chat': 'Chat on WhatsApp',
         'logo_word': '{name} logo',
     },
     'ar': {
-        'nav': [('#products', 'المنتجات'), ('#services', 'الخدمات'), ('#about', 'من نحن'), ('#why', 'لماذا نحن'), ('#contact', 'تواصل معنا')],
+        'nav': [('#products', 'المنتجات'), ('#services', 'الخدمات'), ('#about', 'من نحن'), ('#why', 'لماذا نحن'), ('../blog/', 'أدلة'), ('#contact', 'تواصل معنا')],
         'talk': 'تحدّث معنا', 'menu': 'فتح القائمة', 'home_label': 'الصفحة الرئيسية لـ Anqah Tech', 'logo_alt': 'شعار Anqah Tech',
         'home': 'الرئيسية', 'products': 'المنتجات', 'enquire': 'استفسر عبر واتساب', 'call': 'اتصل بنا',
         'hover': '[ مرّر المؤشر للتفاعل ]', 'model': 'نموذج تفاعلي ثلاثي الأبعاد لـ {name}', 'facts': 'أرقام رئيسية',
@@ -55,6 +60,11 @@ UI = {
         'smart': 'حلول ذكية.<br>خدمة موثوقة.', 'start': 'ابدأ مشروعك',
         'services': 'الخدمات', 'services_links': ['تطوير المواقع', 'تطبيقات الجوال', 'كاميرات المراقبة والأمن', 'أتمتة المنازل', 'البنية التحتية لتقنية المعلومات'],
         'contact': 'تواصل معنا', 'whatsapp': 'واتساب', 'city': 'أبوظبي، الإمارات',
+        'guides': 'أدلة', 'guides_h': 'أدلة ومقالات',
+        'guides_p': 'أدلة عملية عن أنظمة نقاط البيع وأجراس المدارس ومراقبة خزانات المياه للشركات والمدارس والمنازل في الإمارات والسعودية والهند.',
+        'guides_title': 'أدلة: برامج الكاشير وأجراس المدارس ومراقبة الخزانات | Anqah Tech',
+        'read': 'اقرأ الدليل', 'published': 'نُشر في', 'related': 'المنتج المرتبط', 'see': 'شاهد {name}',
+        'more_guides': 'أدلة أخرى', 'all_guides': 'كل الأدلة', 'min': 'قراءة {n} دقائق',
         'rights': 'Anqah Tech. جميع الحقوق محفوظة.', 'switch': ('English', 'en'), 'chat': 'تواصل معنا عبر واتساب',
         'logo_word': 'شعار {name}',
     },

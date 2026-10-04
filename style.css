@@ -575,3 +575,32 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: var(-
 [dir="rtl"] .svc-list .i, [dir="rtl"] .tab-i, [dir="rtl"] .stack span:not(.stack-label), [dir="rtl"] .num {
     font-family: 'JetBrains Mono', ui-monospace, monospace;
 }
+
+/* ---------- Guides (blog) ---------- */
+.bl-hero { max-width: 880px; margin: 0 auto; padding: 140px 28px 24px; }
+.bl-hero h1 { font-size: clamp(2.1rem, 5vw, 3.6rem); text-transform: uppercase; margin: 14px 0 16px; line-height: 1.05; }
+.bl-hero .lead { max-width: none; font-size: 1.15rem; color: var(--text); }
+.bl-meta { font-family: var(--font-mono); font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 22px; }
+.bl-body { max-width: 880px; margin: 0 auto; padding: 8px 28px 40px; }
+.bl-body h2 { font-size: clamp(1.4rem, 2.6vw, 1.9rem); text-transform: uppercase; margin: 44px 0 14px; padding-top: 22px; border-top: 1px solid var(--line); }
+.bl-body p, .bl-body li { color: var(--muted); font-size: 1.04rem; line-height: 1.75; }
+.bl-body p + p { margin-top: 12px; }
+.bl-body strong, .bl-body em { color: var(--text); }
+.bl-body ul { list-style: none; display: grid; gap: 10px; margin: 12px 0; }
+.bl-body ul li { padding-left: 26px; position: relative; }
+.bl-body ul li::before { content: '[+]'; position: absolute; left: 0; color: var(--accent); font-family: var(--font-mono); font-size: 0.72rem; top: 0.45em; }
+.bl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+.bl-card { display: flex; flex-direction: column; gap: 12px; padding: 26px; background: var(--panel); border: 1px solid var(--line); transition: background .25s, border-color .25s; }
+.bl-card:hover { background: var(--panel-2); border-color: var(--accent); }
+.bl-card small { font-family: var(--font-mono); font-size: 0.66rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.1em; }
+.bl-card h3 { font-size: 1.25rem; text-transform: uppercase; line-height: 1.2; }
+.bl-card p { color: var(--muted); font-size: 0.95rem; flex: 1; }
+.bl-index { padding-top: 24px; }
+[dir="rtl"] .bl-body ul li { padding-left: 0; padding-right: 30px; }
+[dir="rtl"] .bl-body ul li::before { left: auto; right: 0; }
+[dir="rtl"] .bl-hero h1, [dir="rtl"] .bl-body h2 { line-height: 1.4; }
+@media (max-width: 760px) {
+    .bl-hero { padding: 120px 16px 16px; }
+    .bl-body { padding: 0 16px 28px; }
+}
+.bl-all { margin-top: 28px; }

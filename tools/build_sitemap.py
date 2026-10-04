@@ -2,8 +2,12 @@
 Run after adding pages or images:
     python tools/build_sitemap.py
 """
+import sys
 from datetime import date
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from blog_content import ARTICLES  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = 'https://www.anqah.com'
@@ -20,6 +24,8 @@ PAGES = {
     'products/sello-lite.html': ['images/og/og-sello-lite.jpg', 'images/products/sello-lite-logo.png', *images('sello-lite')],
     'products/automatic-bell.html': ['images/og/og-automatic-bell.jpg', *images('automatic-bell')],
     'products/water-monitoring.html': ['images/og/og-water-monitoring.jpg'],
+    'blog/': [],
+    **{f'blog/{a["slug"]}.html': [f'images/og/og-{a["product"]}.jpg'] for a in ARTICLES},
 }
 HREFLANG_EN = ('en', 'en-AE', 'en-SA', 'en-IN', 'x-default')
 HREFLANG_AR = ('ar', 'ar-AE', 'ar-SA')
@@ -33,7 +39,8 @@ def main():
         alternates = [f'<xhtml:link rel="alternate" hreflang="{h}" href="{en}"/>' for h in HREFLANG_EN]
         alternates += [f'<xhtml:link rel="alternate" hreflang="{h}" href="{ar}"/>' for h in HREFLANG_AR]
         image_tags = [f'<image:image><image:loc>{SITE}/{i}</image:loc></image:image>' for i in imgs]
-        for loc, prio in ((en, '1.0' if not path else '0.8'), (ar, '0.9' if not path else '0.7')):
+        blog = path.startswith('blog/')
+        for loc, prio in ((en, '1.0' if not path else '0.6' if blog else '0.8'), (ar, '0.9' if not path else '0.5' if blog else '0.7')):
             lines = [f'<loc>{loc}</loc>', f'<lastmod>{today}</lastmod>', '<changefreq>monthly</changefreq>',
                      f'<priority>{prio}</priority>', *alternates, *image_tags]
             rows.append('  <url>\n' + ''.join(f'    {line}\n' for line in lines) + '  </url>')
