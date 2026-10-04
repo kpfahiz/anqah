@@ -386,6 +386,18 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: var(-
 .lb-close { position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; border: 1px solid var(--line-2); background: rgba(15, 18, 21, 0.9); color: var(--text); font-size: 1.2rem; cursor: pointer; }
 .lb-close:hover { color: var(--accent); border-color: var(--accent); }
 
+/* ---------- Product photos (product pages) ---------- */
+.photos { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.photo { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.photo a { position: relative; display: block; overflow: hidden; border: 1px solid var(--line-2); transition: border-color .25s, box-shadow .25s; }
+.photo a:hover, .photo a:focus-visible { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent-soft), 0 18px 50px rgba(0, 0, 0, 0.45); outline: none; }
+.photo img { display: block; width: 100%; height: auto; transition: transform .5s ease; }
+.photo a:hover img { transform: scale(1.03); }
+.photo a:hover .shot-zoom, .photo a:focus-visible .shot-zoom { opacity: 1; }
+.photo figcaption { color: var(--muted); font-size: 0.9rem; }
+.photo figcaption b { display: block; font-family: var(--font-display); font-size: 1.05rem; text-transform: uppercase; color: var(--text); margin-bottom: 2px; }
+.photo figcaption b::before { content: '> '; color: var(--accent); font-family: var(--font-mono); }
+
 /* ---------- Feature tabs (product pages) ---------- */
 .tabs { display: grid; grid-template-columns: 260px 1fr; border: 1px solid var(--line); background: var(--panel); }
 .tab-list { display: flex; flex-direction: column; border-right: 1px solid var(--line); }
@@ -450,6 +462,7 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: var(-
     .pd-hero { grid-template-columns: 1fr; padding-top: 130px; gap: 36px; }
     .pd-two, .pd-others { grid-template-columns: 1fr; }
     .gallery { grid-template-columns: 1fr 1fr; }
+    .photos { grid-template-columns: 1fr; }
     .tabs { grid-template-columns: 1fr; }
     .tab-list { flex-direction: row; overflow-x: auto; border-right: none; border-bottom: 1px solid var(--line); scrollbar-width: none; }
     .tab-list::-webkit-scrollbar { display: none; }

@@ -146,6 +146,34 @@ PRODUCTS = [
         'status': 'Pilot',
         'logo': None,
         'scene': 'bell',
+        # Real School Bell app screens (frames from the app recording): (tab, screenshot, heading, text, points)
+        'tabs': [
+            ('Home', 'bell-app-home.webp', 'Everything at a glance',
+             'The current time, the next bell, today&rsquo;s schedule and a manual ring &mdash; all on one screen.',
+             ['Live clock from the controller', 'Next bell and today&rsquo;s bells', 'Manual ring on the same screen']),
+            ('Manual ring', 'bell-app-ringing.webp', 'Ring the bell from your phone',
+             'Pick 3, 5, 10 or 30 seconds &mdash; or type any duration &mdash; and tap Ring for assemblies, drills or emergencies.',
+             ['Quick 3s / 5s / 10s / 30s presets', 'Custom duration in seconds', 'Instant confirmation in the app']),
+            ('Schedule', 'bell-app-schedule.webp', 'Set the daily timetable',
+             'Up to 10 bells a day. Switch each one on or off, set its time and how many seconds it rings.',
+             ['Up to 10 bells per day', 'On / off per bell', 'Ring length per bell']),
+            ('Weekdays', 'bell-app-weekdays.webp', 'Choose the working days',
+             'Tap a day to mark it off &mdash; no bells ring on weekends or any day you switch off.',
+             ['Tap a day to turn it off', 'Weekends skipped automatically', 'Saved on the controller']),
+            ('Holidays', 'bell-app-holidays.webp', 'Skip holidays and exam days',
+             'Add dates once and the bell stays silent on those days, then carries on as normal.',
+             ['Pick dates from a calendar', 'Remove a holiday in one tap', 'No rewiring or reprogramming']),
+            ('Settings', 'bell-app-settings.webp', 'Connect to the school WiFi',
+             'Point the app at the controller, test the connection and join it to the school network.',
+             ['Device address or setup hotspot', 'Test connection', 'WiFi setup with save &amp; restart']),
+        ],
+        # Product images supplied by Anqah Tech: (file, title, caption)
+        'photos': [
+            ('bell-system-steel.webp', 'Wall panel + app control',
+             'A brushed-steel wall panel with a one-touch bell button, managed from the phone app and an office dashboard.'),
+            ('bell-system-white.webp', 'Timetable at a glance',
+             'Upcoming bells on the phone, the full timetable on the dashboard, and a manual trigger whenever you need it.'),
+        ],
         'terminal': 'bell.schedule load timetable.json|bell.holidays add 2026-12-02|bell.ring --manual',
         'statement': 'A WiFi school bell controller that rings automatically on a preset schedule, skips weekends and '
                      'holidays on its own, and is managed from a mobile app.',
@@ -318,6 +346,21 @@ def tabs_section(p, n):
 '''
 
 
+def photos_section(p, n):
+    folder = f'../images/products/{p["slug"]}'
+    figs = ''.join(
+        f'<figure class="photo reveal"><a href="{folder}/{f}" data-lightbox="{p["slug"]}" data-caption="{t} &mdash; {c}">'
+        f'<img src="{folder}/{f}" alt="{p["name"]}: {t.lower()}" width="1408" height="768" loading="{"eager" if i == 0 else "lazy"}">'
+        f'<span class="shot-zoom">[ enlarge ]</span></a><figcaption><b>{t}</b>{c}</figcaption></figure>'
+        for i, (f, t, c) in enumerate(p['photos']))
+    return f'''
+        <section class="section">
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{p["name"]} system</h2><p>The wall panel, the mobile app and the dashboard working together. Click an image to enlarge.</p></div></header>
+            <div class="photos">{figs}</div>
+        </section>
+'''
+
+
 def gallery_section(p, n):
     # Each screen is shown on a real POS terminal photo (`*-device.webp`); clicking opens the raw screenshot.
     folder = f'../images/products/{p["slug"]}'
@@ -357,7 +400,8 @@ def page(p):
         for o in PRODUCTS if o is not p)
     counter = iter(range(1, 20))
     n = lambda: f'{next(counter):02d}'
-    gallery = gallery_section(p, n) if p.get('gallery') else (tabs_section(p, n) if p.get('tabs') else '')
+    gallery = ''.join(
+        fn(p, n) for key, fn in (('gallery', gallery_section), ('tabs', tabs_section), ('photos', photos_section)) if p.get(key))
     title = f'{name} | {plain(p["category"])} | Anqah Tech'
     desc = plain(p['statement'])
     url = f'{SITE}/products/{p["slug"]}.html'

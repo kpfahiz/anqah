@@ -563,88 +563,223 @@ function initTerminal(canvas) {
 }
 
 /* ------------------------------------------------------------------ */
-/* PRODUCT: Automatic Bell — swings and emits sound rings on hover      */
+/* PRODUCT: Automatic Bell — wall control panel + phone running the    */
+/* real School Bell app; hovering rings the bell from the phone         */
 /* ------------------------------------------------------------------ */
+function brushedTexture(tint = 200) {
+    return canvasTexture(512, 512, (ctx, w, h) => {
+        ctx.fillStyle = `rgb(${tint},${tint + 2},${tint + 5})`;
+        ctx.fillRect(0, 0, w, h);
+        for (let y = 0; y < h; y++) {
+            const v = tint + (Math.random() - 0.5) * 34;
+            ctx.fillStyle = `rgba(${v},${v + 2},${v + 5},0.55)`;
+            ctx.fillRect(0, y, w, 1);
+        }
+    });
+}
+
 function initBell(canvas) {
     const card = canvas.closest('.product, .pd-stage') || canvas;
-    const stage = createStage(canvas, { fov: 32, z: 7.2, hoverTarget: card, minAspect: 1.5 });
-    const { scene } = stage;
-    addLights(scene);
+    const stage = createStage(canvas, { fov: 30, z: 7.4, hoverTarget: card, minAspect: 1.3 });
+    const { scene, camera } = stage;
+    camera.position.x = 1.1;
+    camera.lookAt(0, 0, 0);
+    scene.add(new THREE.HemisphereLight('#f4f1ea', '#3a3530', 1.2));
+    const key = new THREE.DirectionalLight('#fff4e0', 2.4);
+    key.position.set(-3, 3, 5);
+    scene.add(key);
+    const fill = new THREE.PointLight('#bfe0ff', 6, 10);
+    fill.position.set(3, -1, 3);
+    scene.add(fill);
 
     const root = new THREE.Group();
-    root.position.y = -0.15;
     scene.add(root);
 
-    const metal = new THREE.MeshStandardMaterial({ color: '#c9a646', metalness: 0.95, roughness: 0.25, side: THREE.DoubleSide, emissive: '#3a2a05', emissiveIntensity: 0.4 });
-    const steel = new THREE.MeshStandardMaterial({ color: '#1e2a44', metalness: 0.8, roughness: 0.35 });
+    // Plaster wall, lit from the upper left
+    const wall = new THREE.Mesh(new THREE.PlaneGeometry(14, 9), new THREE.MeshStandardMaterial({
+        roughness: 0.95,
+        map: canvasTexture(512, 512, (ctx, w, h) => {
+            const g = ctx.createRadialGradient(w * 0.35, h * 0.3, 20, w * 0.5, h * 0.5, w * 0.75);
+            g.addColorStop(0, '#d8d4cc');
+            g.addColorStop(1, '#8f8b84');
+            ctx.fillStyle = g;
+            ctx.fillRect(0, 0, w, h);
+            for (let i = 0; i < 9000; i++) {
+                ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.03)';
+                ctx.fillRect(Math.random() * w, Math.random() * h, 2, 2);
+            }
+        }),
+    }));
+    wall.position.z = -0.12;
+    root.add(wall);
 
-    // Wall mount bracket
-    const plate = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.18, 0.4), steel);
-    plate.position.y = 1.3;
-    root.add(plate);
-
-    const pivot = new THREE.Group();
-    pivot.position.y = 1.2;
-    root.add(pivot);
-
-    // Bell body (lathe profile, like a Blender screw/spin modifier)
-    const profile = [
-        [0.0, 0.02], [0.14, 0.0], [0.24, -0.08], [0.31, -0.28], [0.36, -0.6], [0.43, -0.9],
-        [0.58, -1.12], [0.76, -1.28], [0.82, -1.36], [0.78, -1.4],
-    ].map(([x, y]) => new THREE.Vector2(x, y));
-    const bell = new THREE.Mesh(new THREE.LatheGeometry(profile, 64), metal);
-    pivot.add(bell);
-    const crown = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.035, 12, 24), metal);
-    crown.position.y = 0.06;
-    pivot.add(crown);
-
-    // Clapper hangs from the inside top
-    const clapperPivot = new THREE.Group();
-    clapperPivot.position.y = -0.1;
-    pivot.add(clapperPivot);
-    const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 1.0, 8), steel);
-    rod.position.y = -0.5;
-    clapperPivot.add(rod);
-    const ball = new THREE.Mesh(new THREE.SphereGeometry(0.11, 24, 24), steel);
-    ball.position.y = -1.05;
-    clapperPivot.add(ball);
-
-    // Controller box with a timetable display
-    const timerTex = canvasTexture(256, 128, (ctx, w, h) => {
-        ctx.fillStyle = '#04101f'; ctx.fillRect(0, 0, w, h);
-        ctx.fillStyle = '#b6ff3b'; ctx.font = 'bold 54px "JetBrains Mono", monospace'; ctx.fillText('08:30', 36, 74);
-        ctx.fillStyle = '#8ea3c4'; ctx.font = '18px "IBM Plex Sans", sans-serif'; ctx.fillText('NEXT: PERIOD 1', 50, 108);
+    // --- Control panel (brushed steel) ---
+    const panel = new THREE.Group();
+    panel.position.set(0.85, -0.05, 0);
+    root.add(panel);
+    const steelTex = brushedTexture(190);
+    const steel = new THREE.MeshStandardMaterial({ color: '#d7dbe0', map: steelTex, metalness: 0.85, roughness: 0.32 });
+    const plateGeo = new THREE.ExtrudeGeometry(roundedRectShape(1.7, 1.9, 0.14), {
+        depth: 0.08, bevelEnabled: true, bevelThickness: 0.03, bevelSize: 0.03, bevelSegments: 4, curveSegments: 12,
     });
-    const ctrl = new THREE.Group();
-    ctrl.position.set(1.35, -0.75, 0.2);
-    ctrl.rotation.y = -0.4;
-    ctrl.add(new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.55, 0.16), steel));
-    const disp = new THREE.Mesh(new THREE.PlaneGeometry(0.76, 0.38), new THREE.MeshBasicMaterial({ map: timerTex, toneMapped: false }));
-    disp.position.z = 0.081;
-    ctrl.add(disp);
-    root.add(ctrl);
+    plateGeo.center();
+    const plate = new THREE.Mesh(plateGeo, steel);
+    plate.position.z = -0.02;
+    panel.add(plate);
+    const faceTex = canvasTexture(512, 576, (ctx, w) => {
+        ctx.drawImage(steelTex.image, 0, 0, w, 576);
+        ctx.fillStyle = 'rgba(30,34,40,0.85)';
+        ctx.textAlign = 'center';
+        ctx.font = '600 40px "Chakra Petch", sans-serif';
+        ctx.fillText('SMART BELL SYSTEM', w / 2, 70);
+        ctx.font = '500 26px "IBM Plex Sans", sans-serif';
+        ctx.fillText('SCHEDULED CONTROL', w / 2, 108);
+        ctx.font = '600 32px "Chakra Petch", sans-serif';
+        ctx.fillText('ACTIVATE BELL', w / 2, 470);
+        ctx.font = '500 21px "IBM Plex Sans", sans-serif';
+        ctx.fillText('PRESS TO TRIGGER SCHEDULED BELL', w / 2, 508);
+    });
+    const face = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 1.69), new THREE.MeshStandardMaterial({ map: faceTex, metalness: 0.7, roughness: 0.4 }));
+    face.position.z = 0.062;
+    panel.add(face);
 
-    // Sound rings
-    const rings = [0, 1, 2].map(() => {
-        const r = new THREE.Mesh(new THREE.TorusGeometry(0.9, 0.012, 8, 96), new THREE.MeshBasicMaterial({ color: SIGNAL, transparent: true, opacity: 0 }));
-        r.position.y = 0.4;
-        root.add(r);
-        return r;
+    // Status display
+    const lcdTex = canvasTexture(256, 64, () => {});
+    const drawLcd = (txt, col) => {
+        const ctx = lcdTex.userData.ctx;
+        ctx.fillStyle = '#081210';
+        ctx.fillRect(0, 0, 256, 64);
+        ctx.fillStyle = col;
+        ctx.font = 'bold 26px "JetBrains Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(txt, 128, 42);
+        lcdTex.needsUpdate = true;
+    };
+    drawLcd('08:30  P1', '#3de0b0');
+    const lcd = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 0.155), new THREE.MeshBasicMaterial({ map: lcdTex, toneMapped: false }));
+    lcd.position.set(0, -0.77, 0.066);
+    panel.add(lcd);
+
+    // Bell button inside an LED ring
+    const ringMat = new THREE.MeshBasicMaterial({ color: '#3de0b0', transparent: true, opacity: 0.35, toneMapped: false });
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(0.36, 0.035, 16, 64), ringMat);
+    ring.position.z = 0.075;
+    panel.add(ring);
+    const bezel = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.42, 0.06, 64), steel);
+    bezel.rotation.x = Math.PI / 2;
+    bezel.position.z = 0.07;
+    panel.add(bezel);
+    const button = new THREE.Group();
+    button.position.z = 0.12;
+    panel.add(button);
+    const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.31, 0.1, 64),
+        new THREE.MeshStandardMaterial({ color: '#e3e6ea', map: brushedTexture(210), metalness: 0.9, roughness: 0.25 }));
+    cap.rotation.x = Math.PI / 2;
+    button.add(cap);
+    const iconTex = canvasTexture(128, 128, (ctx) => {
+        ctx.strokeStyle = 'rgba(40,46,54,0.9)';
+        ctx.lineWidth = 6;
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        ctx.moveTo(40, 88); ctx.lineTo(44, 54);
+        ctx.quadraticCurveTo(48, 30, 64, 30); ctx.quadraticCurveTo(80, 30, 84, 54);
+        ctx.lineTo(88, 88); ctx.closePath(); ctx.stroke();
+        ctx.beginPath(); ctx.arc(64, 96, 7, 0, Math.PI); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(64, 22); ctx.lineTo(64, 30); ctx.stroke();
+    });
+    const icon = new THREE.Mesh(new THREE.CircleGeometry(0.22, 48), new THREE.MeshBasicMaterial({ map: iconTex, transparent: true }));
+    icon.position.z = 0.052;
+    button.add(icon);
+    const glow = new THREE.PointLight('#3de0b0', 0, 2.2);
+    glow.position.set(0, 0, 0.4);
+    panel.add(glow);
+
+    // WiFi arcs above the panel
+    const arcs = [0.18, 0.3, 0.42].map((r, i) => {
+        const m = new THREE.Mesh(new THREE.TorusGeometry(r, 0.022, 8, 40, Math.PI / 2),
+            new THREE.MeshBasicMaterial({ color: '#f2e6c9', transparent: true, opacity: 0.5, toneMapped: false }));
+        m.rotation.z = Math.PI / 4;
+        m.position.set(0, 1.12, 0.05);
+        m.userData.i = i;
+        panel.add(m);
+        return m;
+    });
+    const dot = new THREE.Mesh(new THREE.CircleGeometry(0.045, 20), new THREE.MeshBasicMaterial({ color: '#f2e6c9', toneMapped: false }));
+    dot.position.set(0, 1.12, 0.05);
+    panel.add(dot);
+
+    // --- Phone running the real School Bell app (left) ---
+    const phone = makePhone('images/products/automatic-bell/bell-app-home.webp', { W: 1.12, H: 2.1, body: '#1b1e23' });
+    phone.position.set(-1.4, -0.05, 0.6);
+    phone.rotation.set(0.04, 0.38, 0.06);
+    phone.scale.setScalar(1.18);
+    root.add(phone);
+    const phoneScreen = phone.userData.materials[1];
+    const appTex = {};
+    const loader = new THREE.TextureLoader();
+    [['home', 'bell-app-home'], ['ringing', 'bell-app-ringing']].forEach(([k, f]) => {
+        loader.load(new URL(`./images/products/automatic-bell/${f}.webp`, import.meta.url).href, tex => {
+            tex.colorSpace = THREE.SRGBColorSpace;
+            tex.anisotropy = 8;
+            appTex[k] = tex;
+        });
     });
 
+    // WiFi link: dots that stream from the phone to the panel when ringing
+    const link = new THREE.QuadraticBezierCurve3(
+        new THREE.Vector3(-0.85, 0.75, 0.6), new THREE.Vector3(-0.2, 1.55, 0.45), new THREE.Vector3(0.45, 0.85, 0.12));
+    const dots = Array.from({ length: 9 }, (_, i) => {
+        const m = new THREE.Mesh(new THREE.SphereGeometry(0.03, 12, 12), new THREE.MeshBasicMaterial({ color: '#3de0b0', transparent: true, opacity: 0.4, toneMapped: false }));
+        m.userData.p = i / 9;
+        m.position.copy(link.getPoint(m.userData.p));
+        root.add(m);
+        return m;
+    });
+
+    // Rings pulsing out from the panel while the bell rings
+    const waves = [0, 1, 2].map(() => {
+        const m = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.01, 8, 96),
+            new THREE.MeshBasicMaterial({ color: '#3de0b0', transparent: true, opacity: 0, toneMapped: false }));
+        m.position.set(0.85, -0.05, 0.14);
+        root.add(m);
+        return m;
+    });
+
+    let ringing = false;
     stage.update = (t) => {
         const h = stage.h;
         const motion = reducedMotion ? 0.2 : 1;
-        const swing = Math.sin(t * 8) * 0.42 * h * motion + Math.sin(t * 1.3) * 0.04 * motion;
-        pivot.rotation.z = swing;
-        clapperPivot.rotation.z = -Math.sin(t * 8 - 0.9) * 0.35 * h * motion;
-        root.rotation.y = lerp(Math.sin(t * 0.5) * 0.35, stage.mouse.x * 0.4, h);
-        metal.emissiveIntensity = 0.4 + h * 0.5;
-        rings.forEach((r, i) => {
-            const p = (t * 0.9 + i / 3) % 1;
-            r.scale.setScalar(0.6 + p * 1.6);
-            r.material.opacity = (1 - p) * 0.8 * h;
+        root.rotation.y = lerp(-0.18 + Math.sin(t * 0.4) * 0.08 * motion, -0.1 + stage.mouse.x * 0.2, h);
+        root.rotation.x = lerp(Math.sin(t * 0.3) * 0.03 * motion, -stage.mouse.y * 0.08, h);
+        button.position.z = lerp(0.12, 0.085, ease(h));
+        const pulse = 0.75 + 0.25 * Math.sin(t * 8);
+        ringMat.opacity = 0.35 + h * 0.65 * pulse;
+        glow.intensity = h * 3.5 * pulse;
+        phone.position.y = 0.05 + Math.sin(t * 1.3) * 0.04 * motion;
+        phone.rotation.y = lerp(0.38, 0.22, h);
+        waves.forEach((w, i) => {
+            const ph = (t * 0.9 + i / 3) % 1;
+            w.scale.setScalar(1 + ph * 1.6);
+            w.material.opacity = (1 - ph) * 0.6 * h;
         });
+        dots.forEach(d => {
+            const p = (d.userData.p + t * 0.35 * (0.3 + h)) % 1;
+            d.position.copy(link.getPoint(p));
+            d.material.opacity = (0.25 + 0.75 * h) * Math.sin(p * Math.PI);
+        });
+        arcs.forEach(a => {
+            const ph = (t * 1.5 - a.userData.i * 0.25) % 1;
+            a.material.opacity = 0.35 + h * 0.6 * Math.max(0, Math.sin(ph * Math.PI));
+        });
+        const now = h > 0.5;
+        if (now !== ringing && appTex.home && appTex.ringing) {
+            phoneScreen.map = now ? appTex.ringing : appTex.home;
+            phoneScreen.needsUpdate = true;
+        }
+        if (now !== ringing) {
+            ringing = now;
+            drawLcd(now ? 'RINGING...' : '08:30  P1', now ? '#b6ff3b' : '#3de0b0');
+        }
     };
 }
 
