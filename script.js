@@ -115,6 +115,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Feature tabs: click or use arrow keys / Home / End to switch panels
+    document.querySelectorAll('[data-tabs]').forEach(box => {
+        const tabs = [...box.querySelectorAll('[role="tab"]')];
+        const select = (tab, focus) => {
+            tabs.forEach(t => {
+                const on = t === tab;
+                t.setAttribute('aria-selected', on);
+                t.tabIndex = on ? 0 : -1;
+                document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+            });
+            if (focus) tab.focus();
+            tab.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        };
+        tabs.forEach((t, i) => {
+            t.addEventListener('click', () => select(t));
+            t.addEventListener('keydown', e => {
+                const next = { ArrowDown: i + 1, ArrowRight: i + 1, ArrowUp: i - 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+                if (next === undefined) return;
+                e.preventDefault();
+                select(tabs[(next + tabs.length) % tabs.length], true);
+            });
+        });
+    });
+
     const year = $('year');
     if (year) year.textContent = new Date().getFullYear();
 

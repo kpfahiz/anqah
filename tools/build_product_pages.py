@@ -80,6 +80,27 @@ PRODUCTS = [
         'status': 'Beta',
         'logo': 'images/products/sello-lite-logo.png',
         'scene': 'selloLite',
+        # Real SELLO Lite screenshots, shown in tabs: (tab, screenshot, heading, text, points)
+        'tabs': [
+            ('Sell', 'sello-lite-sell.webp', 'Ring up a sale in seconds',
+             'Tap products from a photo grid, filter by category or search, and charge from the bar at the bottom.',
+             ['Photo grid with categories', 'Search and barcode lookup', 'One-tap charge']),
+            ('Portions', 'sello-lite-portions.webp', 'Sell the same dish in different sizes',
+             'Each product can have its own portions &mdash; single, half, full, small, large &mdash; each with its own price.',
+             ['Custom portion names', 'Separate price per portion', 'Picked right at checkout']),
+            ('Hold &amp; resume', 'sello-lite-pending.webp', 'Park an order and come back to it',
+             'Hold a cart when a customer steps away and resume it later, without re-entering anything.',
+             ['Held carts with item count and total', 'Resume or cancel in one tap', 'Nothing is lost offline']),
+            ('Payments', 'sello-lite-payments.webp', 'Take payment the way customers pay',
+             'Choose which payment methods appear at checkout and split a bill across several of them.',
+             ['Cash, card, bank transfer, QR', 'Mobile wallet and pay later', 'Split payments in one sale']),
+            ('Taxes', 'sello-lite-taxes.webp', 'Set up the taxes you charge',
+             'Add tax rates once &mdash; standard, zero-rated or exempt &mdash; and choose whether prices include tax.',
+             ['Standard, zero-rated, exempt', 'Tax-inclusive or added at checkout', 'Default tax per product']),
+            ('Reports', 'sello-lite-report.webp', 'See how the shop is doing',
+             'Sales for today, this week, this month or any range, with payment and tax breakdowns and best sellers.',
+             ['Sales, tax and average sale', 'How customers paid', 'Best sellers &middot; export CSV / PDF']),
+        ],
         'terminal': 'sello-lite --offline|sello-lite receipt --width=80mm|sello-lite backup --export',
         'statement': 'An offline-first point-of-sale app for restaurants, cafés and small shops &mdash; no internet '
                      'connection needed to make a sale.',
@@ -273,6 +294,30 @@ def logo_tile(p, cls='pd-logo'):
     return f'<span class="{cls} pd-logo-mono" aria-hidden="true">{initials}</span>'
 
 
+def tabs_section(p, n):
+    folder = f'../images/products/{p["slug"]}'
+    sid = f'{p["slug"]}-tabs'
+    tabs = ''.join(
+        f'<button class="tab" role="tab" id="{sid}-t{i}" aria-controls="{sid}-p{i}" aria-selected="{"true" if i == 0 else "false"}" tabindex="{0 if i == 0 else -1}">'
+        f'<span class="tab-i">{i + 1:02d}</span>{label}</button>'
+        for i, (label, *_rest) in enumerate(p['tabs']))
+    panels = ''.join(
+        f'<div class="tab-panel" role="tabpanel" id="{sid}-p{i}" aria-labelledby="{sid}-t{i}"{"" if i == 0 else " hidden"}>'
+        f'<figure class="phone-frame"><img src="{folder}/{img}" alt="{p["name"]} {label.replace("&amp;", "and").lower()} screen" width="738" height="1600" loading="{"eager" if i == 0 else "lazy"}"></figure>'
+        f'<div class="tab-copy"><span class="tag">{label}</span><h3>{title}</h3><p>{text}</p>'
+        f'<ul class="pd-list">{"".join(f"<li>{pt}</li>" for pt in points)}</ul></div></div>'
+        for i, (label, img, title, text, points) in enumerate(p['tabs']))
+    return f'''
+        <section class="section">
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{p["name"]} in action</h2><p>Real screens from the {p["name"]} app. Pick a feature to see it.</p></div></header>
+            <div class="tabs reveal" data-tabs>
+                <div class="tab-list" role="tablist" aria-label="{p["name"]} features">{tabs}</div>
+                <div class="tab-panels">{panels}</div>
+            </div>
+        </section>
+'''
+
+
 def gallery_section(p, n):
     # Each screen is shown on a real POS terminal photo (`*-device.webp`); clicking opens the raw screenshot.
     folder = f'../images/products/{p["slug"]}'
@@ -312,7 +357,7 @@ def page(p):
         for o in PRODUCTS if o is not p)
     counter = iter(range(1, 20))
     n = lambda: f'{next(counter):02d}'
-    gallery = gallery_section(p, n) if p.get('gallery') else ''
+    gallery = gallery_section(p, n) if p.get('gallery') else (tabs_section(p, n) if p.get('tabs') else '')
     title = f'{name} | {plain(p["category"])} | Anqah Tech'
     desc = plain(p['statement'])
     url = f'{SITE}/products/{p["slug"]}.html'
