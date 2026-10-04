@@ -345,7 +345,7 @@ function drawAppScreen(ctx, w, h, { title, accent, lite }) {
     roundRect(ctx, 20, 120, w - 40, 96, 14);
     ctx.fillStyle = 'rgba(255,255,255,0.08)'; ctx.fill();
     ctx.fillStyle = '#8ea3c4'; ctx.font = '14px "IBM Plex Sans", sans-serif'; ctx.fillText("TODAY'S SALES", 36, 150);
-    ctx.fillStyle = '#e6eefc'; ctx.font = 'bold 36px "IBM Plex Sans", sans-serif'; ctx.fillText('₹ 24,580', 36, 196);
+    ctx.fillStyle = '#e6eefc'; ctx.font = 'bold 36px "IBM Plex Sans", sans-serif'; ctx.fillText('AED 4,580', 36, 196);
     // bars
     const bars = lite ? [0.4, 0.7, 0.55, 0.9] : [0.35, 0.6, 0.45, 0.8, 0.65, 0.95, 0.75];
     const bw = (w - 60) / bars.length;
@@ -362,7 +362,7 @@ function drawAppScreen(ctx, w, h, { title, accent, lite }) {
         ctx.fillStyle = 'rgba(255,255,255,0.05)'; ctx.fill();
         ctx.fillStyle = '#e6eefc'; ctx.font = '13px "IBM Plex Sans", sans-serif';
         ctx.fillText(['Invoice #1042', 'Invoice #1041', 'Stock update'][i], 32, 405 + i * 40);
-        ctx.fillStyle = accent; ctx.fillText(['₹ 1,250', '₹ 860', '+24'][i], w - 90, 405 + i * 40);
+        ctx.fillStyle = accent; ctx.fillText(['AED 250', 'AED 160', '+24'][i], w - 92, 405 + i * 40);
     }
     // bottom button
     roundRect(ctx, 20, h - 64, w - 40, 44, 12);
@@ -381,7 +381,7 @@ function drawPanel(ctx, w, h, { icon, title, value, accent }) {
 }
 
 function initPhone(canvas, { lite }) {
-    const card = canvas.closest('.product');
+    const card = canvas.closest('.product, .pd-stage') || canvas;
     const stage = createStage(canvas, { fov: 32, z: 5.6, hoverTarget: card, minAspect: 1.5 });
     const { scene } = stage;
     addLights(scene);
@@ -421,7 +421,7 @@ function initPhone(canvas, { lite }) {
     // Floating UI panels that fly out of the screen on hover
     const panelDefs = lite
         ? [
-            { icon: '🧾', title: 'Bill saved', value: '₹ 860', to: [1.25, 0.55, 0.6], rot: -0.25 },
+            { icon: '🧾', title: 'Bill saved', value: 'AED 160', to: [1.25, 0.55, 0.6], rot: -0.25 },
             { icon: '⚡', title: 'Checkout', value: '3 sec', to: [-1.25, -0.45, 0.5], rot: 0.25 },
         ]
         : [
@@ -444,7 +444,7 @@ function initPhone(canvas, { lite }) {
             ctx.fillStyle = '#f1f5f9'; ctx.fillRect(0, 0, w, h);
             ctx.fillStyle = '#0b1730'; ctx.font = 'bold 16px monospace'; ctx.fillText('SELLO LITE', 14, 28);
             ctx.font = '12px monospace';
-            ['Item A   ₹ 250', 'Item B   ₹ 410', 'Item C   ₹ 200', '--------------', 'TOTAL    ₹ 860'].forEach((l, i) => ctx.fillText(l, 10, 62 + i * 22));
+            ['Item A    AED 45', 'Item B    AED 70', 'Item C    AED 45', '--------------', 'TOTAL    AED 160'].forEach((l, i) => ctx.fillText(l, 10, 62 + i * 22));
             for (let x = 0; x < w; x += 12) { ctx.beginPath(); ctx.moveTo(x, h); ctx.lineTo(x + 6, h - 8); ctx.lineTo(x + 12, h); ctx.fill(); }
         });
         receipt = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 1.24), new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide }));
@@ -476,7 +476,7 @@ function initPhone(canvas, { lite }) {
 /* PRODUCT: Automatic Bell — swings and emits sound rings on hover      */
 /* ------------------------------------------------------------------ */
 function initBell(canvas) {
-    const card = canvas.closest('.product');
+    const card = canvas.closest('.product, .pd-stage') || canvas;
     const stage = createStage(canvas, { fov: 32, z: 7.2, hoverTarget: card, minAspect: 1.5 });
     const { scene } = stage;
     addLights(scene);
@@ -562,7 +562,7 @@ function initBell(canvas) {
 /* PRODUCT: Water Monitoring — tank fills, waves and live level label   */
 /* ------------------------------------------------------------------ */
 function initWater(canvas) {
-    const card = canvas.closest('.product');
+    const card = canvas.closest('.product, .pd-stage') || canvas;
     const stage = createStage(canvas, { fov: 32, z: 7.6, hoverTarget: card, minAspect: 1.5 });
     const { scene, camera } = stage;
     camera.position.y = 1.2;
