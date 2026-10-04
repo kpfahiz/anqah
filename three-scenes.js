@@ -231,7 +231,7 @@ async function initHero() {
         { name: 'data cube', pos: shapeCube() },
         { name: 'dna helix', pos: shapeHelix() },
     ];
-    shapeFromImage('images/logo-mark.png').then(p => { if (p) shapes[0].pos = p; });
+    shapeFromImage(new URL('./images/logo-mark.png', import.meta.url).href).then(p => { if (p) shapes[0].pos = p; });
 
     const geo = new THREE.BufferGeometry();
     const current = sphere.slice();

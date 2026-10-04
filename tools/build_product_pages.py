@@ -2,10 +2,13 @@
 
 Edit a product's content here, then run:  python tools/build_product_pages.py
 """
+import json
 import re
-from html import escape
+from html import escape, unescape
 from pathlib import Path
 from urllib.parse import quote
+
+from product_content_ar import AR, UI
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = 'https://www.anqah.com'
@@ -15,6 +18,12 @@ PHONE = '+971502393703'
 PRODUCTS = [
     {
         'slug': 'sello',
+        'seo': {
+            'title': 'SELLO POS Software for Retail &amp; Restaurants | UAE, KSA, India',
+            'description': 'SELLO POS software for shops, restaurants &amp; cafés in UAE, Saudi Arabia &amp; India: billing, inventory, kitchen display, VAT/GST and reports, even offline.',
+            'keywords': 'POS software UAE, POS system Saudi Arabia, POS software India, restaurant POS, retail POS, billing software, inventory software, kitchen display system, offline POS, SELLO',
+            'og': 'og-sello.jpg', 'app': ('BusinessApplication', 'Windows, Web'),
+        },
         'name': 'SELLO',
         'category': 'POS & Shop Management',
         'status': None,
@@ -75,6 +84,12 @@ PRODUCTS = [
     },
     {
         'slug': 'sello-lite',
+        'seo': {
+            'title': 'SELLO Lite Offline Mobile POS App | UAE, KSA, India',
+            'description': 'Offline mobile POS app for restaurants, cafés &amp; small shops in UAE, Saudi Arabia &amp; India: billing, portions, split payments, taxes and reports. Arabic &amp; English.',
+            'keywords': 'mobile POS app, offline POS app, POS app UAE, POS app Saudi Arabia, billing app India, restaurant billing app, Arabic POS app, Android POS, SELLO Lite',
+            'og': 'og-sello-lite.jpg', 'app': ('BusinessApplication', 'Android'),
+        },
         'name': 'SELLO Lite',
         'category': 'Mobile POS',
         'status': 'Beta',
@@ -141,6 +156,12 @@ PRODUCTS = [
     },
     {
         'slug': 'automatic-bell',
+        'seo': {
+            'title': 'Automatic School Bell System with App | UAE, KSA, India',
+            'description': 'Automatic school bell with mobile app: rings on a timetable, skips weekends &amp; holidays, manual ring. For schools &amp; factories in UAE, Saudi Arabia &amp; India.',
+            'keywords': 'automatic school bell, school bell system UAE, automatic bell Saudi Arabia, school bell timer India, WiFi bell controller, bell scheduler app, factory bell system',
+            'og': 'og-automatic-bell.jpg', 'app': None,
+        },
         'name': 'Automatic Bell',
         'category': 'IoT &middot; School Automation',
         'status': 'Pilot',
@@ -212,6 +233,12 @@ PRODUCTS = [
     },
     {
         'slug': 'water-monitoring',
+        'seo': {
+            'title': 'Water Tank Level Monitoring &amp; Alerts | UAE, KSA, India',
+            'description': 'Live water tank level on your phone plus Telegram alerts below 15% (empty) and above 95% (overflow). For homes &amp; businesses in UAE, Saudi Arabia &amp; India.',
+            'keywords': 'water tank level monitoring, water level sensor, tank overflow alarm, water tank monitoring UAE, water level indicator Saudi Arabia, water level controller India, Telegram alerts IoT',
+            'og': 'og-water-monitoring.jpg', 'app': None,
+        },
         'name': 'Water Monitoring',
         'category': 'IoT &middot; Monitoring',
         'status': None,
@@ -258,12 +285,64 @@ PRODUCTS = [
 WA_ICON = re.search(r'<svg viewBox="0 0 24 24".*?</svg>', (ROOT / 'index.html').read_text(encoding='utf-8'), re.S).group(0)
 
 
+def text_only(html):
+    """HTML snippet -> plain text for structured data."""
+    return unescape(re.sub(r'<[^>]+>', '', html))
+
+
+def localize(p, lang):
+    """Product data in the requested language (Arabic overrides English, field by field)."""
+    if lang == 'en':
+        return p
+    ar = AR[p['slug']]
+    out = {**p, **{k: v for k, v in ar.items() if k != 'seo'}}
+    out['seo'] = {**p['seo'], **ar['seo']}
+    return out
+
+
+def page_url(slug, lang):
+    return f'{SITE}/{"ar/" if lang == "ar" else ""}products/{slug}.html'
+
+
+def structured_data(p, lang, url, image):
+    t = UI[lang]
+    org = {'@type': 'Organization', '@id': f'{SITE}/#org', 'name': 'Anqah Tech', 'url': f'{SITE}/'}
+    home = f'{SITE}/{"ar/" if lang == "ar" else ""}'
+    images = [image] + [f'{SITE}/images/products/{p["slug"]}/{g[0].replace(".webp", "-device.webp")}' for g in p.get('gallery', [])[:3]]
+    item = {
+        '@id': f'{url}#product', 'name': p['name'], 'url': url, 'image': images, 'inLanguage': lang,
+        'description': text_only(p['seo']['description']), 'brand': org,
+        'category': text_only(p['category']),
+    }
+    if p['seo']['app']:
+        item.update({'@type': 'SoftwareApplication', 'applicationCategory': p['seo']['app'][0],
+                     'operatingSystem': p['seo']['app'][1], 'publisher': org})
+    else:
+        item.update({'@type': 'Product', 'manufacturer': org})
+    graph = [
+        item,
+        {'@type': 'BreadcrumbList', 'itemListElement': [
+            {'@type': 'ListItem', 'position': 1, 'name': t['home'], 'item': home},
+            {'@type': 'ListItem', 'position': 2, 'name': t['products'], 'item': f'{home}#products'},
+            {'@type': 'ListItem', 'position': 3, 'name': p['name'], 'item': url},
+        ]},
+        {'@type': 'FAQPage', 'inLanguage': lang, 'mainEntity': [
+            {'@type': 'Question', 'name': text_only(q), 'acceptedAnswer': {'@type': 'Answer', 'text': text_only(a)}}
+            for q, a in p['faq']]},
+    ]
+    return {'@context': 'https://schema.org', '@graph': graph}
+
+
 def wa_link(text):
     return f'https://wa.me/{WHATSAPP}?text={quote(text)}'
 
 
-def header():
-    return '''    <div class="scanlines" aria-hidden="true"></div>
+def header(lang, root, switch_href):
+    t = UI[lang]
+    current = ' aria-current="page"'
+    nav = ''.join(f'<li><a href="../index.html{h}"{current if h == "#products" else ""}>{label}</a></li>' for h, label in t['nav'])
+    sw_label, sw_lang = t['switch']
+    return f'''    <div class="scanlines" aria-hidden="true"></div>
     <header id="header">
         <div class="statusbar" aria-hidden="true">
             <span><i class="led"></i> SYS.ONLINE</span>
@@ -272,65 +351,67 @@ def header():
             <span>GST <b id="clock">--:--:--</b></span>
         </div>
         <nav class="navbar">
-            <a href="../index.html" class="logo" aria-label="Anqah Tech home">
-                <img src="../images/logo-mark-white.png" alt="Anqah Tech logo" width="48" height="35">
-                <span class="logo-text"><span><b>Anqah</b> Tech</span><small>Pvt Limited</small></span>
+            <a href="../index.html" class="logo" aria-label="{t['home_label']}">
+                <img src="{root}images/logo-mark-white.png" alt="{t['logo_alt']}" width="48" height="35">
+                <span class="logo-text"><span><b>Anqah</b> Tech</span></span>
             </a>
             <ul class="nav-links" id="navLinks">
-                <li><a href="../index.html#products" aria-current="page">Products</a></li>
-                <li><a href="../index.html#services">Services</a></li>
-                <li><a href="../index.html#about">About</a></li>
-                <li><a href="../index.html#why">Why Us</a></li>
-                <li><a href="../index.html#contact">Contact</a></li>
+                {nav}
+                <li><a class="lang-switch" href="{switch_href}" hreflang="{sw_lang}" lang="{sw_lang}">{sw_label}</a></li>
             </ul>
-            <a href="../index.html#contact" class="btn btn-accent nav-cta">Talk to us <span class="arr">&rarr;</span></a>
-            <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">
+            <a href="../index.html#contact" class="btn btn-accent nav-cta">{t['talk']} <span class="arr">&rarr;</span></a>
+            <button class="menu-toggle" id="menuToggle" aria-label="{t['menu']}" aria-expanded="false">
                 <span></span><span></span>
             </button>
         </nav>
     </header>'''
 
 
-def footer():
-    links = ''.join(f'<a href="{p["slug"]}.html">{p["name"]}</a>' for p in PRODUCTS)
+def footer(lang, root, switch_href):
+    t = UI[lang]
+    links = ''.join(f'<a href="{p["slug"]}.html">{localize(p, lang)["name"]}</a>' for p in PRODUCTS)
+    services = ''.join(f'<a href="../index.html#services">{s}</a>' for s in t['services_links'])
+    sw_label, sw_lang = t['switch']
     return f'''    <footer>
         <div class="footer-top">
-            <p class="footer-big">Smart solutions.<br>Reliable service.</p>
-            <a href="../index.html#contact" class="btn btn-accent">Start a project <span class="arr">&rarr;</span></a>
+            <p class="footer-big">{t['smart']}</p>
+            <a href="../index.html#contact" class="btn btn-accent">{t['start']} <span class="arr">&rarr;</span></a>
         </div>
         <div class="footer-grid">
             <div>
-                <a href="../index.html" class="logo"><img src="../images/logo-mark-white.png" alt="" width="48" height="35"><span class="logo-text"><span><b>Anqah</b> Tech</span><small>Pvt Limited</small></span></a>
+                <a href="../index.html" class="logo"><img src="{root}images/logo-mark-white.png" alt="" width="48" height="35"><span class="logo-text"><span><b>Anqah</b> Tech</span></span></a>
             </div>
             <div>
-                <h4>Products</h4>
+                <h4>{t['products']}</h4>
                 {links}
             </div>
             <div>
-                <h4>Services</h4>
-                <a href="../index.html#services">Web Development</a><a href="../index.html#services">Mobile Apps</a><a href="../index.html#services">CCTV &amp; Security</a><a href="../index.html#services">Home Automation</a><a href="../index.html#services">IT Infrastructure</a>
+                <h4>{t['services']}</h4>
+                {services}
             </div>
             <div>
-                <h4>Contact</h4>
-                <a href="tel:{PHONE}">+971 50 239 3703</a><a href="https://wa.me/{WHATSAPP}" target="_blank" rel="noopener">WhatsApp</a><a href="mailto:anqahgroups@gmail.com">anqahgroups@gmail.com</a><span>Abu Dhabi, UAE</span>
+                <h4>{t['contact']}</h4>
+                <a href="tel:{PHONE}" dir="ltr">+971 50 239 3703</a><a href="https://wa.me/{WHATSAPP}" target="_blank" rel="noopener">{t['whatsapp']}</a><a href="mailto:anqahgroups@gmail.com">anqahgroups@gmail.com</a><span>{t['city']}</span>
             </div>
         </div>
         <div class="footer-bottom">
-            <span>&copy; <span id="year">2026</span> Anqah Tech Pvt Limited. All rights reserved.</span>
-            <span class="mono">// engineered in Abu Dhabi, UAE</span>
+            <span>&copy; <span id="year">2026</span> {t['rights']}</span>
+            <a class="lang-switch" href="{switch_href}" hreflang="{sw_lang}" lang="{sw_lang}">{sw_label}</a>
         </div>
     </footer>'''
 
 
-def logo_tile(p, cls='pd-logo'):
+def logo_tile(p, root, lang, cls='pd-logo'):
     if p['logo']:
-        return f'<img class="{cls}" src="../{p["logo"]}" alt="{p["name"]} logo" width="72" height="72">'
-    initials = ''.join(w[0] for w in p['name'].split()[:2]).upper()
+        return f'<img class="{cls}" src="{root}{p["logo"]}" alt="{UI[lang]["logo_word"].format(name=p["name"])}" width="72" height="72">'
+    en_name = next(x['name'] for x in PRODUCTS if x['slug'] == p['slug'])  # initials always from the Latin name
+    initials = ''.join(w[0] for w in en_name.split()[:2]).upper()
     return f'<span class="{cls} pd-logo-mono" aria-hidden="true">{initials}</span>'
 
 
-def tabs_section(p, n):
-    folder = f'../images/products/{p["slug"]}'
+def tabs_section(p, n, lang, root):
+    t = UI[lang]
+    folder = f'{root}images/products/{p["slug"]}'
     sid = f'{p["slug"]}-tabs'
     tabs = ''.join(
         f'<button class="tab" role="tab" id="{sid}-t{i}" aria-controls="{sid}-p{i}" aria-selected="{"true" if i == 0 else "false"}" tabindex="{0 if i == 0 else -1}">'
@@ -338,85 +419,101 @@ def tabs_section(p, n):
         for i, (label, *_rest) in enumerate(p['tabs']))
     panels = ''.join(
         f'<div class="tab-panel" role="tabpanel" id="{sid}-p{i}" aria-labelledby="{sid}-t{i}"{"" if i == 0 else " hidden"}>'
-        f'<figure class="phone-frame"><img src="{folder}/{img}" alt="{p["name"]} {label.replace("&amp;", "and").lower()} screen" width="738" height="1600" loading="{"eager" if i == 0 else "lazy"}"></figure>'
+        f'<figure class="phone-frame"><img src="{folder}/{img}" alt="{t["tab_alt"].format(name=p["name"], label=label.replace("&amp;", "and").lower())}" width="738" height="1600" loading="{"eager" if i == 0 else "lazy"}"></figure>'
         f'<div class="tab-copy"><span class="tag">{label}</span><h3>{title}</h3><p>{text}</p>'
         f'<ul class="pd-list">{"".join(f"<li>{pt}</li>" for pt in points)}</ul></div></div>'
         for i, (label, img, title, text, points) in enumerate(p['tabs']))
     return f'''
         <section class="section">
-            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{p["name"]} in action</h2><p>Real screens from the {p["name"]} app. Pick a feature to see it.</p></div></header>
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{t['tabs_h'].format(name=p["name"])}</h2><p>{t['tabs_p'].format(name=p["name"])}</p></div></header>
             <div class="tabs reveal" data-tabs>
-                <div class="tab-list" role="tablist" aria-label="{p["name"]} features">{tabs}</div>
+                <div class="tab-list" role="tablist" aria-label="{t['tabs_label'].format(name=p["name"])}">{tabs}</div>
                 <div class="tab-panels">{panels}</div>
             </div>
         </section>
 '''
 
 
-def photos_section(p, n):
-    folder = f'../images/products/{p["slug"]}'
+def photos_section(p, n, lang, root):
+    t = UI[lang]
+    folder = f'{root}images/products/{p["slug"]}'
     figs = ''.join(
-        f'<figure class="photo reveal"><a href="{folder}/{f}" data-lightbox="{p["slug"]}" data-caption="{t} &mdash; {c}">'
-        f'<img src="{folder}/{f}" alt="{p["name"]}: {t.lower()}" width="1408" height="768" loading="{"eager" if i == 0 else "lazy"}">'
-        f'<span class="shot-zoom">[ enlarge ]</span></a><figcaption><b>{t}</b>{c}</figcaption></figure>'
-        for i, (f, t, c) in enumerate(p['photos']))
+        f'<figure class="photo reveal"><a href="{folder}/{f}" data-lightbox="{p["slug"]}" data-caption="{ti} &mdash; {c}">'
+        f'<img src="{folder}/{f}" alt="{p["name"]}: {ti.lower()}" width="1408" height="768" loading="{"eager" if i == 0 else "lazy"}">'
+        f'<span class="shot-zoom">{t["enlarge"]}</span></a><figcaption><b>{ti}</b>{c}</figcaption></figure>'
+        for i, (f, ti, c) in enumerate(p['photos']))
     return f'''
         <section class="section">
-            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{p["name"]} system</h2><p>The wall panel, the mobile app and the dashboard working together. Click an image to enlarge.</p></div></header>
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{t['photos_h'].format(name=p["name"])}</h2><p>{t['photos_p']}</p></div></header>
             <div class="photos">{figs}</div>
         </section>
 '''
 
 
-def gallery_section(p, n):
+def gallery_section(p, n, lang, root):
     # Each screen is shown on a real POS terminal photo (`*-device.webp`); clicking opens the raw screenshot.
-    folder = f'../images/products/{p["slug"]}'
+    t = UI[lang]
+    folder = f'{root}images/products/{p["slug"]}'
     shots = ''.join(
         f'<figure class="shot reveal">'
-        f'<a href="{folder}/{f}" data-lightbox="{p["slug"]}" data-caption="{t} &mdash; {c}">'
-        f'<img src="{folder}/{f.replace(".webp", "-device.webp")}" alt="{p["name"]} {t.lower()} screen on a POS terminal" '
+        f'<a href="{folder}/{f}" data-lightbox="{p["slug"]}" data-caption="{ti} &mdash; {c}">'
+        f'<img src="{folder}/{f.replace(".webp", "-device.webp")}" alt="{t["shot_alt"].format(name=p["name"], title=ti.lower())}" '
         f'width="1000" height="750" loading="{"eager" if i == 0 else "lazy"}">'
-        f'<span class="shot-zoom">[ view screen ]</span>'
-        f'</a><figcaption><b>{t}</b>{c}</figcaption></figure>'
-        for i, (f, t, c, _url) in enumerate(p['gallery']))
+        f'<span class="shot-zoom">{t["view"]}</span>'
+        f'</a><figcaption><b>{ti}</b>{c}</figcaption></figure>'
+        for i, (f, ti, c, _url) in enumerate(p['gallery']))
     return f'''
         <section class="section">
-            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{p["name"]} in action</h2><p>Real screens from {p["name"]}, running a demo café &amp; mart, each shown on a different kind of POS hardware. Click any screen to see it full size.</p></div></header>
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{t['gallery_h'].format(name=p["name"])}</h2><p>{t['gallery_p'].format(name=p["name"])}</p></div></header>
             <div class="gallery">{shots}</div>
-            <p class="credit">POS hardware and product photos via <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>. Screens are from a demo shop with sample data.</p>
+            <p class="credit">{t['credit']}</p>
         </section>
 '''
 
 
-def page(p):
+def page(base, lang):
+    p = localize(base, lang)
+    t = UI[lang]
+    root = '../../' if lang == 'ar' else '../'
     name = p['name']
-    plain = lambda s: s.replace('&mdash;', '-').replace('&rsquo;', "'").replace('&amp;', '&').replace('&middot;', '-')
-    enquire = wa_link(f"Hello Anqah Tech, I'm interested in {name}. Please share more details.")
+    url = page_url(p['slug'], lang)
+    en_url, ar_url = page_url(p['slug'], 'en'), page_url(p['slug'], 'ar')
+    switch_href = f'../../products/{p["slug"]}.html' if lang == 'ar' else f'../ar/products/{p["slug"]}.html'
+    enquire = wa_link(unescape(t['wa_msg'].format(name=name)))
     status = f'<span class="pd-status">{p["status"]}</span>' if p['status'] else ''
     facts = ''.join(f'<div><strong>{v}</strong><span>{k}</span></div>' for v, k in p['facts'])
-    feats = ''.join(f'<li class="reveal"><span class="i">{i:02d}</span><h3>{t}</h3><p>{d}</p></li>'
-                    for i, (t, d) in enumerate(p['features'], 1))
-    steps = ''.join(f'<li><span>Step {i}</span><p>{s}</p></li>' for i, s in enumerate(p['steps'], 1))
+    feats = ''.join(f'<li class="reveal"><span class="i">{i:02d}</span><h3>{ti}</h3><p>{d}</p></li>'
+                    for i, (ti, d) in enumerate(p['features'], 1))
+    steps = ''.join(f'<li><span>{t["step"].format(i=i)}</span><p>{s}</p></li>' for i, s in enumerate(p['steps'], 1))
     uses = ''.join(f'<li>{u}</li>' for u in p['use_cases'])
     bens = ''.join(f'<li>{b}</li>' for b in p['benefits'])
     faq = ''.join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in p['faq'])
-    privacy = f'<div class="pd-panel"><h3>Data &amp; privacy</h3><p>{p["privacy"]}</p></div>' if p['privacy'] else ''
+    privacy = f'<div class="pd-panel"><h3>{t["privacy"]}</h3><p>{p["privacy"]}</p></div>' if p['privacy'] else ''
     others = ''.join(
-        f'<a class="pd-other hud" href="{o["slug"]}.html">{logo_tile(o, "pd-other-logo")}'
+        f'<a class="pd-other hud" href="{o["slug"]}.html">{logo_tile(o, root, lang, "pd-other-logo")}'
         f'<span><small>{o["category"]}</small><b>{o["name"]}</b></span><span class="arr">&rarr;</span></a>'
-        for o in PRODUCTS if o is not p)
+        for o in (localize(x, lang) for x in PRODUCTS) if o['slug'] != p['slug'])
     counter = iter(range(1, 20))
     n = lambda: f'{next(counter):02d}'
     gallery = ''.join(
-        fn(p, n) for key, fn in (('gallery', gallery_section), ('tabs', tabs_section), ('photos', photos_section)) if p.get(key))
-    title = f'{name} | {plain(p["category"])} | Anqah Tech'
-    desc = plain(p['statement'])
-    url = f'{SITE}/products/{p["slug"]}.html'
-    image = f'{SITE}/{p["logo"]}' if p['logo'] else f'{SITE}/images/logo-full-navy.png'
-    ld_type = 'SoftwareApplication' if p['slug'].startswith('sello') else 'Product'
+        fn(p, n, lang, root) for key, fn in (('gallery', gallery_section), ('tabs', tabs_section), ('photos', photos_section)) if p.get(key))
+    seo = p['seo']
+    title = unescape(seo['title'])
+    desc = seo['description']
+    image = f'{SITE}/images/og/{seo["og"]}'
+    ld = json.dumps(structured_data(p, lang, url, image), ensure_ascii=False, indent=2)
+    hreflang = '\n'.join(
+        [f'    <link rel="alternate" hreflang="{h}" href="{en_url}">' for h in ('en', 'en-AE', 'en-SA', 'en-IN')] +
+        [f'    <link rel="alternate" hreflang="{h}" href="{ar_url}">' for h in ('ar', 'ar-AE', 'ar-SA')] +
+        [f'    <link rel="alternate" hreflang="x-default" href="{en_url}">'])
+    fonts = ('family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600'
+             + ('&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@600;700;800' if lang == 'ar' else '')
+             + '&family=JetBrains+Mono:wght@400;500;700&display=swap')
+    locale = 'ar_AE' if lang == 'ar' else 'en_AE'
+    alt_locale = 'en_AE' if lang == 'ar' else 'ar_AE'
 
     return f'''<!DOCTYPE html>
-<html lang="en">
+<html lang="{lang}" dir="{'rtl' if lang == 'ar' else 'ltr'}">
 
 <head>
     <meta charset="UTF-8">
@@ -424,45 +521,60 @@ def page(p):
     <!-- Generated by tools/build_product_pages.py - edit the data there, not this file. -->
     <title>{escape(title)}</title>
     <meta name="description" content="{escape(desc)}">
+    <meta name="keywords" content="{escape(seo['keywords'])}">
+    <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="theme-color" content="#07080a">
     <link rel="canonical" href="{url}">
-    <link rel="icon" type="image/png" href="../images/favicon.png">
+{hreflang}
+    <meta name="geo.region" content="AE-AZ">
+    <meta name="geo.placename" content="Abu Dhabi">
+    <link rel="icon" type="image/png" href="{root}images/favicon.png">
+    <link rel="apple-touch-icon" href="{root}images/favicon.png">
+    <link rel="manifest" href="{root}site.webmanifest">
     <meta property="og:type" content="product">
+    <meta property="og:site_name" content="Anqah Tech">
     <meta property="og:url" content="{url}">
     <meta property="og:title" content="{escape(title)}">
     <meta property="og:description" content="{escape(desc)}">
     <meta property="og:image" content="{image}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="{locale}">
+    <meta property="og:locale:alternate" content="{alt_locale}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{escape(title)}">
+    <meta name="twitter:description" content="{escape(desc)}">
+    <meta name="twitter:image" content="{image}">
     <script type="application/ld+json">
-    {{ "@context": "https://schema.org", "@type": "{ld_type}", "name": "{name}", "description": "{escape(desc)}",
-       "brand": {{ "@type": "Organization", "name": "Anqah Tech Pvt Limited" }}, "url": "{url}", "image": "{image}" }}
+{ld}
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../style.css">
+    <link href="https://fonts.googleapis.com/css2?{fonts}" rel="stylesheet">
+    <link rel="stylesheet" href="{root}style.css">
     <script type="importmap">
     {{ "imports": {{ "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" }} }}
     </script>
 </head>
 
 <body class="pd-page">
-{header()}
+{header(lang, root, switch_href)}
 
     <main>
         <section class="pd-hero">
             <div class="pd-copy">
-                <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a><span>/</span><a href="../index.html#products">Products</a><span>/</span><b>{name}</b></nav>
+                <nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">{t['home']}</a><span>/</span><a href="../index.html#products">{t['products']}</a><span>/</span><b>{name}</b></nav>
                 <div class="pd-id">
-                    {logo_tile(p)}
+                    {logo_tile(p, root, lang)}
                     <div><span class="tag">{p["category"]}</span>{status}</div>
                 </div>
                 <h1>{name}</h1>
                 <p class="lead">{p["statement"]}</p>
                 <div class="hero-actions">
-                    <a href="{enquire}" target="_blank" rel="noopener" class="btn btn-accent">Enquire on WhatsApp <span class="arr">&rarr;</span></a>
-                    <a href="tel:{PHONE}" class="btn btn-line">Call us</a>
+                    <a href="{enquire}" target="_blank" rel="noopener" class="btn btn-accent">{t['enquire']} <span class="arr">&rarr;</span></a>
+                    <a href="tel:{PHONE}" class="btn btn-line">{t['call']}</a>
                 </div>
-                <div class="terminal pd-term">
+                <div class="terminal pd-term" dir="ltr">
                     <div class="term-bar"><i></i><i></i><i></i><span>anqah@tech:~/{p["slug"]}</span></div>
                     <code><span class="prompt">$</span> <span id="typed" data-commands="{escape(p["terminal"])}"></span><span class="caret"></span></code>
                 </div>
@@ -470,80 +582,80 @@ def page(p):
             <figure class="pd-stage hero-frame hud">
                 <span class="corner tl">{p["slug"].upper()}</span>
                 <span class="corner tr">3D // LIVE</span>
-                <canvas data-scene="{p["scene"]}" aria-label="Interactive 3D model of {name}"></canvas>
-                <figcaption>[ hover to interact ]</figcaption>
+                <canvas data-scene="{p["scene"]}" aria-label="{t['model'].format(name=name)}"></canvas>
+                <figcaption>{t['hover']}</figcaption>
             </figure>
         </section>
 
-        <section class="facts" aria-label="Key facts">{facts}</section>
+        <section class="facts" aria-label="{t['facts']}">{facts}</section>
 {gallery}
         <section class="section">
-            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>Why {name}</h2></div></header>
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{t['why'].format(name=name)}</h2></div></header>
             <div class="pd-two reveal">
-                <div class="pd-panel"><h3>The problem</h3><p>{p["problem"]}</p></div>
-                <div class="pd-panel accent"><h3>Our solution</h3><p>{p["solution"]}</p></div>
+                <div class="pd-panel"><h3>{t['problem']}</h3><p>{p["problem"]}</p></div>
+                <div class="pd-panel accent"><h3>{t['solution']}</h3><p>{p["solution"]}</p></div>
             </div>
         </section>
 
         <section class="section">
-            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>Key features</h2></div></header>
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{t['features']}</h2></div></header>
             <ol class="svc-list">{feats}</ol>
         </section>
 
         <section class="section">
-            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>How it works</h2></div></header>
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{t['how']}</h2></div></header>
             <ol class="process pd-steps reveal">{steps}</ol>
         </section>
 
         <section class="section">
-            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>Built for</h2></div></header>
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{t['built']}</h2></div></header>
             <div class="pd-two reveal">
-                <div class="pd-panel"><h3>Use cases</h3><ul class="pd-list">{uses}</ul></div>
-                <div class="pd-panel"><h3>Benefits</h3><ul class="pd-list">{bens}</ul></div>
+                <div class="pd-panel"><h3>{t['uses']}</h3><ul class="pd-list">{uses}</ul></div>
+                <div class="pd-panel"><h3>{t['benefits']}</h3><ul class="pd-list">{bens}</ul></div>
             </div>
         </section>
 
         <section class="section">
-            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>Under the hood</h2></div></header>
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{t['hood']}</h2></div></header>
             <div class="pd-two reveal">
-                <div class="pd-panel"><h3>Technical overview</h3><p>{p["tech"]}</p></div>
+                <div class="pd-panel"><h3>{t['tech']}</h3><p>{p["tech"]}</p></div>
                 {privacy}
             </div>
         </section>
 
         <section class="section">
-            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>FAQ</h2></div></header>
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{t['faq']}</h2></div></header>
             <div class="faq reveal">{faq}</div>
         </section>
 
         <section class="section">
             <div class="pd-cta hud reveal">
                 <div>
-                    <span class="tag">Get {name}</span>
-                    <h2>Interested in {name}?</h2>
-                    <p>Tell us about your business &mdash; we&rsquo;ll get back to you within 24 hours.</p>
+                    <span class="tag">{t['get'].format(name=name)}</span>
+                    <h2>{t['interested'].format(name=name)}</h2>
+                    <p>{t['tell']}</p>
                 </div>
                 <div class="hero-actions">
-                    <a href="{enquire}" target="_blank" rel="noopener" class="btn btn-accent">Enquire on WhatsApp <span class="arr">&rarr;</span></a>
-                    <a href="../index.html#contact" class="btn btn-line">Contact form</a>
+                    <a href="{enquire}" target="_blank" rel="noopener" class="btn btn-accent">{t['enquire']} <span class="arr">&rarr;</span></a>
+                    <a href="../index.html#contact" class="btn btn-line">{t['form']}</a>
                 </div>
             </div>
         </section>
 
         <section class="section">
-            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>Other products</h2></div></header>
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{t['others']}</h2></div></header>
             <div class="pd-others reveal">{others}</div>
         </section>
     </main>
 
-{footer()}
+{footer(lang, root, switch_href)}
 
-    <a class="fab-wa" href="https://wa.me/{WHATSAPP}" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    <a class="fab-wa" href="https://wa.me/{WHATSAPP}" target="_blank" rel="noopener" aria-label="{t['chat']}">
         {WA_ICON}
     </a>
 
-    <script src="../script.js"></script>
-    <script type="module" src="../three-scenes.js"></script>
+    <script src="{root}script.js"></script>
+    <script type="module" src="{root}three-scenes.js"></script>
 </body>
 
 </html>
@@ -551,11 +663,11 @@ def page(p):
 
 
 def main():
-    out = ROOT / 'products'
-    out.mkdir(exist_ok=True)
-    for p in PRODUCTS:
-        (out / f'{p["slug"]}.html').write_text(page(p), encoding='utf-8')
-        print('wrote', f'products/{p["slug"]}.html')
+    for lang, folder in (('en', ROOT / 'products'), ('ar', ROOT / 'ar' / 'products')):
+        folder.mkdir(parents=True, exist_ok=True)
+        for p in PRODUCTS:
+            (folder / f'{p["slug"]}.html').write_text(page(p, lang), encoding='utf-8')
+            print('wrote', (folder / f'{p["slug"]}.html').relative_to(ROOT).as_posix())
 
 
 if __name__ == '__main__':

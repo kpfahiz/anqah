@@ -1,0 +1,10 @@
+{
+  "name": "Anqah Tech",
+  "short_name": "Anqah Tech",
+  "description": "POS software, IoT products and IT solutions in the UAE, Saudi Arabia and India.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#07080a",
+  "theme_color": "#07080a",
+  "icons": [{ "src": "/images/favicon.png", "sizes": "192x192", "type": "image/png" }]
+}

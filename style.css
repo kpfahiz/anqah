@@ -386,6 +386,13 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: var(-
 .lb-close { position: absolute; top: 10px; right: 10px; width: 40px; height: 40px; border: 1px solid var(--line-2); background: rgba(15, 18, 21, 0.9); color: var(--text); font-size: 1.2rem; cursor: pointer; }
 .lb-close:hover { color: var(--accent); border-color: var(--accent); }
 
+/* ---------- Areas we serve (home) ---------- */
+.areas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.area { background: var(--panel); border: 1px solid var(--line); padding: 28px; display: flex; flex-direction: column; gap: 10px; }
+.area h3 { font-size: 1.4rem; text-transform: uppercase; }
+.area p { color: var(--muted); font-size: 0.95rem; }
+.area .cities { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); font-family: var(--font-mono); font-size: 0.78rem; color: var(--blue); }
+
 /* ---------- Product photos (product pages) ---------- */
 .photos { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .photo { margin: 0; display: flex; flex-direction: column; gap: 12px; }
@@ -426,6 +433,49 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: var(-
 .tab-copy h3 { font-size: clamp(1.4rem, 2.4vw, 2rem); text-transform: uppercase; margin: 10px 0 12px; }
 .tab-copy > p { color: var(--muted); margin-bottom: 20px; max-width: 460px; }
 
+/* ---------- Language switch ---------- */
+.nav-links a.lang-switch { color: var(--accent); }
+.nav-links a.lang-switch::before, .nav-links a.lang-switch::after { content: none; }
+[lang="ar"].lang-switch, .lang-switch[lang="ar"] { font-family: 'IBM Plex Sans Arabic', var(--font-body); }
+.footer-bottom .lang-switch { color: var(--accent); }
+
+/* ---------- Arabic / right-to-left ---------- */
+[dir="rtl"] {
+    --font-display: 'Noto Kufi Arabic', 'Chakra Petch', system-ui, sans-serif;
+    --font-body: 'IBM Plex Sans Arabic', 'IBM Plex Sans', system-ui, sans-serif;
+}
+[dir="rtl"] body { line-height: 1.8; }
+/* Arabic letters must join: never space them out */
+[dir="rtl"] body * { letter-spacing: normal !important; }
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] .footer-big { line-height: 1.35; }
+[dir="rtl"] .hero h1 { font-size: clamp(2.1rem, 4.6vw, 3.9rem); }
+[dir="rtl"] .arr { transform: scaleX(-1); }
+[dir="rtl"] .btn:hover .arr, [dir="rtl"] .link-btn:hover .arr { transform: scaleX(-1) translateX(4px); }
+[dir="rtl"] .link-btn::before { content: '< '; }
+[dir="rtl"] .facts div { border-right: none; border-left: 1px solid var(--line); padding: 22px 18px 0; }
+[dir="rtl"] .facts div:first-child { padding-right: 0; padding-left: 18px; }
+[dir="rtl"] .facts div:last-child { border-left: none; }
+[dir="rtl"] .svc-list li::before { left: auto; right: 0; }
+[dir="rtl"] .pillars div { border-left: none; border-right: 2px solid var(--accent); padding-left: 0; padding-right: 16px; }
+[dir="rtl"] .process li { border-right: none; border-left: 1px solid var(--line); }
+[dir="rtl"] .process li:last-child { border-left: none; }
+[dir="rtl"] .process li:not(:last-child)::after { content: '◂'; right: auto; left: -8px; }
+[dir="rtl"] .why-grid { border-left: none; border-right: 1px solid var(--line); }
+[dir="rtl"] .why-grid div { border-right: none; border-left: 1px solid var(--line); }
+[dir="rtl"] .p-wide .p-body { border-left: none; border-right: 1px solid var(--line); }
+[dir="rtl"] .pd-list li { padding-left: 0; padding-right: 30px; }
+[dir="rtl"] .pd-list li::before { left: auto; right: 0; }
+[dir="rtl"] .tab { text-align: right; }
+[dir="rtl"] .tab::before { left: auto; right: 0; }
+[dir="rtl"] .tab-list { border-right: none; border-left: 1px solid var(--line); }
+[dir="rtl"] .pd-other .arr { margin-left: 0; margin-right: auto; }
+[dir="rtl"] .faq summary { padding: 22px 0 22px 40px; }
+[dir="rtl"] .faq summary::after { right: auto; left: 4px; }
+[dir="rtl"] .map-btn { left: auto; right: 20px; }
+[dir="rtl"] .fab-wa { right: auto; left: 20px; }
+[dir="rtl"] .statusbar, [dir="rtl"] .corner, [dir="rtl"] .svc-list .t, [dir="rtl"] .stack span:not(.stack-label) { direction: ltr; }
+[dir="rtl"] .contact-form input[dir="ltr"] { text-align: right; }
+
 /* Reveal */
 .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
 .reveal.active { opacity: 1; transform: none; }
@@ -463,6 +513,7 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: var(-
     .pd-two, .pd-others { grid-template-columns: 1fr; }
     .gallery { grid-template-columns: 1fr 1fr; }
     .photos { grid-template-columns: 1fr; }
+    .areas { grid-template-columns: 1fr; }
     .tabs { grid-template-columns: 1fr; }
     .tab-list { flex-direction: row; overflow-x: auto; border-right: none; border-bottom: 1px solid var(--line); scrollbar-width: none; }
     .tab-list::-webkit-scrollbar { display: none; }
@@ -502,4 +553,25 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: var(-
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
     html { scroll-behavior: auto; }
+}
+
+/* Arabic / right-to-left on smaller screens */
+@media (max-width: 900px) {
+    [dir="rtl"] .tab-list { border-left: none; }
+    [dir="rtl"] .tab { border-right: none; border-left: 1px solid var(--line); }
+    [dir="rtl"] .tab::before { left: 0; right: 0; }
+    [dir="rtl"] .facts div:nth-child(2) { border-left: none; }
+    [dir="rtl"] .facts div:nth-child(3) { padding-right: 0; }
+}
+@media (max-width: 600px) {
+    [dir="rtl"] .p-wide .p-body { border-right: none; }
+    [dir="rtl"] .process li { border-left: none; }
+}
+
+/* Arabic: label text that uses the mono font switches to the Arabic sans (JetBrains Mono has no Arabic);
+   Latin code-style bits stay monospaced */
+[dir="rtl"] { --font-mono: 'IBM Plex Sans Arabic', 'JetBrains Mono', ui-monospace, monospace; }
+[dir="rtl"] .terminal, [dir="rtl"] .statusbar, [dir="rtl"] .corner, [dir="rtl"] .svc-list .t,
+[dir="rtl"] .svc-list .i, [dir="rtl"] .tab-i, [dir="rtl"] .stack span:not(.stack-label), [dir="rtl"] .num {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
 }

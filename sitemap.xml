@@ -1,33 +1,197 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.anqah.com/</loc>
     <lastmod>2026-10-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/"/>
+    <xhtml:link rel="alternate" hreflang="en-AE" href="https://www.anqah.com/"/>
+    <xhtml:link rel="alternate" hreflang="en-SA" href="https://www.anqah.com/"/>
+    <xhtml:link rel="alternate" hreflang="en-IN" href="https://www.anqah.com/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.anqah.com/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.anqah.com/ar/"/>
+    <xhtml:link rel="alternate" hreflang="ar-AE" href="https://www.anqah.com/ar/"/>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://www.anqah.com/ar/"/>
+    <image:image><image:loc>https://www.anqah.com/images/og/og-home.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.anqah.com/ar/</loc>
+    <lastmod>2026-10-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/"/>
+    <xhtml:link rel="alternate" hreflang="en-AE" href="https://www.anqah.com/"/>
+    <xhtml:link rel="alternate" hreflang="en-SA" href="https://www.anqah.com/"/>
+    <xhtml:link rel="alternate" hreflang="en-IN" href="https://www.anqah.com/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.anqah.com/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.anqah.com/ar/"/>
+    <xhtml:link rel="alternate" hreflang="ar-AE" href="https://www.anqah.com/ar/"/>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://www.anqah.com/ar/"/>
+    <image:image><image:loc>https://www.anqah.com/images/og/og-home.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.anqah.com/products/sello.html</loc>
     <lastmod>2026-10-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/products/sello.html"/>
+    <xhtml:link rel="alternate" hreflang="en-AE" href="https://www.anqah.com/products/sello.html"/>
+    <xhtml:link rel="alternate" hreflang="en-SA" href="https://www.anqah.com/products/sello.html"/>
+    <xhtml:link rel="alternate" hreflang="en-IN" href="https://www.anqah.com/products/sello.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.anqah.com/products/sello.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.anqah.com/ar/products/sello.html"/>
+    <xhtml:link rel="alternate" hreflang="ar-AE" href="https://www.anqah.com/ar/products/sello.html"/>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://www.anqah.com/ar/products/sello.html"/>
+    <image:image><image:loc>https://www.anqah.com/images/og/og-sello.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello-logo.png</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-dashboard-device.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-kitchen-device.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-payment-device.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-pos-device.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-sales-device.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-tables-device.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.anqah.com/ar/products/sello.html</loc>
+    <lastmod>2026-10-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/products/sello.html"/>
+    <xhtml:link rel="alternate" hreflang="en-AE" href="https://www.anqah.com/products/sello.html"/>
+    <xhtml:link rel="alternate" hreflang="en-SA" href="https://www.anqah.com/products/sello.html"/>
+    <xhtml:link rel="alternate" hreflang="en-IN" href="https://www.anqah.com/products/sello.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.anqah.com/products/sello.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.anqah.com/ar/products/sello.html"/>
+    <xhtml:link rel="alternate" hreflang="ar-AE" href="https://www.anqah.com/ar/products/sello.html"/>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://www.anqah.com/ar/products/sello.html"/>
+    <image:image><image:loc>https://www.anqah.com/images/og/og-sello.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello-logo.png</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-dashboard-device.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-kitchen-device.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-payment-device.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-pos-device.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-sales-device.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-tables-device.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.anqah.com/products/sello-lite.html</loc>
     <lastmod>2026-10-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/products/sello-lite.html"/>
+    <xhtml:link rel="alternate" hreflang="en-AE" href="https://www.anqah.com/products/sello-lite.html"/>
+    <xhtml:link rel="alternate" hreflang="en-SA" href="https://www.anqah.com/products/sello-lite.html"/>
+    <xhtml:link rel="alternate" hreflang="en-IN" href="https://www.anqah.com/products/sello-lite.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.anqah.com/products/sello-lite.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.anqah.com/ar/products/sello-lite.html"/>
+    <xhtml:link rel="alternate" hreflang="ar-AE" href="https://www.anqah.com/ar/products/sello-lite.html"/>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://www.anqah.com/ar/products/sello-lite.html"/>
+    <image:image><image:loc>https://www.anqah.com/images/og/og-sello-lite.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello-lite-logo.png</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello-lite/sello-lite-payments.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello-lite/sello-lite-pending.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello-lite/sello-lite-portions.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello-lite/sello-lite-report.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello-lite/sello-lite-sell.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello-lite/sello-lite-taxes.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.anqah.com/ar/products/sello-lite.html</loc>
+    <lastmod>2026-10-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/products/sello-lite.html"/>
+    <xhtml:link rel="alternate" hreflang="en-AE" href="https://www.anqah.com/products/sello-lite.html"/>
+    <xhtml:link rel="alternate" hreflang="en-SA" href="https://www.anqah.com/products/sello-lite.html"/>
+    <xhtml:link rel="alternate" hreflang="en-IN" href="https://www.anqah.com/products/sello-lite.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.anqah.com/products/sello-lite.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.anqah.com/ar/products/sello-lite.html"/>
+    <xhtml:link rel="alternate" hreflang="ar-AE" href="https://www.anqah.com/ar/products/sello-lite.html"/>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://www.anqah.com/ar/products/sello-lite.html"/>
+    <image:image><image:loc>https://www.anqah.com/images/og/og-sello-lite.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello-lite-logo.png</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello-lite/sello-lite-payments.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello-lite/sello-lite-pending.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello-lite/sello-lite-portions.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello-lite/sello-lite-report.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello-lite/sello-lite-sell.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/sello-lite/sello-lite-taxes.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.anqah.com/products/automatic-bell.html</loc>
     <lastmod>2026-10-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/products/automatic-bell.html"/>
+    <xhtml:link rel="alternate" hreflang="en-AE" href="https://www.anqah.com/products/automatic-bell.html"/>
+    <xhtml:link rel="alternate" hreflang="en-SA" href="https://www.anqah.com/products/automatic-bell.html"/>
+    <xhtml:link rel="alternate" hreflang="en-IN" href="https://www.anqah.com/products/automatic-bell.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.anqah.com/products/automatic-bell.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.anqah.com/ar/products/automatic-bell.html"/>
+    <xhtml:link rel="alternate" hreflang="ar-AE" href="https://www.anqah.com/ar/products/automatic-bell.html"/>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://www.anqah.com/ar/products/automatic-bell.html"/>
+    <image:image><image:loc>https://www.anqah.com/images/og/og-automatic-bell.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/automatic-bell/bell-app-holidays.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/automatic-bell/bell-app-home.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/automatic-bell/bell-app-ringing.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/automatic-bell/bell-app-schedule.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/automatic-bell/bell-app-settings.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/automatic-bell/bell-app-weekdays.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/automatic-bell/bell-system-steel.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/automatic-bell/bell-system-white.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.anqah.com/ar/products/automatic-bell.html</loc>
+    <lastmod>2026-10-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/products/automatic-bell.html"/>
+    <xhtml:link rel="alternate" hreflang="en-AE" href="https://www.anqah.com/products/automatic-bell.html"/>
+    <xhtml:link rel="alternate" hreflang="en-SA" href="https://www.anqah.com/products/automatic-bell.html"/>
+    <xhtml:link rel="alternate" hreflang="en-IN" href="https://www.anqah.com/products/automatic-bell.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.anqah.com/products/automatic-bell.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.anqah.com/ar/products/automatic-bell.html"/>
+    <xhtml:link rel="alternate" hreflang="ar-AE" href="https://www.anqah.com/ar/products/automatic-bell.html"/>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://www.anqah.com/ar/products/automatic-bell.html"/>
+    <image:image><image:loc>https://www.anqah.com/images/og/og-automatic-bell.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/automatic-bell/bell-app-holidays.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/automatic-bell/bell-app-home.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/automatic-bell/bell-app-ringing.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/automatic-bell/bell-app-schedule.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/automatic-bell/bell-app-settings.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/automatic-bell/bell-app-weekdays.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/automatic-bell/bell-system-steel.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/automatic-bell/bell-system-white.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.anqah.com/products/water-monitoring.html</loc>
     <lastmod>2026-10-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/products/water-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="en-AE" href="https://www.anqah.com/products/water-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="en-SA" href="https://www.anqah.com/products/water-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="en-IN" href="https://www.anqah.com/products/water-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.anqah.com/products/water-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.anqah.com/ar/products/water-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="ar-AE" href="https://www.anqah.com/ar/products/water-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://www.anqah.com/ar/products/water-monitoring.html"/>
+    <image:image><image:loc>https://www.anqah.com/images/og/og-water-monitoring.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://www.anqah.com/ar/products/water-monitoring.html</loc>
+    <lastmod>2026-10-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/products/water-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="en-AE" href="https://www.anqah.com/products/water-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="en-SA" href="https://www.anqah.com/products/water-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="en-IN" href="https://www.anqah.com/products/water-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.anqah.com/products/water-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.anqah.com/ar/products/water-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="ar-AE" href="https://www.anqah.com/ar/products/water-monitoring.html"/>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://www.anqah.com/ar/products/water-monitoring.html"/>
+    <image:image><image:loc>https://www.anqah.com/images/og/og-water-monitoring.jpg</image:loc></image:image>
   </url>
 </urlset>

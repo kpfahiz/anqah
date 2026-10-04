@@ -2,6 +2,15 @@
 document.addEventListener('DOMContentLoaded', () => {
     const whatsappNumber = '971505762100';
     const $ = id => document.getElementById(id);
+    const ar = document.documentElement.lang === 'ar';
+    // UI strings for the Arabic pages; English is the default
+    const t = ar ? {
+        hello: name => `مرحبًا Anqah Tech، أنا ${name}.`, interest: 'مهتم بـ', phone: 'الهاتف', email: 'البريد',
+        prev: 'الصورة السابقة', next: 'الصورة التالية', close: 'إغلاق',
+    } : {
+        hello: name => `Hello Anqah Tech, I'm ${name}.`, interest: 'Interested in', phone: 'Phone', email: 'Email',
+        prev: 'Previous screen', next: 'Next screen', close: 'Close',
+    };
 
     // Mobile menu
     const toggle = $('menuToggle');
@@ -69,10 +78,10 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const f = new FormData(form);
             const lines = [
-                `Hello Anqah Tech, I'm ${[f.get('first'), f.get('last')].filter(Boolean).join(' ')}.`,
-                f.get('interest') && `Interested in: ${f.get('interest')}`,
-                f.get('phone') && `Phone: ${f.get('phone')}`,
-                f.get('email') && `Email: ${f.get('email')}`,
+                t.hello([f.get('first'), f.get('last')].filter(Boolean).join(' ')),
+                f.get('interest') && `${t.interest}: ${f.get('interest')}`,
+                f.get('phone') && `${t.phone}: ${f.get('phone')}`,
+                f.get('email') && `${t.email}: ${f.get('email')}`,
                 '',
                 f.get('message'),
             ].filter(v => v !== null && v !== undefined && v !== false);
@@ -86,9 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const dlg = document.createElement('dialog');
         dlg.className = 'lightbox';
         dlg.innerHTML = '<figure><img alt=""><figcaption><span class="lb-cap"></span><span class="lb-count"></span></figcaption></figure>' +
-            '<button class="lb-btn lb-prev" aria-label="Previous screen">&larr;</button>' +
-            '<button class="lb-btn lb-next" aria-label="Next screen">&rarr;</button>' +
-            '<button class="lb-close" aria-label="Close">&times;</button>';
+            `<button class="lb-btn lb-prev" aria-label="${t.prev}">&larr;</button>` +
+            `<button class="lb-btn lb-next" aria-label="${t.next}">&rarr;</button>` +
+            `<button class="lb-close" aria-label="${t.close}">&times;</button>`;
         document.body.appendChild(dlg);
         const img = dlg.querySelector('img');
         let index = 0;
