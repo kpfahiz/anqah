@@ -29,7 +29,7 @@ UI = {
         'smart': 'Smart solutions.<br>Reliable service.', 'start': 'Start a project',
         'services': 'Services', 'services_links': ['Web Development', 'Mobile Apps', 'CCTV &amp; Security', 'Home Automation', 'IT Infrastructure'],
         'contact': 'Contact', 'whatsapp': 'WhatsApp', 'city': 'Abu Dhabi, UAE',
-        'guides': 'Guides', 'guides_h': 'Guides &amp; insights',
+        'for': 'Built for', 'guides': 'Guides', 'guides_h': 'Guides &amp; insights',
         'guides_p': 'Practical guides on POS systems, school bells and water tank monitoring for businesses, schools and homes in the UAE, Saudi Arabia and India.',
         'guides_title': 'Guides: POS Software, School Bells &amp; Tank Monitoring | Anqah Tech',
         'read': 'Read guide', 'published': 'Published', 'related': 'Related product', 'see': 'See {name}',
@@ -60,7 +60,7 @@ UI = {
         'smart': 'حلول ذكية.<br>خدمة موثوقة.', 'start': 'ابدأ مشروعك',
         'services': 'الخدمات', 'services_links': ['تطوير المواقع', 'تطبيقات الجوال', 'كاميرات المراقبة والأمن', 'أتمتة المنازل', 'البنية التحتية لتقنية المعلومات'],
         'contact': 'تواصل معنا', 'whatsapp': 'واتساب', 'city': 'أبوظبي، الإمارات',
-        'guides': 'أدلة', 'guides_h': 'أدلة ومقالات',
+        'for': 'مناسب لـ', 'guides': 'أدلة', 'guides_h': 'أدلة ومقالات',
         'guides_p': 'أدلة عملية عن أنظمة نقاط البيع وأجراس المدارس ومراقبة خزانات المياه للشركات والمدارس والمنازل في الإمارات والسعودية والهند.',
         'guides_title': 'أدلة: برامج الكاشير وأجراس المدارس ومراقبة الخزانات | Anqah Tech',
         'read': 'اقرأ الدليل', 'published': 'نُشر في', 'related': 'المنتج المرتبط', 'see': 'شاهد {name}',
@@ -192,10 +192,11 @@ AR = {
     'automatic-bell': {
         'seo': {
             'title': 'جرس مدرسة آلي مع تطبيق جوال | الإمارات والسعودية والهند',
-            'description': 'جرس مدرسة آلي مع تطبيق جوال: يرنّ حسب الجدول، ويتخطّى العطل الأسبوعية والرسمية، مع رنين يدوي. للمدارس والمصانع في الإمارات والسعودية والهند.',
-            'keywords': 'جرس مدرسة آلي, نظام جرس المدرسة, جرس الحصص الآلي, جرس مدرسي ذكي, جرس مدرسة الإمارات, جرس مدرسة السعودية, جرس المصانع, منبه الحصص',
+            'description': 'جرس آلي مع تطبيق جوال للمدارس والكليات والسكن الطلابي والمصانع: يرنّ حسب الجدول، ويتخطّى العطل، مع رنين يدوي. في الإمارات والسعودية والهند.',
+            'keywords': 'جرس مدرسة آلي, نظام جرس المدرسة, جرس الحصص الآلي, جرس مدرسي ذكي, جرس مدرسة الإمارات, جرس مدرسة السعودية, جرس الجامعات والكليات, جرس السكن الطلابي, جرس المصانع, منبه الحصص',
         },
         'name': 'الجرس الآلي',
+        'audience': ['المدارس', 'الكليات والجامعات', 'السكن الطلابي', 'المدارس الدينية', 'مراكز التدريب', 'المصانع', 'المكاتب'],
         'category': 'إنترنت الأشياء &middot; أتمتة المدارس',
         'status': 'تجربة ميدانية',
         'tabs': [

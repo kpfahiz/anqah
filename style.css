@@ -604,3 +604,12 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: var(-
     .bl-body { padding: 0 16px 28px; }
 }
 .bl-all { margin-top: 28px; }
+
+/* ---------- "Built for" audience chips ---------- */
+.for-chips { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 18px 0 20px; }
+.for-chips li { font-family: var(--font-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 5px 11px; border: 1px solid var(--line-2); color: var(--text); }
+.for-chips .for-label { border: none; padding: 5px 2px 5px 0; color: var(--accent); }
+.for-chips .for-label::before { content: '// '; }
+.pd-copy .for-chips { margin: 18px 0 6px; }
+[dir="rtl"] .for-chips li { text-transform: none; letter-spacing: 0; font-size: 0.8rem; }
+[dir="rtl"] .for-chips .for-label { padding: 5px 0 5px 2px; }

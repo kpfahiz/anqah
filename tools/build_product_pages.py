@@ -158,11 +158,12 @@ PRODUCTS = [
         'slug': 'automatic-bell',
         'seo': {
             'title': 'Automatic School Bell System with App | UAE, KSA, India',
-            'description': 'Automatic school bell with mobile app: rings on a timetable, skips weekends &amp; holidays, manual ring. For schools &amp; factories in UAE, Saudi Arabia &amp; India.',
-            'keywords': 'automatic school bell, school bell system UAE, automatic bell Saudi Arabia, school bell timer India, WiFi bell controller, bell scheduler app, factory bell system',
+            'description': 'Automatic bell with mobile app for schools, colleges, hostels &amp; factories: rings on a timetable, skips holidays, manual ring. UAE, Saudi Arabia &amp; India.',
+            'keywords': 'automatic school bell, school bell system UAE, automatic bell Saudi Arabia, school bell timer India, college bell system, hostel bell timer, madrasa bell, WiFi bell controller, bell scheduler app, factory bell system',
             'og': 'og-automatic-bell.jpg', 'app': None,
         },
         'name': 'Automatic Bell',
+        'audience': ['Schools', 'Colleges', 'Hostels', 'Madrasas', 'Training centres', 'Factories', 'Offices'],
         'category': 'IoT &middot; School Automation',
         'status': 'Pilot',
         'logo': None,
@@ -482,6 +483,8 @@ def page(base, lang):
     switch_href = f'../../products/{p["slug"]}.html' if lang == 'ar' else f'../ar/products/{p["slug"]}.html'
     enquire = wa_link(unescape(t['wa_msg'].format(name=name)))
     status = f'<span class="pd-status">{p["status"]}</span>' if p['status'] else ''
+    audience = (f'<ul class="for-chips" aria-label="{t["for"]}"><li class="for-label">{t["for"]}</li>'
+                + ''.join(f'<li>{a}</li>' for a in p['audience']) + '</ul>') if p.get('audience') else ''
     facts = ''.join(f'<div><strong>{v}</strong><span>{k}</span></div>' for v, k in p['facts'])
     feats = ''.join(f'<li class="reveal"><span class="i">{i:02d}</span><h3>{ti}</h3><p>{d}</p></li>'
                     for i, (ti, d) in enumerate(p['features'], 1))
@@ -573,6 +576,7 @@ def page(base, lang):
                 </div>
                 <h1>{name}</h1>
                 <p class="lead">{p["statement"]}</p>
+                {audience}
                 <div class="hero-actions">
                     <a href="{enquire}" target="_blank" rel="noopener" class="btn btn-accent">{t['enquire']} <span class="arr">&rarr;</span></a>
                     <a href="tel:{PHONE}" class="btn btn-line">{t['call']}</a>
