@@ -327,148 +327,238 @@ async function initHero() {
 }
 
 /* ------------------------------------------------------------------ */
-/* PRODUCT: SELLO / SELLO Lite — phone with floating UI panels         */
+/* PRODUCT: SELLO Lite — phone running the real app; more screens fly   */
+/* out on hover                                                         */
 /* ------------------------------------------------------------------ */
-function drawAppScreen(ctx, w, h, { title, accent, lite }) {
-    const bg = ctx.createLinearGradient(0, 0, 0, h);
-    bg.addColorStop(0, '#0b1730');
-    bg.addColorStop(1, '#050b18');
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = accent;
-    ctx.font = 'bold 36px "Chakra Petch", sans-serif';
-    ctx.fillText(title, 24, 70);
-    ctx.fillStyle = '#8ea3c4';
-    ctx.font = '16px "IBM Plex Sans", sans-serif';
-    ctx.fillText(lite ? 'Quick Billing' : 'Business Dashboard', 24, 98);
-    // total card
-    roundRect(ctx, 20, 120, w - 40, 96, 14);
-    ctx.fillStyle = 'rgba(255,255,255,0.08)'; ctx.fill();
-    ctx.fillStyle = '#8ea3c4'; ctx.font = '14px "IBM Plex Sans", sans-serif'; ctx.fillText("TODAY'S SALES", 36, 150);
-    ctx.fillStyle = '#e6eefc'; ctx.font = 'bold 36px "IBM Plex Sans", sans-serif'; ctx.fillText('AED 4,580', 36, 196);
-    // bars
-    const bars = lite ? [0.4, 0.7, 0.55, 0.9] : [0.35, 0.6, 0.45, 0.8, 0.65, 0.95, 0.75];
-    const bw = (w - 60) / bars.length;
-    bars.forEach((v, i) => {
-        const bh = v * 120;
-        const g = ctx.createLinearGradient(0, 360 - bh, 0, 360);
-        g.addColorStop(0, accent); g.addColorStop(1, '#3b82f6');
-        ctx.fillStyle = g;
-        roundRect(ctx, 30 + i * bw, 360 - bh, bw - 10, bh, 5); ctx.fill();
+const LITE_SCREENS = {
+    main: 'images/products/sello-lite/sello-lite-sell.webp',
+    left: 'images/products/sello-lite/sello-lite-report.webp',
+    right: 'images/products/sello-lite/sello-lite-portions.webp',
+};
+
+// A phone body with a screenshot on its screen; screenshots are 738x1600 (20:9)
+function makePhone(url, { W = 1.02, H = 2.1, body = '#15181d' } = {}) {
+    const group = new THREE.Group();
+    const geo = new THREE.ExtrudeGeometry(roundedRectShape(W, H, 0.14), {
+        depth: 0.08, bevelEnabled: true, bevelThickness: 0.03, bevelSize: 0.03, bevelSegments: 4, curveSegments: 16,
     });
-    // list rows
-    for (let i = 0; i < (lite ? 2 : 3); i++) {
-        roundRect(ctx, 20, 384 + i * 40, w - 40, 32, 8);
-        ctx.fillStyle = 'rgba(255,255,255,0.05)'; ctx.fill();
-        ctx.fillStyle = '#e6eefc'; ctx.font = '13px "IBM Plex Sans", sans-serif';
-        ctx.fillText(['Invoice #1042', 'Invoice #1041', 'Stock update'][i], 32, 405 + i * 40);
-        ctx.fillStyle = accent; ctx.fillText(['AED 250', 'AED 160', '+24'][i], w - 92, 405 + i * 40);
-    }
-    // bottom button
-    roundRect(ctx, 20, h - 64, w - 40, 44, 12);
-    ctx.fillStyle = accent; ctx.fill();
-    ctx.fillStyle = '#0a0d05'; ctx.font = 'bold 16px "IBM Plex Sans", sans-serif';
-    ctx.fillText('+ NEW BILL', w / 2 - 50, h - 36);
+    geo.center();
+    const bodyMat = new THREE.MeshStandardMaterial({ color: body, metalness: 0.75, roughness: 0.3, transparent: true });
+    group.add(new THREE.Mesh(geo, bodyMat));
+    const sw = W - 0.1, sh = H - 0.1;
+    const screenGeo = new THREE.ShapeGeometry(roundedRectShape(sw, sh, 0.1));
+    const uv = screenGeo.attributes.uv, pos = screenGeo.attributes.position;
+    for (let i = 0; i < uv.count; i++) uv.setXY(i, pos.getX(i) / sw + 0.5, pos.getY(i) / sh + 0.5);
+    const screenMat = new THREE.MeshBasicMaterial({ color: '#0d1013', toneMapped: false, transparent: true });
+    const screen = new THREE.Mesh(screenGeo, screenMat);
+    screen.position.z = 0.072;
+    group.add(screen);
+    new THREE.TextureLoader().load(new URL(`./${url}`, import.meta.url).href, tex => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = 8;
+        screenMat.map = tex;
+        screenMat.color.set('#ffffff');
+        screenMat.needsUpdate = true;
+    });
+    group.userData.materials = [bodyMat, screenMat];
+    return group;
 }
 
-function drawPanel(ctx, w, h, { icon, title, value, accent }) {
-    roundRect(ctx, 4, 4, w - 8, h - 8, 22);
-    ctx.fillStyle = 'rgba(10,20,40,0.92)'; ctx.fill();
-    ctx.lineWidth = 3; ctx.strokeStyle = accent; ctx.stroke();
-    ctx.font = '44px sans-serif'; ctx.fillText(icon, 22, 74);
-    ctx.fillStyle = '#8ea3c4'; ctx.font = '20px "IBM Plex Sans", sans-serif'; ctx.fillText(title, 90, 50);
-    ctx.fillStyle = '#e6eefc'; ctx.font = 'bold 32px "IBM Plex Sans", sans-serif'; ctx.fillText(value, 90, 88);
-}
-
-function initPhone(canvas, { lite }) {
+function initLitePhone(canvas) {
     const card = canvas.closest('.product, .pd-stage') || canvas;
-    const stage = createStage(canvas, { fov: 32, z: 5.6, hoverTarget: card, minAspect: 1.5 });
+    const stage = createStage(canvas, { fov: 32, z: 5.8, hoverTarget: card, minAspect: 1.2 });
     const { scene } = stage;
     addLights(scene);
-    const accent = lite ? '#4d8dff' : '#b6ff3b';
-    const title = lite ? 'SELLO Lite' : 'SELLO';
 
     const root = new THREE.Group();
     scene.add(root);
-    const phone = new THREE.Group();
+    const phone = makePhone(LITE_SCREENS.main);
     root.add(phone);
 
-    const W = lite ? 1.0 : 1.12, H = lite ? 2.0 : 2.24;
-    const bodyGeo = new THREE.ExtrudeGeometry(roundedRectShape(W, H, 0.16), {
-        depth: 0.1, bevelEnabled: true, bevelThickness: 0.035, bevelSize: 0.035, bevelSegments: 4, curveSegments: 16,
-    });
-    bodyGeo.center();
-    const body = new THREE.Mesh(bodyGeo, new THREE.MeshStandardMaterial({ color: lite ? '#16314f' : '#1d1f3f', metalness: 0.8, roughness: 0.3 }));
-    phone.add(body);
-
-    const screenTex = canvasTexture(256, 512, (ctx, w, h) => drawAppScreen(ctx, w, h, { title, accent, lite }));
-    const screen = new THREE.Mesh(
-        new THREE.ShapeGeometry(roundedRectShape(W - 0.1, H - 0.1, 0.12)),
-        new THREE.MeshBasicMaterial({ map: screenTex, toneMapped: false })
-    );
-    // map ShapeGeometry UVs (shape space) to 0..1
-    const uv = screen.geometry.attributes.uv, pos = screen.geometry.attributes.position;
-    for (let i = 0; i < uv.count; i++) uv.setXY(i, pos.getX(i) / (W - 0.1) + 0.5, pos.getY(i) / (H - 0.1) + 0.5);
-    screen.position.z = 0.087;
-    phone.add(screen);
-
-    // Camera bump on the back
-    const cam = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.04, 24), new THREE.MeshStandardMaterial({ color: '#0a0f1f', metalness: 0.9, roughness: 0.2 }));
-    cam.rotation.x = Math.PI / 2;
-    cam.position.set(-W / 2 + 0.25, H / 2 - 0.25, -0.09);
-    phone.add(cam);
-
-    // Floating UI panels that fly out of the screen on hover
-    const panelDefs = lite
-        ? [
-            { icon: '🧾', title: 'Bill saved', value: 'AED 160', to: [1.25, 0.55, 0.6], rot: -0.25 },
-            { icon: '⚡', title: 'Checkout', value: '3 sec', to: [-1.25, -0.45, 0.5], rot: 0.25 },
-        ]
-        : [
-            { icon: '📦', title: 'Inventory', value: '1,284', to: [1.35, 0.75, 0.6], rot: -0.3 },
-            { icon: '📈', title: 'Growth', value: '+18%', to: [-1.4, 0.35, 0.7], rot: 0.3 },
-            { icon: '👥', title: 'Customers', value: '342', to: [1.25, -0.7, 0.5], rot: -0.2 },
-        ];
-    const panels = panelDefs.map((d, i) => {
-        const tex = canvasTexture(320, 120, (ctx, w, h) => drawPanel(ctx, w, h, { ...d, accent }));
-        const m = new THREE.Mesh(new THREE.PlaneGeometry(1.15, 0.43), new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0, side: THREE.DoubleSide, toneMapped: false }));
-        m.userData = { ...d, delay: i * 0.12 };
-        root.add(m);
-        return m;
+    // Secondary phones (real Reports and portion-picker screens) that fly out on hover
+    const extras = [
+        { url: LITE_SCREENS.left, to: [-1.35, -0.05, -0.55], rot: 0.45, delay: 0 },
+        { url: LITE_SCREENS.right, to: [1.35, -0.05, -0.55], rot: -0.45, delay: 0.12 },
+    ].map(d => {
+        const p = makePhone(d.url);
+        p.userData = { ...p.userData, ...d };
+        p.userData.materials.forEach(m => { m.opacity = 0; });
+        root.add(p);
+        return p;
     });
 
-    // Lite: a receipt that prints out of the top of the phone
-    let receipt;
-    if (lite) {
-        const tex = canvasTexture(128, 256, (ctx, w, h) => {
-            ctx.fillStyle = '#f1f5f9'; ctx.fillRect(0, 0, w, h);
-            ctx.fillStyle = '#0b1730'; ctx.font = 'bold 16px monospace'; ctx.fillText('SELLO LITE', 14, 28);
-            ctx.font = '12px monospace';
-            ['Item A    AED 45', 'Item B    AED 70', 'Item C    AED 45', '--------------', 'TOTAL    AED 160'].forEach((l, i) => ctx.fillText(l, 10, 62 + i * 22));
-            for (let x = 0; x < w; x += 12) { ctx.beginPath(); ctx.moveTo(x, h); ctx.lineTo(x + 6, h - 8); ctx.lineTo(x + 12, h); ctx.fill(); }
-        });
-        receipt = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 1.24), new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide }));
-        receipt.position.set(0, H / 2 - 0.62, -0.02);
-        phone.add(receipt);
-    }
-
-    stage.update = (t, dt) => {
+    stage.update = (t) => {
         const h = stage.h;
         const motion = reducedMotion ? 0.2 : 1;
-        root.position.y = Math.sin(t * 1.4) * 0.06 * motion;
-        phone.rotation.y = lerp(Math.sin(t * 0.6) * 0.5 * motion, stage.mouse.x * 0.35, h);
-        phone.rotation.x = lerp(0.08, -stage.mouse.y * 0.2, h);
-        phone.rotation.z = lerp(0.12, 0, h);
-        phone.scale.setScalar(lerp(1, 0.9, h));
-        panels.forEach(p => {
+        root.position.y = Math.sin(t * 1.4) * 0.05 * motion;
+        phone.rotation.y = lerp(Math.sin(t * 0.6) * 0.45 * motion, stage.mouse.x * 0.3, h);
+        phone.rotation.x = lerp(0.06, -stage.mouse.y * 0.15, h);
+        phone.rotation.z = lerp(0.1, 0, h);
+        extras.forEach(p => {
             const k = ease(clamp01((h - p.userData.delay) / (1 - p.userData.delay)));
             const [x, y, z] = p.userData.to;
-            p.position.set(lerp(0, x, k), lerp(0, y, k) + Math.sin(t * 2 + x) * 0.04 * k, lerp(0, z, k));
+            p.position.set(lerp(0, x, k), lerp(0, y, k) + Math.sin(t * 1.8 + x) * 0.03 * k, lerp(-0.2, z, k));
             p.rotation.y = lerp(0, p.userData.rot, k);
-            p.scale.setScalar(lerp(0.3, 1, k));
-            p.material.opacity = k;
+            p.scale.setScalar(lerp(0.6, 0.86, k));
+            p.visible = k > 0.01;
+            p.userData.materials.forEach(m => { m.opacity = k; });
         });
-        if (receipt) receipt.position.y = H / 2 - 0.62 + ease(h) * 0.85;
+    };
+}
+
+/* ------------------------------------------------------------------ */
+/* PRODUCT: SELLO — countertop POS terminal with the real SELLO screen  */
+/* ------------------------------------------------------------------ */
+function initTerminal(canvas) {
+    const card = canvas.closest('.product, .pd-stage') || canvas;
+    const stage = createStage(canvas, { fov: 30, z: 8.2, hoverTarget: card, minAspect: 1.1 });
+    const { scene, camera } = stage;
+    camera.position.y = 1.4;
+    camera.lookAt(0, -0.15, 0);
+    addLights(scene);
+
+    const dark = new THREE.MeshStandardMaterial({ color: '#1a1d22', metalness: 0.6, roughness: 0.38 });
+    const darker = new THREE.MeshStandardMaterial({ color: '#0f1114', metalness: 0.5, roughness: 0.45 });
+    const steel = new THREE.MeshStandardMaterial({ color: '#8a929c', metalness: 0.9, roughness: 0.28 });
+    const rounded = (w, h, r, depth) => {
+        const g = new THREE.ExtrudeGeometry(roundedRectShape(w, h, r), { depth, bevelEnabled: true, bevelThickness: 0.02, bevelSize: 0.02, bevelSegments: 3, curveSegments: 10 });
+        g.center();
+        return g;
+    };
+
+    const root = new THREE.Group();
+    root.position.y = -0.2;
+    scene.add(root);
+
+    // Cash-drawer cabinet the terminal stands on
+    const cabinet = new THREE.Mesh(new THREE.BoxGeometry(3.4, 0.42, 1.7), dark);
+    cabinet.position.set(0, -0.95, 0);
+    root.add(cabinet);
+    const drawer = new THREE.Group();
+    root.add(drawer);
+    const front = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.32, 0.06), darker);
+    front.position.set(0, -0.97, 0.86);
+    drawer.add(front);
+    const keyhole = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.02, 16), steel);
+    keyhole.rotation.x = Math.PI / 2;
+    keyhole.position.set(0, -0.97, 0.9);
+    drawer.add(keyhole);
+    // Tray with AED notes and coins (revealed as the drawer opens)
+    const tray = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.05, 1.0), new THREE.MeshStandardMaterial({ color: '#2a2f36', roughness: 0.7 }));
+    tray.position.set(0, -0.86, 0.34);
+    drawer.add(tray);
+    ['#7a5a3a', '#3f7a52', '#6b4f8f', '#2f6f8f'].forEach((c, i) => {
+        const note = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.04, 0.62), new THREE.MeshStandardMaterial({ color: c, roughness: 0.8 }));
+        note.position.set(-0.9 + i * 0.5, -0.82, 0.24);
+        drawer.add(note);
+    });
+    for (let i = 0; i < 5; i++) {
+        const coin = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.03, 20), new THREE.MeshStandardMaterial({ color: '#c9a646', metalness: 0.9, roughness: 0.3 }));
+        coin.position.set(-0.95 + i * 0.47, -0.82, 0.68);
+        drawer.add(coin);
+    }
+
+    // Stand
+    const neck = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.95, 0.2), steel);
+    neck.position.set(0, -0.32, -0.38);
+    neck.rotation.x = -0.18;
+    root.add(neck);
+    const foot = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.06, 0.55), steel);
+    foot.position.set(0, -0.72, -0.4);
+    root.add(foot);
+
+    // Touchscreen (16:9) showing the real SELLO point-of-sale screen
+    const head = new THREE.Group();
+    head.position.set(0, 0.42, -0.25);
+    root.add(head);
+    const SW = 2.56, SH = 1.44;
+    const housing = new THREE.Mesh(rounded(SW + 0.18, SH + 0.2, 0.08, 0.1), dark);
+    head.add(housing);
+    const screenMat = new THREE.MeshBasicMaterial({ color: '#0b1220', toneMapped: false });
+    const screen = new THREE.Mesh(new THREE.PlaneGeometry(SW, SH), screenMat);
+    screen.position.set(0, 0.02, 0.082);
+    head.add(screen);
+    new THREE.TextureLoader().load(new URL('./images/products/sello/sello-pos.webp', import.meta.url).href, tex => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = 8;
+        screenMat.map = tex;
+        screenMat.color.set('#ffffff');
+        screenMat.needsUpdate = true;
+    });
+    // glass sheen
+    const sheen = new THREE.Mesh(new THREE.PlaneGeometry(SW, SH), new THREE.MeshBasicMaterial({
+        map: canvasTexture(256, 144, (ctx, w, h) => {
+            const g = ctx.createLinearGradient(0, 0, w, h);
+            g.addColorStop(0, 'rgba(255,255,255,0.18)'); g.addColorStop(0.35, 'rgba(255,255,255,0.03)'); g.addColorStop(0.5, 'rgba(255,255,255,0)');
+            ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+        }), transparent: true, depthWrite: false,
+    }));
+    sheen.position.set(0, 0.02, 0.085);
+    head.add(sheen);
+    const led = new THREE.Mesh(new THREE.SphereGeometry(0.018, 10, 10), new THREE.MeshBasicMaterial({ color: '#b6ff3b' }));
+    led.position.set(SW / 2 - 0.05, -SH / 2 - 0.05, 0.082);
+    head.add(led);
+
+    // Receipt printer (right) with a receipt that prints on hover
+    const printer = new THREE.Group();
+    printer.position.set(1.28, -0.5, 0.35);
+    root.add(printer);
+    const pBody = new THREE.Mesh(rounded(0.62, 0.5, 0.1, 0.62), new THREE.MeshStandardMaterial({ color: '#e7eaee', metalness: 0.2, roughness: 0.45 }));
+    printer.add(pBody);
+    const slot = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.02, 0.05), darker);
+    slot.position.set(0, 0.26, -0.05);
+    printer.add(slot);
+    const receiptTex = canvasTexture(160, 320, (ctx, w, h) => {
+        ctx.fillStyle = '#fbfbf8'; ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = '#111827'; ctx.font = 'bold 15px monospace'; ctx.fillText('SELLO POS', 36, 26);
+        ctx.font = '11px monospace';
+        ['2x Spanish Latte  39.90', '1x Manakeesh     10.50', '1x Kunafa        23.10', '1x Orange Juice  14.70', '1x Croissant      9.45', '----------------------', 'VAT 5%            4.65', 'TOTAL AED        97.65']
+            .forEach((l, i) => ctx.fillText(l, 8, 56 + i * 20));
+        for (let x = 12; x < w - 12; x += 3) { ctx.fillRect(x, 230, Math.random() > 0.5 ? 2 : 1, 34); }
+    });
+    receiptTex.wrapT = THREE.ClampToEdgeWrapping;
+    const receipt = new THREE.Mesh(new THREE.PlaneGeometry(0.4, 0.8), new THREE.MeshBasicMaterial({ map: receiptTex, side: THREE.DoubleSide }));
+    receipt.geometry.translate(0, 0.4, 0); // grow upwards from the slot
+    receipt.position.set(0, 0.26, -0.05);
+    receipt.rotation.x = -0.12;
+    printer.add(receipt);
+
+    // Card machine (left) that lights up "TAP TO PAY"
+    const cardM = new THREE.Group();
+    cardM.position.set(-1.3, -0.62, 0.45);
+    cardM.rotation.set(-0.5, 0.35, 0);
+    root.add(cardM);
+    cardM.add(new THREE.Mesh(rounded(0.34, 0.6, 0.06, 0.08), darker));
+    const tapTex = canvasTexture(128, 96, (ctx, w, h) => {
+        ctx.fillStyle = '#0b1220'; ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = '#b6ff3b'; ctx.font = 'bold 13px sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('TAP TO PAY', w / 2, 36);
+        ctx.fillStyle = '#e9edf0'; ctx.font = 'bold 18px sans-serif'; ctx.fillText('AED 97.65', w / 2, 66);
+    });
+    const tapMat = new THREE.MeshBasicMaterial({ map: tapTex, transparent: true, opacity: 0.35, toneMapped: false });
+    const tap = new THREE.Mesh(new THREE.PlaneGeometry(0.26, 0.2), tapMat);
+    tap.position.set(0, 0.14, 0.062);
+    cardM.add(tap);
+    const keyMat = ['#3a414b', '#3a414b', '#3a414b', '#ef4444', '#f59e0b', '#22c55e'];
+    keyMat.forEach((c, i) => {
+        const k = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.04, 0.02), new THREE.MeshStandardMaterial({ color: c }));
+        k.position.set(-0.09 + (i % 3) * 0.09, -0.08 - Math.floor(i / 3) * 0.08, 0.06);
+        cardM.add(k);
+    });
+
+    stage.update = (t) => {
+        const h = stage.h;
+        const motion = reducedMotion ? 0.2 : 1;
+        root.rotation.y = lerp(Math.sin(t * 0.45) * 0.32 * motion, stage.mouse.x * 0.35, h);
+        root.position.y = -0.2 + Math.sin(t * 1.2) * 0.03 * motion;
+        head.rotation.x = lerp(-0.2, -0.08 - stage.mouse.y * 0.08, h);
+        drawer.position.z = ease(h) * 0.75;
+        const print = ease(clamp01(h * 1.3 - 0.15));
+        receipt.scale.y = Math.max(0.02, print);
+        receiptTex.repeat.y = Math.max(0.02, print);
+        receiptTex.offset.y = 1 - Math.max(0.02, print);
+        tapMat.opacity = 0.35 + h * 0.65 * (0.75 + 0.25 * Math.sin(t * 6));
+        led.material.color.set(Math.sin(t * 3) > 0 ? '#b6ff3b' : '#4a6a1a');
     };
 }
 
@@ -716,8 +806,8 @@ function boot() {
         initHero();
         document.querySelectorAll('canvas[data-scene]').forEach(c => {
             const s = c.dataset.scene;
-            if (s === 'sello') initPhone(c, { lite: false });
-            else if (s === 'selloLite') initPhone(c, { lite: true });
+            if (s === 'sello') initTerminal(c);
+            else if (s === 'selloLite') initLitePhone(c);
             else if (s === 'bell') initBell(c);
             else if (s === 'water') initWater(c);
         });

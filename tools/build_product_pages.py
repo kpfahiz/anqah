@@ -25,7 +25,7 @@ PRODUCTS = [
             ('sello-pos.webp', 'Point of sale', 'Fast touch billing with categories, barcode search and a live cart with VAT.', 'sello.local/pos'),
             ('sello-payment.webp', 'Checkout', 'Cash, card or split payments, with change calculated automatically.', 'sello.local/pos'),
             ('sello-tables.webp', 'Restaurant tables', 'See every table at a glance, seat guests and manage orders in rounds.', 'sello.local/restaurant/tables'),
-            ('sello-kitchen.webp', 'Kitchen display', 'Tickets flow from New to Accepted, Preparing and Ready.', 'sello.local/kitchen'),
+            ('sello-kitchen.webp', 'Kitchen display', 'A tablet at the kitchen pass, where tickets flow from New to Accepted, Preparing and Ready.', 'sello.local/kitchen'),
             ('sello-sales.webp', 'Sales history', 'Every invoice with payment method, items and one-click returns or exchanges.', 'sello.local/pos/sales'),
             ('sello-dashboard.webp', 'Dashboard', 'One home screen for POS, inventory, purchasing, kitchen, reports and settings.', 'sello.local/dashboard'),
         ],
@@ -274,17 +274,21 @@ def logo_tile(p, cls='pd-logo'):
 
 
 def gallery_section(p, n):
+    # Each screen is shown on a real POS terminal photo (`*-device.webp`); clicking opens the raw screenshot.
+    folder = f'../images/products/{p["slug"]}'
     shots = ''.join(
-        f'<figure class="shot reveal{" shot-lg" if i == 0 else ""}">'
-        f'<a href="../images/products/{p["slug"]}/{f}" data-lightbox="{p["slug"]}" data-caption="{t} &mdash; {c}">'
-        f'<span class="shot-bar"><i></i><i></i><i></i><span>{url}</span></span>'
-        f'<img src="../images/products/{p["slug"]}/{f}" alt="{p["name"]} {t.lower()} screen" width="1440" height="900" loading="{"eager" if i == 0 else "lazy"}">'
+        f'<figure class="shot reveal">'
+        f'<a href="{folder}/{f}" data-lightbox="{p["slug"]}" data-caption="{t} &mdash; {c}">'
+        f'<img src="{folder}/{f.replace(".webp", "-device.webp")}" alt="{p["name"]} {t.lower()} screen on a POS terminal" '
+        f'width="1000" height="750" loading="{"eager" if i == 0 else "lazy"}">'
+        f'<span class="shot-zoom">[ view screen ]</span>'
         f'</a><figcaption><b>{t}</b>{c}</figcaption></figure>'
-        for i, (f, t, c, url) in enumerate(p['gallery']))
+        for i, (f, t, c, _url) in enumerate(p['gallery']))
     return f'''
         <section class="section">
-            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{p["name"]} in action</h2><p>Real screens from {p["name"]}, running a demo café &amp; mart. Click any screen to enlarge.</p></div></header>
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{p["name"]} in action</h2><p>Real screens from {p["name"]}, running a demo café &amp; mart, each shown on a different kind of POS hardware. Click any screen to see it full size.</p></div></header>
             <div class="gallery">{shots}</div>
+            <p class="credit">POS hardware and product photos via <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>. Screens are from a demo shop with sample data.</p>
         </section>
 '''
 
