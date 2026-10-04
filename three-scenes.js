@@ -337,7 +337,8 @@ const LITE_SCREENS = {
 };
 
 // A phone body with a screenshot on its screen; screenshots are 738x1600 (20:9)
-function makePhone(url, { W = 1.02, H = 2.1, body = '#15181d' } = {}) {
+// `texture` (optional) shows a live CanvasTexture instead of loading `url`
+function makePhone(url, { W = 1.02, H = 2.1, body = '#15181d', texture = null } = {}) {
     const group = new THREE.Group();
     const geo = new THREE.ExtrudeGeometry(roundedRectShape(W, H, 0.14), {
         depth: 0.08, bevelEnabled: true, bevelThickness: 0.03, bevelSize: 0.03, bevelSegments: 4, curveSegments: 16,
@@ -353,13 +354,15 @@ function makePhone(url, { W = 1.02, H = 2.1, body = '#15181d' } = {}) {
     const screen = new THREE.Mesh(screenGeo, screenMat);
     screen.position.z = 0.072;
     group.add(screen);
-    new THREE.TextureLoader().load(new URL(`./${url}`, import.meta.url).href, tex => {
+    const apply = tex => {
         tex.colorSpace = THREE.SRGBColorSpace;
         tex.anisotropy = 8;
         screenMat.map = tex;
         screenMat.color.set('#ffffff');
         screenMat.needsUpdate = true;
-    });
+    };
+    if (texture) apply(texture);
+    else new THREE.TextureLoader().load(new URL(`./${url}`, import.meta.url).href, apply);
     group.userData.materials = [bodyMat, screenMat];
     return group;
 }
@@ -784,19 +787,140 @@ function initBell(canvas) {
 }
 
 /* ------------------------------------------------------------------ */
-/* PRODUCT: Water Monitoring — tank fills, waves and live level label   */
+/* PRODUCT: Water Monitoring — the tank fills and drains, the phone app */
+/* mirrors the level live, and Telegram alerts fire below 15% (empty)   */
+/* and above 95% (overflow)                                             */
 /* ------------------------------------------------------------------ */
+const WATER_LOW = 15, WATER_HIGH = 95;
+
+function waterStatus(pct) {
+    if (pct < WATER_LOW) return { text: 'LOW — REFILL NEEDED', col: '#ef4444' };
+    if (pct > WATER_HIGH) return { text: 'FULL — OVERFLOW RISK', col: '#f59e0b' };
+    return { text: 'NORMAL', col: '#22c55e' };
+}
+
+// Phone app screen: live tank level, status, pump state and Telegram alerts
+function drawWaterApp(ctx, w, h, pct, rising) {
+    const st = waterStatus(pct);
+    ctx.fillStyle = '#0d141b';
+    ctx.fillRect(0, 0, w, h);
+    // status bar + header
+    ctx.fillStyle = '#9aa7b4';
+    ctx.font = '600 15px "IBM Plex Sans", sans-serif';
+    ctx.fillText('10:42', 22, 30);
+    ctx.textAlign = 'right';
+    ctx.fillText('5G  ▮▮▮  82%', w - 20, 30);
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#e8eef4';
+    ctx.font = 'bold 24px "Chakra Petch", sans-serif';
+    ctx.fillText('Water Monitor', 22, 78);
+    ctx.fillStyle = '#22c55e';
+    ctx.beginPath(); ctx.arc(w - 72, 70, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.font = 'bold 14px "JetBrains Mono", monospace';
+    ctx.fillText('LIVE', w - 60, 75);
+    ctx.fillStyle = '#7d8a97';
+    ctx.font = '14px "IBM Plex Sans", sans-serif';
+    ctx.fillText('Overhead tank · Villa 12', 22, 102);
+
+    // tank card
+    roundRect(ctx, 16, 122, w - 32, 300, 18);
+    ctx.fillStyle = '#16212b'; ctx.fill();
+    const tx = 40, ty = 150, tw = 104, th = 246;
+    roundRect(ctx, tx, ty, tw, th, 14);
+    ctx.lineWidth = 3; ctx.strokeStyle = '#3b4b5b'; ctx.stroke();
+    ctx.save();
+    roundRect(ctx, tx + 4, ty + 4, tw - 8, th - 8, 10); ctx.clip();
+    const fillH = (th - 8) * pct / 100, top = ty + th - 4 - fillH;
+    const g = ctx.createLinearGradient(0, top, 0, ty + th);
+    g.addColorStop(0, '#4fc3ff'); g.addColorStop(1, '#1d6fe0');
+    ctx.fillStyle = g;
+    ctx.fillRect(tx, top, tw, fillH + 4);
+    ctx.restore();
+    // threshold marks
+    [[WATER_HIGH, '#f59e0b'], [WATER_LOW, '#ef4444']].forEach(([v, c]) => {
+        const y = ty + th - 4 - (th - 8) * v / 100;
+        ctx.strokeStyle = c; ctx.lineWidth = 2; ctx.setLineDash([5, 4]);
+        ctx.beginPath(); ctx.moveTo(tx - 6, y); ctx.lineTo(tx + tw + 6, y); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = c; ctx.font = 'bold 12px "JetBrains Mono", monospace';
+        ctx.fillText(`${v}%`, tx + tw + 10, y + 4);
+    });
+    ctx.fillStyle = '#e8eef4';
+    ctx.font = 'bold 54px "Chakra Petch", sans-serif';
+    ctx.fillText(`${pct}%`, 172, 230);
+    ctx.fillStyle = '#7d8a97';
+    ctx.font = '14px "IBM Plex Sans", sans-serif';
+    ctx.fillText('Water level', 174, 254);
+    ctx.fillStyle = rising ? '#4fc3ff' : '#9aa7b4';
+    ctx.font = 'bold 15px "IBM Plex Sans", sans-serif';
+    ctx.fillText(rising ? '▲ Filling' : '▼ In use', 174, 290);
+    ctx.fillStyle = '#7d8a97';
+    ctx.font = '14px "IBM Plex Sans", sans-serif';
+    ctx.fillText('Updated just now', 174, 318);
+
+    // status pill
+    roundRect(ctx, 16, 440, w - 32, 54, 14);
+    ctx.fillStyle = st.col + '26'; ctx.fill();
+    ctx.lineWidth = 2; ctx.strokeStyle = st.col; ctx.stroke();
+    ctx.fillStyle = st.col;
+    ctx.font = 'bold 17px "Chakra Petch", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(st.text, w / 2, 474);
+    ctx.textAlign = 'left';
+
+    // alert rules
+    roundRect(ctx, 16, 512, w - 32, 112, 14);
+    ctx.fillStyle = '#16212b'; ctx.fill();
+    ctx.fillStyle = '#e8eef4';
+    ctx.font = 'bold 15px "IBM Plex Sans", sans-serif';
+    ctx.fillText('Telegram alerts', 32, 542);
+    ctx.font = '14px "IBM Plex Sans", sans-serif';
+    ctx.fillStyle = '#ef8a8a';
+    ctx.fillText(`● Below ${WATER_LOW}% → Tank empty`, 32, 572);
+    ctx.fillStyle = '#f5c26b';
+    ctx.fillText(`● Above ${WATER_HIGH}% → Overflow`, 32, 600);
+}
+
+// Telegram-style notification card
+function drawTelegram(ctx, w, h, kind, pct) {
+    ctx.clearRect(0, 0, w, h);
+    roundRect(ctx, 4, 4, w - 8, h - 8, 22);
+    ctx.fillStyle = 'rgba(250,251,252,0.97)'; ctx.fill();
+    // paper-plane avatar
+    ctx.fillStyle = '#2aabee';
+    ctx.beginPath(); ctx.arc(62, h / 2, 36, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.moveTo(42, h / 2 - 2); ctx.lineTo(82, h / 2 - 18); ctx.lineTo(74, h / 2 + 20); ctx.lineTo(62, h / 2 + 6);
+    ctx.lineTo(56, h / 2 + 16); ctx.lineTo(56, h / 2 + 3); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#111827';
+    ctx.font = 'bold 22px "IBM Plex Sans", sans-serif';
+    ctx.fillText('Telegram · Tank Alert Bot', 116, 46);
+    ctx.fillStyle = '#6b7280';
+    ctx.font = '17px "IBM Plex Sans", sans-serif';
+    ctx.textAlign = 'right'; ctx.fillText('now', w - 24, 46); ctx.textAlign = 'left';
+    ctx.fillStyle = kind === 'empty' ? '#b91c1c' : '#b45309';
+    ctx.font = 'bold 21px "IBM Plex Sans", sans-serif';
+    ctx.fillText(kind === 'empty' ? `⚠ Tank empty — level ${pct}%` : `⚠ Overflow alert — level ${pct}%`, 116, 84);
+    ctx.fillStyle = '#374151';
+    ctx.font = '17px "IBM Plex Sans", sans-serif';
+    ctx.fillText(kind === 'empty' ? 'Please refill the tank / start the pump.' : 'Tank almost full — stop the pump.', 116, 114);
+}
+
 function initWater(canvas) {
     const card = canvas.closest('.product, .pd-stage') || canvas;
-    const stage = createStage(canvas, { fov: 32, z: 7.6, hoverTarget: card, minAspect: 1.5 });
+    const stage = createStage(canvas, { fov: 32, z: 8.2, hoverTarget: card, minAspect: 1.05 });
     const { scene, camera } = stage;
-    camera.position.y = 1.2;
-    camera.lookAt(0, 0, 0);
+    camera.position.y = 1.0;
+    camera.lookAt(0, 0.1, 0);
     addLights(scene);
 
-    const root = new THREE.Group();
-    root.position.y = -0.25;
-    scene.add(root);
+    const world = new THREE.Group();
+    world.position.x = -0.12;
+    scene.add(world);
+    const root = new THREE.Group();     // the tank
+    root.position.set(-0.85, -0.25, 0);
+    world.add(root);
     const R = 0.75, TH = 1.8;
 
     // Glass tank
@@ -812,32 +936,31 @@ function initWater(canvas) {
         e.position.y = y;
         root.add(e);
     });
-    // level ticks
-    for (let i = 1; i < 5; i++) {
-        const tick = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.012, 0.012), new THREE.MeshBasicMaterial({ color: '#7f8892' }));
-        tick.position.set(R + 0.1, -TH / 2 + (TH * i) / 5, 0);
-        root.add(tick);
-    }
+    // threshold rings on the glass: 95% (overflow) and 15% (empty)
+    [[WATER_HIGH, '#f59e0b'], [WATER_LOW, '#ef4444']].forEach(([v, c]) => {
+        const m = new THREE.Mesh(new THREE.TorusGeometry(R + 0.035, 0.008, 6, 80), new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: 0.7 }));
+        m.rotation.x = Math.PI / 2;
+        m.position.y = -TH / 2 + TH * v / 100;
+        root.add(m);
+    });
     const base = new THREE.Mesh(new THREE.CylinderGeometry(R + 0.12, R + 0.18, 0.14, 64), new THREE.MeshStandardMaterial({ color: '#1e2a44', metalness: 0.7, roughness: 0.4 }));
     base.position.y = -TH / 2 - 0.08;
     root.add(base);
 
-    // Water column
+    // Water column + wavy surface
     const waterMat = new THREE.MeshStandardMaterial({ color: '#1d8bff', emissive: '#0a3d8f', emissiveIntensity: 0.6, transparent: true, opacity: 0.78, roughness: 0.15, metalness: 0.1 });
     const colGeo = new THREE.CylinderGeometry(R - 0.01, R - 0.01, 1, 64);
     colGeo.translate(0, 0.5, 0);
     const column = new THREE.Mesh(colGeo, waterMat);
     column.position.y = -TH / 2;
     root.add(column);
-
-    // Wavy surface
     const surfGeo = new THREE.RingGeometry(0, R - 0.01, 64, 10);
     surfGeo.rotateX(-Math.PI / 2);
     const surfBase = surfGeo.attributes.position.array.slice();
     const surface = new THREE.Mesh(surfGeo, new THREE.MeshStandardMaterial({ color: '#4fc3ff', emissive: '#1260c9', emissiveIntensity: 0.7, transparent: true, opacity: 0.9, side: THREE.DoubleSide, roughness: 0.1 }));
     root.add(surface);
 
-    // Lid with ultrasonic sensor + blinking LED
+    // Lid with ultrasonic sensor, LED and sonar pulses
     const lid = new THREE.Mesh(new THREE.CylinderGeometry(R + 0.04, R + 0.04, 0.06, 64), new THREE.MeshStandardMaterial({ color: '#1e2a44', metalness: 0.7, roughness: 0.35 }));
     lid.position.y = TH / 2 + 0.03;
     root.add(lid);
@@ -847,7 +970,6 @@ function initWater(canvas) {
     const led = new THREE.Mesh(new THREE.SphereGeometry(0.035, 12, 12), new THREE.MeshBasicMaterial({ color: '#22c55e' }));
     led.position.set(-0.05, TH / 2 + 0.18, 0.14);
     root.add(led);
-    // Sonar pulses from the sensor down to the water
     const pulses = [0, 1].map(() => {
         const m = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.008, 6, 40), new THREE.MeshBasicMaterial({ color: SIGNAL, transparent: true, opacity: 0 }));
         m.rotation.x = Math.PI / 2;
@@ -856,7 +978,7 @@ function initWater(canvas) {
         return m;
     });
 
-    // Inlet pipe + droplets
+    // Inlet pipe + droplets (only while filling)
     const pipeMat = new THREE.MeshStandardMaterial({ color: '#64748b', metalness: 0.8, roughness: 0.3 });
     const pipe = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.9, 16), pipeMat);
     pipe.rotation.z = Math.PI / 2;
@@ -873,37 +995,46 @@ function initWater(canvas) {
         return d;
     });
 
-    // Floating level read-out
-    let shown = -1;
-    const labelTex = canvasTexture(256, 112, () => {});
-    const drawLabel = (pct) => {
-        const ctx = labelTex.userData.ctx;
-        ctx.clearRect(0, 0, 256, 112);
-        roundRect(ctx, 4, 4, 248, 104, 18);
-        ctx.fillStyle = 'rgba(15,27,51,0.94)'; ctx.fill();
-        ctx.lineWidth = 3; ctx.strokeStyle = pct > 85 ? '#ff6b3d' : '#b6ff3b'; ctx.stroke();
-        ctx.fillStyle = '#8ea3c4'; ctx.font = '18px "IBM Plex Sans", sans-serif'; ctx.fillText('TANK LEVEL', 24, 40);
-        ctx.fillStyle = '#e6eefc'; ctx.font = 'bold 46px "Chakra Petch", sans-serif'; ctx.fillText(`${pct}%`, 24, 90);
-        ctx.fillStyle = pct > 85 ? '#f59e0b' : '#22c55e'; ctx.beginPath(); ctx.arc(220, 70, 10, 0, Math.PI * 2); ctx.fill();
-        labelTex.needsUpdate = true;
-    };
-    const label = new THREE.Sprite(new THREE.SpriteMaterial({ map: labelTex, transparent: true, toneMapped: false }));
-    label.scale.set(1.15, 0.5, 1);
-    label.position.set(-1.3, 0.6, 0.4);
-    root.add(label);
+    // Phone app mirroring the level live
+    const appTex = canvasTexture(300, 640, () => {});
+    const phone = makePhone(null, { W: 1.02, H: 2.1, body: '#1b1e23', texture: appTex });
+    phone.position.set(1.45, 0.0, 0.3);
+    phone.rotation.set(0.02, -0.32, 0.03);
+    world.add(phone);
+    // Wireless link: dots from the tank sensor to the phone
+    const link = new THREE.QuadraticBezierCurve3(
+        new THREE.Vector3(-0.85, 0.85, 0), new THREE.Vector3(0.3, 1.6, 0.2), new THREE.Vector3(1.2, 0.95, 0.35));
+    const dots = Array.from({ length: 8 }, (_, i) => {
+        const m = new THREE.Mesh(new THREE.SphereGeometry(0.028, 10, 10), new THREE.MeshBasicMaterial({ color: '#4fc3ff', transparent: true, opacity: 0.5, toneMapped: false }));
+        m.userData.p = i / 8;
+        world.add(m);
+        return m;
+    });
 
-    let level = 0.3;
+    // Telegram notification that drops in when a threshold is crossed
+    const tgTex = canvasTexture(560, 150, () => {});
+    const tgMat = new THREE.MeshBasicMaterial({ map: tgTex, transparent: true, opacity: 0, toneMapped: false, depthTest: false });
+    const tg = new THREE.Mesh(new THREE.PlaneGeometry(2.1, 0.56), tgMat);
+    tg.renderOrder = 10;
+    tg.position.set(0.45, 1.55, 0.8);
+    world.add(tg);
+    let alertUntil = -1, alertKind = null;
+
+    let phase = -Math.PI / 2 + 0.6, level = 0.3, prevLevel = 0.3, shown = -1, shownRising = null, zone = 'normal';
     stage.update = (t, dt) => {
         const h = stage.h;
         const motion = reducedMotion ? 0.2 : 1;
-        const target = lerp(0.3 + Math.sin(t * 0.4) * 0.02, 0.88, ease(h));
-        level = lerp(level, target, Math.min(dt * 2.5, 1));
-        column.scale.y = level * TH;
+        // level keeps cycling between ~3% and ~98%; hovering speeds it up
+        phase += dt * (0.32 + h * 0.5) * (reducedMotion ? 0.4 : 1);
+        prevLevel = level;
+        level = 0.505 + 0.475 * Math.sin(phase);
+        const rising = level >= prevLevel;
+        column.scale.y = Math.max(0.001, level * TH);
         const surfY = -TH / 2 + level * TH;
         surface.position.y = surfY;
 
         const p = surfGeo.attributes.position;
-        const amp = (0.015 + h * 0.035) * motion;
+        const amp = (rising ? 0.035 : 0.015) * motion;
         for (let i = 0; i < p.count; i++) {
             const x = surfBase[i * 3], z = surfBase[i * 3 + 2];
             const r = Math.hypot(x - 0.32, z);
@@ -914,9 +1045,8 @@ function initWater(canvas) {
 
         drops.forEach(d => {
             const ph = (t * 1.2 + d.userData.phase) % 1;
-            const top = TH / 2 + 0.1;
-            d.position.y = lerp(top, surfY, ph * ph);
-            d.material.opacity = h * (ph < 0.95 ? 1 : 0);
+            d.position.y = lerp(TH / 2 + 0.1, surfY, ph * ph);
+            d.material.opacity = rising ? (ph < 0.95 ? 1 : 0) : 0;
         });
         pulses.forEach((m, i) => {
             const ph = (t * 0.8 + i * 0.5) % 1;
@@ -924,12 +1054,36 @@ function initWater(canvas) {
             m.scale.setScalar(1 + ph * 2);
             m.material.opacity = (1 - ph) * 0.7;
         });
+        dots.forEach(d => {
+            const q = (d.userData.p + t * 0.45) % 1;
+            d.position.copy(link.getPoint(q));
+            d.material.opacity = 0.7 * Math.sin(q * Math.PI);
+        });
         led.material.color.set(Math.sin(t * 6) > 0 ? '#22c55e' : '#064e3b');
-        root.rotation.y = lerp(Math.sin(t * 0.4) * 0.3, stage.mouse.x * 0.4, h);
-        label.position.y = surfY + 0.25;
+        world.rotation.y = lerp(Math.sin(t * 0.35) * 0.18 * motion, stage.mouse.x * 0.3, h);
+        phone.position.y = Math.sin(t * 1.3) * 0.04 * motion;
 
         const pct = Math.round(level * 100);
-        if (pct !== shown) { shown = pct; drawLabel(pct); }
+        if (pct !== shown || rising !== shownRising) {
+            shown = pct; shownRising = rising;
+            drawWaterApp(appTex.userData.ctx, 300, 640, pct, rising);
+            appTex.needsUpdate = true;
+        }
+        // Telegram alerts when crossing into the empty / overflow zones
+        const nextZone = pct < WATER_LOW ? 'empty' : pct > WATER_HIGH ? 'overflow' : 'normal';
+        if (nextZone !== zone) {
+            zone = nextZone;
+            if (zone !== 'normal') {
+                alertKind = zone;
+                alertUntil = t + 3.2;
+                drawTelegram(tgTex.userData.ctx, 560, 150, zone, pct);
+                tgTex.needsUpdate = true;
+            }
+        }
+        const showing = t < alertUntil;
+        tgMat.opacity = lerp(tgMat.opacity, showing ? 1 : 0, Math.min(dt * 6, 1));
+        tg.position.y = lerp(tg.position.y, showing ? 1.55 : 1.85, Math.min(dt * 6, 1));
+        tg.visible = tgMat.opacity > 0.01;
     };
 }
 

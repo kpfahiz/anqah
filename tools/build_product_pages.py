@@ -217,31 +217,38 @@ PRODUCTS = [
         'status': None,
         'logo': None,
         'scene': 'water',
-        'terminal': 'water.monitor --tank=1 --alerts=on|pump.auto --low=20% --high=95%|water.history --days=30',
-        'statement': 'Real-time water tank level monitoring &mdash; see the level on your phone, get alerts, and avoid '
-                     'overflow or a dry run.',
-        'facts': [('Live', 'Tank level on your phone'), ('Auto', 'Pump on / off control'), ('Alerts', 'Low and high level'), ('24/7', 'Monitoring')],
+        'terminal': 'water.monitor --tank=1 --live|alerts.telegram --empty-below=15 --overflow-above=95|water.level --watch',
+        'statement': 'Real-time water tank monitoring &mdash; the level updates live on your phone as the tank fills and '
+                     'empties, and Telegram alerts you before it runs dry or overflows.',
+        'facts': [('Live', 'Tank level on your phone'), ('&lt;15%', 'Telegram: tank empty'), ('&gt;95%', 'Telegram: overflow'), ('24/7', 'Monitoring')],
         'problem': 'Tanks overflow and waste water, or run dry without warning &mdash; and checking levels means climbing '
                    'onto the roof or opening an underground sump.',
-        'solution': 'A level sensor on the tank reports to a controller that shows the live level on your phone, sends '
-                    'alerts, and can switch the pump automatically between low and high limits.',
+        'solution': 'A level sensor on the tank reports the water level continuously. The phone app shows it live as it '
+                    'rises and falls, and a Telegram message warns you the moment the tank drops below 15% or goes above 95%.',
         'features': [
-            ('Live tank level', 'See the current level as a percentage from anywhere on the network.'),
-            ('Level alerts', 'Get notified when the tank is low or about to overflow.'),
-            ('Pump automation', 'Start and stop the pump automatically between set limits.'),
+            ('Live level on your phone', 'The percentage on the app rises and falls in real time, exactly as the water in the tank does.'),
+            ('Tank-empty alert', 'When the level drops below 15%, a Telegram message tells you the tank is nearly empty.'),
+            ('Overflow alert', 'When the level goes above 95%, a Telegram message warns you before the tank overflows.'),
+            ('Filling or in use', 'See at a glance whether the tank is filling up or being used.'),
             ('Overhead &amp; sump tanks', 'Works with rooftop and underground tanks.'),
         ],
         'steps': [
-            'A level sensor is mounted on the tank lid.',
-            'The controller reads the water level continuously.',
-            'Levels and alerts appear in the app; the pump switches on and off at your limits.',
+            'A level sensor is mounted on the tank lid and measures the water level continuously.',
+            'The level is sent to the phone app, where it updates live as the tank fills and empties.',
+            'Below 15%, a Telegram message says the tank is empty &mdash; time to refill.',
+            'Above 95%, a Telegram message warns of overflow &mdash; time to stop the water.',
         ],
         'use_cases': ['Villas and homes with rooftop tanks', 'Apartment buildings', 'Farms and commercial sites'],
-        'benefits': ['No overflow or wasted water', 'No dry-running pumps', 'No more manual tank checks'],
-        'tech': 'Contact us for the sensor options, controller and installation details for your tanks.',
+        'benefits': ['No overflow or wasted water', 'Never run out of water unexpectedly', 'No more climbing up to check the tank',
+                     'Alerts on Telegram, wherever you are'],
+        'tech': 'A level sensor on the tank lid reads the water level continuously and sends it to the app. Alerts are '
+                'delivered as Telegram messages at two thresholds: below 15% (tank empty) and above 95% (overflow). '
+                'Contact us for sensor options and installation details for your tanks.',
         'privacy': None,
         'faq': [
-            ('Can it control my existing pump?', 'In most cases, yes &mdash; contact us with your pump and tank details and we&rsquo;ll confirm.'),
+            ('How quickly does the app update?', 'Continuously &mdash; the level on your phone rises and falls along with the water in the tank.'),
+            ('When do I get alerts?', 'You get a Telegram message when the level drops below 15% (tank empty) and when it goes above 95% (overflow).'),
+            ('Do I need Telegram?', 'Yes &mdash; alerts are sent as Telegram messages, so install Telegram on the phone that should receive them.'),
         ],
     },
 ]
