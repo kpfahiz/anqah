@@ -25,7 +25,7 @@ PRODUCTS = [
             'og': 'og-sello.jpg', 'app': ('BusinessApplication', 'Windows, Web'),
         },
         'name': 'SELLO',
-        'category': 'POS & Shop Management',
+        'category': 'POS All-in-One Solution',
         'status': None,
         'logo': 'images/products/sello-logo.png',
         'scene': 'sello',
