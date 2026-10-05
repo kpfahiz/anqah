@@ -296,7 +296,7 @@ PRODUCTS = [
 
 
 # Reuse the exact WhatsApp icon from the home page
-WA_ICON = re.search(r'<svg viewBox="0 0 24 24".*?</svg>', (ROOT / 'index.html').read_text(encoding='utf-8'), re.S).group(0)
+WA_ICON = re.search(r'class="fab-wa".*?(<svg.*?</svg>)', (ROOT / 'index.html').read_text(encoding='utf-8'), re.S).group(1)
 
 
 def text_only(html):
@@ -406,7 +406,7 @@ def footer(lang, root, switch_href, product_dir=''):
             </div>
             <div>
                 <h4>{t['contact']}</h4>
-                <a href="tel:{PHONE}" dir="ltr">+971 50 239 3703</a><a href="https://wa.me/{WHATSAPP}" target="_blank" rel="noopener">{t['whatsapp']}</a><a href="mailto:anqahgroups@gmail.com">anqahgroups@gmail.com</a><span>{t['city']}</span>
+                <a href="tel:{PHONE}" dir="ltr">+971 50 239 3703</a><a href="https://wa.me/{WHATSAPP}" target="_blank" rel="noopener">{t['whatsapp']}</a><a href="mailto:anqahgroups@gmail.com">anqahgroups@gmail.com</a><span>{t['city']}</span><a href="{root}downloads/Anqah-Tech-Company-Profile.pdf" download>{t['profile']}</a>
             </div>
         </div>
         <div class="footer-bottom">
@@ -689,6 +689,9 @@ def page(base, lang):
 
 {footer(lang, root, switch_href)}
 
+    <a class="fab-pdf" href="{root}downloads/Anqah-Tech-Company-Profile.pdf" download aria-label="{t['profile_dl']}" title="{t['profile_dl']}">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 11v6m0 0-3-3m3 3 3-3"/></svg>
+    </a>
     <a class="fab-wa" href="https://wa.me/{WHATSAPP}" target="_blank" rel="noopener" aria-label="{t['chat']}">
         {WA_ICON}
     </a>

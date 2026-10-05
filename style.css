@@ -624,3 +624,22 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: var(-
 [dir="rtl"] .hw-incl li { text-transform: none; }
 .hw-gallery .shot img { border: 1px solid var(--line-2); }
 @media (max-width: 760px) { .hw-incl { padding: 20px; } .hw-incl ul { flex-basis: 100%; } }
+
+/* ---------- Company profile download ---------- */
+.profile-dl { margin-top: 40px; display: flex; align-items: center; gap: 22px; padding: 24px 28px; background: var(--panel); border: 1px solid var(--line-2); transition: border-color .25s, background .25s; }
+.profile-dl:hover { border-color: var(--accent); background: var(--panel-2); }
+.pdl-icon { flex: none; width: 52px; height: 52px; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); }
+.pdl-icon svg { width: 26px; height: 26px; }
+.pdl-text { display: grid; gap: 2px; }
+.pdl-text small { font-family: var(--font-mono); font-size: 0.7rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.12em; }
+.pdl-text b { font-family: var(--font-display); font-size: 1.35rem; text-transform: uppercase; }
+.pdl-text span { color: var(--muted); font-size: 0.88rem; }
+.profile-dl .arr { margin-left: auto; color: var(--accent); font-size: 1.4rem; transition: transform .2s; }
+.profile-dl:hover .arr { transform: translateY(3px); }
+[dir="rtl"] .profile-dl .arr { margin-left: 0; margin-right: auto; }
+@media (max-width: 760px) { .profile-dl { padding: 18px; gap: 14px; } .pdl-text b { font-size: 1.1rem; } }
+
+/* ---------- Floating company-profile button (above WhatsApp) ---------- */
+.fab-pdf { position: fixed; right: 20px; bottom: 84px; z-index: 90; width: 54px; height: 54px; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px)); transition: transform .2s; }
+.fab-pdf:hover, .fab-pdf:focus-visible { transform: scale(1.08); outline: none; }
+[dir="rtl"] .fab-pdf { right: auto; left: 20px; }
