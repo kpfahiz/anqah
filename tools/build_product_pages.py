@@ -332,7 +332,11 @@ def structured_data(p, lang, url, image):
         item.update({'@type': 'SoftwareApplication', 'applicationCategory': p['seo']['app'][0],
                      'operatingSystem': p['seo']['app'][1], 'publisher': org})
     else:
-        item.update({'@type': 'Product', 'manufacturer': org})
+        # Devices we supply, install and support. Marked up as a Service, not a Product: Google's Product rich
+        # results need a price (offers) or reviews, which we don't publish, and would flag the page as invalid.
+        item.pop('inLanguage')
+        item.update({'@type': 'Service', 'serviceType': text_only(p['category']), 'provider': org,
+                     'areaServed': [{'@type': 'Country', 'name': c} for c in ('United Arab Emirates', 'Saudi Arabia', 'India')]})
     graph = [
         item,
         {'@type': 'BreadcrumbList', 'itemListElement': [
