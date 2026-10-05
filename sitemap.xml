@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.anqah.com/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/"/>
@@ -17,7 +17,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/ar/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/"/>
@@ -32,7 +32,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/products/sello.html</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/products/sello.html"/>
@@ -51,10 +51,16 @@
     <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-pos-device.webp</image:loc></image:image>
     <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-sales-device.webp</image:loc></image:image>
     <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-tables-device.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/pos-hardware/drawer.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/pos-hardware/kds.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/pos-hardware/monitor.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/pos-hardware/printer.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/pos-hardware/tablet.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/pos-hardware/terminal.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.anqah.com/ar/products/sello.html</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/products/sello.html"/>
@@ -73,10 +79,16 @@
     <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-pos-device.webp</image:loc></image:image>
     <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-sales-device.webp</image:loc></image:image>
     <image:image><image:loc>https://www.anqah.com/images/products/sello/sello-tables-device.webp</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/pos-hardware/drawer.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/pos-hardware/kds.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/pos-hardware/monitor.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/pos-hardware/printer.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/pos-hardware/tablet.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/products/pos-hardware/terminal.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.anqah.com/products/sello-lite.html</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/products/sello-lite.html"/>
@@ -98,7 +110,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/ar/products/sello-lite.html</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/products/sello-lite.html"/>
@@ -120,7 +132,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/products/automatic-bell.html</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/products/automatic-bell.html"/>
@@ -143,7 +155,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/ar/products/automatic-bell.html</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/products/automatic-bell.html"/>
@@ -166,7 +178,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/products/water-monitoring.html</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/products/water-monitoring.html"/>
@@ -181,7 +193,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/ar/products/water-monitoring.html</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/products/water-monitoring.html"/>
@@ -196,7 +208,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/blog/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/blog/"/>
@@ -210,7 +222,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/ar/blog/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/blog/"/>
@@ -224,7 +236,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/blog/restaurant-pos-system-uae.html</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/blog/restaurant-pos-system-uae.html"/>
@@ -239,7 +251,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/ar/blog/restaurant-pos-system-uae.html</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/blog/restaurant-pos-system-uae.html"/>
@@ -254,7 +266,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/blog/pos-software-saudi-arabia.html</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/blog/pos-software-saudi-arabia.html"/>
@@ -269,7 +281,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/ar/blog/pos-software-saudi-arabia.html</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/blog/pos-software-saudi-arabia.html"/>
@@ -284,7 +296,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/blog/automatic-school-bell-system.html</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/blog/automatic-school-bell-system.html"/>
@@ -299,7 +311,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/ar/blog/automatic-school-bell-system.html</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/blog/automatic-school-bell-system.html"/>
@@ -314,7 +326,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/blog/water-tank-level-monitoring.html</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/blog/water-tank-level-monitoring.html"/>
@@ -329,7 +341,7 @@
   </url>
   <url>
     <loc>https://www.anqah.com/ar/blog/water-tank-level-monitoring.html</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.anqah.com/blog/water-tank-level-monitoring.html"/>

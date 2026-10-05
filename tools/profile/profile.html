@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<!-- Anqah Tech company profile (A4). Print to PDF with: node tools/profile/build_profile.mjs -->
+<title>Anqah Tech - Company Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+@page { size: A4; margin: 0; }
+:root {
+    --ink: #07080a; --ink-2: #0f1215; --navy: #23345c; --lime: #b6ff3b; --lime-dk: #6f9e12;
+    --text: #1b2027; --muted: #5d6670; --line: #dfe3e8; --paper: #ffffff; --soft: #f4f6f8;
+    --display: 'Chakra Petch', sans-serif; --body: 'IBM Plex Sans', sans-serif; --mono: 'JetBrains Mono', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { font-family: var(--body); color: var(--text); background: #888; }
+.page { width: 210mm; height: 297mm; position: relative; overflow: hidden; background: var(--paper); page-break-after: always; margin: 0 auto 8mm; }
+.page:last-child { page-break-after: auto; }
+@media print { body { background: none; } .page { margin: 0; } }
+
+/* geometric corner accents (navy + lime, like a tech HUD) */
+.geo { position: absolute; width: 0; height: 0; }
+.geo.tr-navy { top: 0; right: 0; border-top: 46mm solid var(--navy); border-left: 46mm solid transparent; }
+.geo.tr-lime { top: 0; right: 0; border-top: 24mm solid var(--lime); border-left: 24mm solid transparent; }
+.geo.bl-navy { bottom: 0; left: 0; border-bottom: 30mm solid var(--navy); border-right: 30mm solid transparent; }
+.geo.bl-lime { bottom: 0; left: 0; border-bottom: 14mm solid var(--lime); border-right: 14mm solid transparent; }
+.geo.tl-navy { top: 0; left: 0; border-top: 40mm solid var(--navy); border-right: 40mm solid transparent; }
+.geo.tl-lime { top: 0; left: 0; border-top: 20mm solid var(--lime); border-right: 20mm solid transparent; }
+.geo.br-navy { bottom: 0; right: 0; border-bottom: 34mm solid var(--navy); border-left: 34mm solid transparent; }
+.geo.br-lime { bottom: 0; right: 0; border-bottom: 16mm solid var(--lime); border-left: 16mm solid transparent; }
+
+.inner { position: absolute; inset: 22mm 18mm 20mm; display: flex; flex-direction: column; }
+.kicker { font-family: var(--mono); font-size: 8.5pt; letter-spacing: 0.14em; text-transform: uppercase; color: var(--lime-dk); font-weight: 700; }
+.kicker::before { content: '// '; }
+h1, h2, h3 { font-family: var(--display); text-transform: uppercase; line-height: 1.02; color: var(--ink); }
+h2 { font-size: 34pt; margin: 3mm 0 6mm; letter-spacing: -0.01em; }
+h2 em { font-style: normal; color: var(--navy); }
+h3 { font-size: 12.5pt; margin-bottom: 1.6mm; }
+p { font-size: 10pt; line-height: 1.6; color: var(--muted); }
+p.lead { font-size: 11.5pt; color: var(--text); }
+.rule { width: 34mm; height: 1.4mm; background: var(--lime); margin: 5mm 0; }
+.foot { position: absolute; left: 18mm; right: 18mm; bottom: 9mm; display: flex; justify-content: space-between; font-family: var(--mono); font-size: 7.5pt; color: #9aa3ad; letter-spacing: 0.08em; }
+.foot b { color: var(--navy); }
+
+/* ---------- cover ---------- */
+.cover { background: var(--ink); color: #e9edf0; }
+.cover::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle, #2a3138 1px, transparent 1.4px) 0 0 / 7mm 7mm; opacity: .8; }
+.cover::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 80% 70%, rgba(182,255,59,.16), transparent 55%), radial-gradient(ellipse at 10% 10%, rgba(77,141,255,.16), transparent 50%); }
+.cover > * { position: relative; z-index: 1; }
+.cover .brand { position: absolute; top: 20mm; left: 18mm; display: flex; align-items: center; gap: 5mm; }
+.cover .brand img { width: 26mm; }
+.cover .brand span { font-family: var(--display); font-weight: 700; font-size: 17pt; letter-spacing: 0.04em; text-transform: uppercase; }
+.cover .status { position: absolute; top: 22mm; right: 18mm; font-family: var(--mono); font-size: 8pt; color: #7f8892; text-align: right; line-height: 1.7; }
+.cover .status i { display: inline-block; width: 2mm; height: 2mm; background: var(--lime); margin-right: 2mm; box-shadow: 0 0 6px var(--lime); }
+.cover .title { position: absolute; left: 18mm; top: 62mm; right: 18mm; }
+.cover .title .kicker { color: var(--lime); }
+.cover h1 { color: #fff; font-size: 54pt; margin: 4mm 0 5mm; }
+.cover h1 span { color: var(--lime); display: block; }
+.cover .title p { color: #aab3bc; font-size: 12pt; max-width: 135mm; }
+.cover .hero { position: absolute; left: 18mm; right: 18mm; bottom: 34mm; height: 92mm; display: grid; grid-template-columns: 1.35fr 1fr 1fr; gap: 3mm; }
+.cover .hero div { border: 0.3mm solid #2a3138; background: #0f1215 center / cover no-repeat; position: relative; }
+.cover .hero div::after { content: attr(data-label); position: absolute; left: 3mm; bottom: 2.5mm; font-family: var(--mono); font-size: 7pt; color: var(--lime); letter-spacing: .1em; background: rgba(7,8,10,.75); padding: .8mm 2mm; }
+.cover .web { position: absolute; left: 18mm; right: 18mm; bottom: 16mm; display: flex; justify-content: space-between; font-family: var(--mono); font-size: 9pt; color: #7f8892; border-top: 0.3mm solid #2a3138; padding-top: 4mm; }
+.cover .web b { color: #fff; }
+
+/* ---------- about ---------- */
+.about-img { height: 82mm; margin: -22mm -18mm 8mm; background: url('../../images/products/sello/sello-dashboard-device.webp') center 45% / cover; position: relative; }
+.about-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, #fff); }
+.vmp { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5mm; margin-top: 7mm; }
+.vmp div { border-top: 1.2mm solid var(--navy); background: var(--soft); padding: 5mm 4.5mm; }
+.vmp div:nth-child(2) { border-color: var(--lime); }
+.vmp p { font-size: 9.2pt; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; margin-top: auto; }
+.stats div { border-left: 0.8mm solid var(--lime); padding-left: 3mm; }
+.stats b { display: block; font-family: var(--display); font-size: 17pt; color: var(--navy); }
+.stats span { font-size: 8pt; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+
+/* ---------- products ---------- */
+.prods { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; flex: 1; }
+.prod { border: 0.3mm solid var(--line); display: flex; flex-direction: column; }
+.prod .img { height: 52mm; background: #0f1215 center / cover no-repeat; position: relative; }
+.prod .img.contain { background-size: contain; }
+.prod .img::after { content: attr(data-tag); position: absolute; top: 3mm; left: 3mm; font-family: var(--mono); font-size: 6.8pt; letter-spacing: .1em; background: var(--lime); color: var(--ink); padding: .8mm 2mm; font-weight: 700; text-transform: uppercase; }
+.prod .txt { padding: 4.5mm; }
+.prod p { font-size: 9pt; }
+.prod ul { list-style: none; display: flex; flex-wrap: wrap; gap: 1.6mm; margin-top: 3mm; }
+.prod li { font-family: var(--mono); font-size: 6.8pt; text-transform: uppercase; border: 0.3mm solid var(--line); padding: .8mm 2mm; color: var(--navy); }
+
+/* ---------- services ---------- */
+.svc { display: grid; grid-template-columns: 1fr 1fr; gap: 0 9mm; }
+.svc div { display: grid; grid-template-columns: 11mm 1fr; padding: 5.6mm 0; border-bottom: 0.3mm solid var(--line); }
+.svc .n { font-family: var(--mono); font-size: 9pt; color: var(--lime-dk); font-weight: 700; padding-top: .6mm; }
+.svc h3 { font-size: 11.5pt; margin-bottom: 1.4mm; }
+.svc p { font-size: 9.4pt; line-height: 1.5; }
+
+/* ---------- why ---------- */
+.why { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+.why div { background: var(--soft); padding: 7mm 6mm; position: relative; }
+.why div::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1mm; background: var(--navy); }
+.why div:nth-child(4n+2)::before, .why div:nth-child(4n+3)::before { background: var(--lime); }
+.why p { font-size: 9.8pt; }
+.areas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+.why + .sub { margin-top: auto; }
+.areas div { background: var(--ink); color: #e9edf0; padding: 5mm; }
+.areas .kicker { color: var(--lime); font-size: 7.5pt; }
+.areas h3 { color: #fff; margin: 2mm 0; font-size: 13pt; }
+.areas p { color: #aab3bc; font-size: 8.4pt; }
+
+/* ---------- how we work ---------- */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; }
+.steps div { border: 0.3mm solid var(--line); padding: 6mm 4.5mm; position: relative; }
+.steps b { font-family: var(--display); font-size: 28pt; color: var(--lime); -webkit-text-stroke: 0.3mm var(--navy); display: block; line-height: 1; margin-bottom: 3mm; }
+.steps p { font-size: 8.8pt; }
+.inds { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; }
+.inds span { background: var(--soft); border-left: 1mm solid var(--navy); padding: 3.2mm 3mm; font-family: var(--display); font-weight: 600; text-transform: uppercase; font-size: 9.5pt; color: var(--ink); }
+.stack { display: flex; flex-wrap: wrap; gap: 2.2mm; }
+.stack span { font-family: var(--mono); font-size: 8.4pt; border: 0.3mm solid var(--navy); color: var(--navy); padding: 1.4mm 3mm; }
+.sub { margin: 9mm 0 4mm; font-size: 15pt; }
+.band { margin-top: auto; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3mm; height: 52mm; }
+.band div { background: #0f1215 center / cover no-repeat; position: relative; }
+.band div::after { content: attr(data-label); position: absolute; left: 2.5mm; bottom: 2.5mm; font-family: var(--mono); font-size: 6.8pt; letter-spacing: .1em; background: var(--lime); color: var(--ink); padding: .8mm 2mm; font-weight: 700; }
+
+/* ---------- contact ---------- */
+.contact { background: var(--ink); color: #e9edf0; }
+.contact::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle, #2a3138 1px, transparent 1.4px) 0 0 / 7mm 7mm; opacity: .7; }
+.contact .inner, .contact .geo { z-index: 1; }
+.contact h2 { color: #fff; font-size: 44pt; }
+.contact .kicker { color: var(--lime); }
+.contact p { color: #aab3bc; }
+.cgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 10mm; border-top: 0.3mm solid #2a3138; }
+.cgrid div { padding: 5.5mm 0; border-bottom: 0.3mm solid #2a3138; }
+.cgrid small { display: block; font-family: var(--mono); font-size: 7.5pt; letter-spacing: .12em; text-transform: uppercase; color: #7f8892; margin-bottom: 1.5mm; }
+.cgrid b { font-family: var(--display); font-size: 15pt; color: #fff; font-weight: 600; }
+.cta { margin-top: auto; border: 0.4mm solid var(--lime); padding: 7mm; display: flex; justify-content: space-between; align-items: center; background: rgba(182,255,59,.06); }
+.cta h3 { color: #fff; font-size: 16pt; }
+.cta span { font-family: var(--mono); background: var(--lime); color: var(--ink); padding: 3mm 5mm; font-weight: 700; font-size: 10pt; }
+.contact .endlogo { width: 30mm; margin-bottom: 8mm; }
+
+/* ---------- SELLO POS systems ---------- */
+.pos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm 6mm; }
+.pos-grid figure { margin: 0; }
+.pos-grid figure div { height: 50mm; background: #0f1215 center / cover no-repeat; border: 0.3mm solid var(--line); }
+.pos-grid figcaption { font-size: 8.6pt; line-height: 1.45; color: var(--muted); padding-top: 2.2mm; border-left: 0.8mm solid var(--lime); padding-left: 2.5mm; margin-top: 2mm; }
+.pos-grid figcaption b { display: block; font-family: var(--display); text-transform: uppercase; font-size: 10.5pt; color: var(--ink); }
+
+.pos-grid.hw { grid-template-columns: 1fr 1fr 1fr; gap: 5mm 4mm; }
+.pos-grid.hw figure div { height: 40mm; }
+.incl { margin-top: auto; background: var(--ink); padding: 6mm; }
+.incl .kicker { color: var(--lime); }
+.incl ul { list-style: none; display: flex; flex-wrap: wrap; gap: 2.4mm; margin-top: 3.5mm; }
+.incl li { font-family: var(--display); font-weight: 600; text-transform: uppercase; font-size: 9.5pt; color: #fff; border: 0.3mm solid #3a434c; padding: 2mm 3.2mm; }
+.incl li::before { content: '+ '; color: var(--lime); }
+</style>
+</head>
+<body>
+
+<!-- 1. COVER -->
+<section class="page cover">
+    <div class="brand"><img src="../../images/logo-mark-white.png" alt=""><span>Anqah Tech</span></div>
+    <div class="status"><i></i>SYS.ONLINE<br>ABU DHABI &middot; UAE</div>
+    <div class="title">
+        <div class="kicker">Company Profile</div>
+        <h1>Intelligent POS, IoT<span>&amp; IT systems</span></h1>
+        <p>Software, smart devices and IT infrastructure for businesses, schools and homes across the UAE, Saudi Arabia and India.</p>
+    </div>
+    <div class="hero">
+        <div style="background-image:url('../../images/products/sello/sello-pos-device.webp')" data-label="SELLO POS"></div>
+        <div style="background-image:url('../../images/profile/stage-automatic-bell.jpg')" data-label="AUTOMATIC BELL"></div>
+        <div style="background-image:url('../../images/profile/stage-water-monitoring.jpg')" data-label="WATER MONITORING"></div>
+    </div>
+    <div class="web"><span><b>www.anqah.com</b></span><span>POS &middot; IoT &middot; IT SOLUTIONS</span></div>
+</section>
+
+<!-- 2. ABOUT -->
+<section class="page">
+    <div class="geo tr-navy"></div><div class="geo tr-lime"></div>
+    <div class="inner">
+        <div class="about-img"></div>
+        <div class="kicker">01 &middot; Who we are</div>
+        <h2>About <em>us</em></h2>
+        <p class="lead">Anqah Tech is a software, IoT and IT solutions company based in Abu Dhabi, United Arab Emirates. We design and build our own products &mdash; the <b>SELLO</b> point-of-sale system, the <b>SELLO Lite</b> mobile POS app, the <b>Automatic Bell</b> and <b>Water Monitoring</b> &mdash; supply complete POS systems with hardware, and deliver web, mobile, CCTV, networking, automation and IT infrastructure for businesses, schools and homes.</p>
+        <div class="vmp">
+            <div><h3>Vision</h3><p>To be the region&rsquo;s most dependable technology partner &mdash; where every shop, school and home runs on systems that are simple, smart and always on.</p></div>
+            <div><h3>Mission</h3><p>To engineer practical software and connected devices that remove everyday friction, delivered end-to-end with honest pricing and local support.</p></div>
+            <div><h3>Our promise</h3><p>You work directly with the engineers who build your system. We design for how you actually work, keep it running with support and AMC, and stand behind every installation.</p></div>
+        </div>
+        <div class="stats">
+            <div><b>4</b><span>In-house products</span></div>
+            <div><b>12</b><span>Service lines</span></div>
+            <div><b>3</b><span>Countries served</span></div>
+            <div><b>2</b><span>Languages: EN &middot; AR</span></div>
+        </div>
+    </div>
+    <div class="foot"><span><b>ANQAH TECH</b> &middot; COMPANY PROFILE</span><span>02</span></div>
+</section>
+
+<!-- 3. PRODUCTS -->
+<section class="page">
+    <div class="geo tl-navy"></div><div class="geo tl-lime"></div>
+    <div class="inner">
+        <div class="kicker" style="margin-left:26mm">02 &middot; Built by us</div>
+        <h2 style="margin-left:26mm">Our <em>products</em></h2>
+        <div class="prods">
+            <div class="prod">
+                <div class="img" style="background-image:url('../../images/products/sello/sello-pos-device.webp')" data-tag="POS All-in-One Solution"></div>
+                <div class="txt"><h3>SELLO</h3><p>Complete point-of-sale and shop management for retail stores, restaurants and caf&eacute;s &mdash; billing, inventory, kitchen display and reports, running on your own shop network.</p>
+                <ul><li>Retail &amp; restaurant</li><li>Kitchen display</li><li>Inventory</li><li>VAT / GST</li></ul></div>
+            </div>
+            <div class="prod">
+                <div class="img contain" style="background-image:url('../../images/profile/stage-sello-lite.jpg')" data-tag="Mobile POS"></div>
+                <div class="txt"><h3>SELLO Lite</h3><p>An offline point-of-sale app for Android phones and tablets. Sell, print receipts and see reports with no internet and no cloud subscription.</p>
+                <ul><li>Works offline</li><li>Portions</li><li>Reports</li><li>Arabic</li></ul></div>
+            </div>
+            <div class="prod">
+                <div class="img" style="background-image:url('../../images/profile/stage-automatic-bell.jpg')" data-tag="IoT &middot; Automation"></div>
+                <div class="txt"><h3>Automatic Bell</h3><p>A WiFi bell controller that rings on schedule, skips weekends and holidays, and is managed from a mobile app.</p>
+                <ul><li>Schools</li><li>Colleges</li><li>Hostels</li><li>Factories</li></ul></div>
+            </div>
+            <div class="prod">
+                <div class="img" style="background-image:url('../../images/profile/stage-water-monitoring.jpg')" data-tag="IoT &middot; Smart Home"></div>
+                <div class="txt"><h3>Water Monitoring</h3><p>Live tank level on your phone, with Telegram alerts below 15% (tank empty) and above 95% (overflow).</p>
+                <ul><li>Live level</li><li>Telegram alerts</li><li>Villas</li><li>Buildings</li></ul></div>
+            </div>
+        </div>
+    </div>
+    <div class="foot"><span><b>ANQAH TECH</b> &middot; COMPANY PROFILE</span><span>03</span></div>
+</section>
+
+<!-- 3b. SELLO POS SYSTEMS -->
+<section class="page">
+    <div class="geo tr-navy"></div><div class="geo tr-lime"></div>
+    <div class="geo bl-navy"></div><div class="geo bl-lime"></div>
+    <div class="inner">
+        <div class="kicker">03 &middot; POS systems</div>
+        <h2>SELLO <em>in action</em></h2>
+        <p class="lead" style="margin-bottom:6mm">One POS all-in-one solution for the counter, the dining floor and the kitchen &mdash; running on touch POS terminals, tablets and PCs on your own shop network.</p>
+        <div class="pos-grid">
+            <figure><div style="background-image:url('../../images/products/sello/sello-pos-device.webp')"></div><figcaption><b>Point of sale</b>Fast touch billing with categories, barcode search and a live cart with VAT.</figcaption></figure>
+            <figure><div style="background-image:url('../../images/products/sello/sello-payment-device.webp')"></div><figcaption><b>Checkout</b>Cash, card or split payments, with change calculated automatically.</figcaption></figure>
+            <figure><div style="background-image:url('../../images/products/sello/sello-tables-device.webp')"></div><figcaption><b>Restaurant tables</b>See every table at a glance, seat guests and manage orders in rounds.</figcaption></figure>
+            <figure><div style="background-image:url('../../images/products/sello/sello-kitchen-device.webp')"></div><figcaption><b>Kitchen display</b>Tickets flow from New to Accepted, Preparing and Ready at the kitchen pass.</figcaption></figure>
+            <figure><div style="background-image:url('../../images/products/sello/sello-sales-device.webp')"></div><figcaption><b>Sales history</b>Every invoice with payment method, items and one-click returns or exchanges.</figcaption></figure>
+            <figure><div style="background-image:url('../../images/products/sello/sello-dashboard-device.webp')"></div><figcaption><b>Dashboard</b>One home screen for POS, inventory, purchasing, kitchen, reports and settings.</figcaption></figure>
+        </div>
+    </div>
+    <div class="foot"><span></span><span>04</span></div>
+</section>
+
+<!-- 3c. POS HARDWARE -->
+<section class="page">
+    <div class="geo tl-navy"></div><div class="geo tl-lime"></div>
+    <div class="inner">
+        <div class="kicker" style="margin-left:26mm">03 &middot; POS hardware</div>
+        <h2 style="margin-left:26mm">We sell <em>complete POS systems</em></h2>
+        <p class="lead" style="margin-bottom:5mm">Hardware and software from one supplier. We supply the POS machines, install SELLO, set up your products and taxes, and train your staff &mdash; ready to sell from day one.</p>
+        <div class="pos-grid hw">
+            <figure><div style="background-image:url('../../images/products/pos-hardware/terminal.jpg')"></div><figcaption><b>Dual-screen POS terminal</b>All-in-one touch terminal with a customer-facing display.</figcaption></figure>
+            <figure><div style="background-image:url('../../images/products/pos-hardware/printer.jpg')"></div><figcaption><b>Receipt printer</b>Fast thermal printing for receipts and kitchen tickets.</figcaption></figure>
+            <figure><div style="background-image:url('../../images/products/pos-hardware/tablet.jpg')"></div><figcaption><b>Tablet POS</b>Compact counter or table-side billing on a secure stand.</figcaption></figure>
+            <figure><div style="background-image:url('../../images/products/pos-hardware/kds.jpg')"></div><figcaption><b>Kitchen display</b>A screen at the kitchen pass, so orders never get lost.</figcaption></figure>
+            <figure><div style="background-image:url('../../images/products/pos-hardware/drawer.jpg')"></div><figcaption><b>Cash drawer</b>Opens automatically on cash sales and keeps takings secure.</figcaption></figure>
+            <figure><div style="background-image:url('../../images/products/pos-hardware/monitor.jpg')"></div><figcaption><b>Touch-screen POS monitor</b>Large touch screen for busy counters and the back office.</figcaption></figure>
+        </div>
+        <div class="incl">
+            <span class="kicker">Every POS package includes</span>
+            <ul><li>POS hardware</li><li>SELLO software</li><li>Installation &amp; setup</li><li>Product &amp; VAT/GST setup</li><li>Staff training</li><li>Support &amp; AMC</li></ul>
+        </div>
+    </div>
+    <div class="foot"><span><b>ANQAH TECH</b> &middot; COMPANY PROFILE</span><span>05</span></div>
+</section>
+
+<!-- 4. WHAT WE DO -->
+<section class="page">
+    <div class="geo tr-navy"></div><div class="geo tr-lime"></div>
+    <div class="geo bl-navy"></div><div class="geo bl-lime"></div>
+    <div class="inner">
+        <div class="kicker">04 &middot; Services</div>
+        <h2>What <em>we do?</em></h2>
+        <p class="lead" style="margin-bottom:5mm">Comprehensive technology solutions for modern businesses and homes &mdash; designed, installed and supported by one team.</p>
+        <div class="svc">
+            <div><span class="n">01</span><span><h3>Web Design &amp; Development</h3><p>Responsive websites and web applications, optimised for performance and SEO.</p></span></div>
+            <div><span class="n">02</span><span><h3>Mobile App Development</h3><p>Native and cross-platform apps for iOS and Android.</p></span></div>
+            <div><span class="n">03</span><span><h3>Digital Marketing &amp; Branding</h3><p>SEO, social media, PPC and brand identity design.</p></span></div>
+            <div><span class="n">04</span><span><h3>POS Systems &amp; Hardware</h3><p>Complete POS machines with SELLO software, printers, cash drawers and ERP.</p></span></div>
+            <div><span class="n">05</span><span><h3>IT Solutions &amp; Infrastructure</h3><p>IT setup, server management, networking and cloud.</p></span></div>
+            <div><span class="n">06</span><span><h3>CCTV Installation &amp; Service</h3><p>HD/4K and IP camera systems &mdash; supply, install and maintain.</p></span></div>
+            <div><span class="n">07</span><span><h3>Access Control &amp; Attendance</h3><p>Biometric and card access, time attendance and intercom.</p></span></div>
+            <div><span class="n">08</span><span><h3>WiFi, GSM &amp; Networks</h3><p>Enterprise WiFi, GSM signal solutions and structured cabling.</p></span></div>
+            <div><span class="n">09</span><span><h3>Home, Gate &amp; AC Automation</h3><p>Smart home, automated gates, AC control and IoT living.</p></span></div>
+            <div><span class="n">10</span><span><h3>Automobile Solutions</h3><p>GPS tracking, dash cameras and fleet technology.</p></span></div>
+            <div><span class="n">11</span><span><h3>Electrical Services</h3><p>Wiring, sensor installation and automated electrical systems.</p></span></div>
+            <div><span class="n">12</span><span><h3>Annual Maintenance (AMC)</h3><p>Preventive, on-site support for IT, CCTV, networks and automation.</p></span></div>
+        </div>
+    </div>
+    <div class="foot"><span></span><span>06</span></div>
+</section>
+
+<!-- 5. WHY CHOOSE -->
+<section class="page">
+    <div class="geo tl-navy"></div><div class="geo tl-lime"></div>
+    <div class="inner">
+        <div class="kicker" style="margin-left:26mm">05 &middot; Our edge</div>
+        <h2 style="margin-left:26mm">Why choose <em>Anqah Tech?</em></h2>
+        <p class="lead" style="margin-bottom:6mm">We don&rsquo;t just deliver technology &mdash; we deliver confidence.</p>
+        <div class="why">
+            <div><h3>Own products</h3><p>You deal directly with the engineers who built SELLO, the Automatic Bell and Water Monitoring.</p></div>
+            <div><h3>End-to-end</h3><p>Design, supply, installation, training and maintenance &mdash; one partner, one point of contact.</p></div>
+            <div><h3>Reliable &amp; secure</h3><p>Systems that keep working offline and are built with security in every deployment.</p></div>
+            <div><h3>Fast turnaround</h3><p>Quick delivery without compromising on quality or detail.</p></div>
+            <div><h3>Local expertise</h3><p>Deep knowledge of the local market, including VAT and GST tax setup.</p></div>
+            <div><h3>Fair pricing</h3><p>Premium solutions at transparent, competitive prices &mdash; no surprise fees.</p></div>
+            <div><h3>Innovative</h3><p>IoT, mobile and modern web technology applied to everyday problems.</p></div>
+            <div><h3>Full support</h3><p>Technical support and AMC packages for complete peace of mind.</p></div>
+        </div>
+        <h3 class="sub">Areas we serve</h3>
+        <div class="areas">
+            <div><span class="kicker">Headquarters</span><h3>United Arab Emirates</h3><p>Abu Dhabi &middot; Dubai &middot; Sharjah &middot; Al Ain &middot; Ajman</p></div>
+            <div><span class="kicker">KSA</span><h3>Saudi Arabia</h3><p>Riyadh &middot; Jeddah &middot; Dammam &middot; Makkah &middot; Madinah</p></div>
+            <div><span class="kicker">India</span><h3>India</h3><p>Kerala &middot; Bengaluru &middot; Chennai &middot; Mumbai &middot; Hyderabad</p></div>
+        </div>
+    </div>
+    <div class="foot"><span><b>ANQAH TECH</b> &middot; COMPANY PROFILE</span><span>07</span></div>
+</section>
+
+<!-- 6. HOW WE WORK -->
+<section class="page">
+    <div class="geo tr-navy"></div><div class="geo tr-lime"></div>
+    <div class="geo br-navy"></div><div class="geo br-lime"></div>
+    <div class="inner">
+        <div class="kicker">06 &middot; Process</div>
+        <h2>How <em>we work?</em></h2>
+        <p class="lead" style="margin-bottom:6mm">A clear four-step process, from the first conversation to long-term support.</p>
+        <div class="steps">
+            <div><b>01</b><h3>Discover</h3><p>We understand your workflow, site and budget.</p></div>
+            <div><b>02</b><h3>Design</h3><p>We plan the system, the hardware and the experience.</p></div>
+            <div><b>03</b><h3>Build &amp; install</h3><p>We develop, configure and install on site.</p></div>
+            <div><b>04</b><h3>Support</h3><p>Training, updates and AMC so it keeps running.</p></div>
+        </div>
+        <h3 class="sub">Who we serve</h3>
+        <div class="inds">
+            <span>Retail stores</span><span>Restaurants &amp; caf&eacute;s</span><span>Supermarkets</span><span>Schools</span>
+            <span>Colleges</span><span>Hostels</span><span>Offices</span><span>Factories</span>
+            <span>Villas &amp; homes</span><span>Buildings</span><span>Farms</span><span>Fleets</span>
+        </div>
+        <h3 class="sub">Technology we work with</h3>
+        <div class="stack">
+            <span>React</span><span>Node.js</span><span>Python</span><span>Flutter</span><span>Android</span><span>ESP32</span>
+            <span>Arduino</span><span>Linux</span><span>AWS</span><span>MySQL</span><span>IP CCTV</span><span>Structured cabling</span>
+        </div>
+        <div class="band">
+            <div style="background-image:url('../../images/products/sello/sello-tables-device.webp')" data-label="SELLO &middot; TABLES"></div>
+            <div style="background-image:url('../../images/products/sello/sello-kitchen-device.webp')" data-label="SELLO &middot; KITCHEN"></div>
+            <div style="background-image:url('../../images/products/automatic-bell/bell-system-white.webp')" data-label="AUTOMATIC BELL"></div>
+        </div>
+    </div>
+    <div class="foot"><span><b>ANQAH TECH</b> &middot; COMPANY PROFILE</span><span></span></div>
+</section>
+
+<!-- 7. CONTACT -->
+<section class="page contact">
+    <div class="geo tr-navy"></div><div class="geo tr-lime"></div>
+    <div class="inner">
+        <img class="endlogo" src="../../images/logo-mark-white.png" alt="">
+        <div class="kicker">07 &middot; Get in touch</div>
+        <h2>Contact us</h2>
+        <p class="lead" style="color:#aab3bc">Tell us what you need &mdash; our team replies within 24 hours.</p>
+        <div class="cgrid">
+            <div><small>Phone (UAE)</small><b>+971 50 239 3703</b></div>
+            <div><small>Phone (India)</small><b>+91 95670 40754</b></div>
+            <div><small>WhatsApp</small><b>+971 50 576 2100</b></div>
+            <div><small>Email</small><b>anqahgroups@gmail.com</b></div>
+            <div><small>Address</small><b>Abu Dhabi, UAE</b></div>
+            <div><small>Hours</small><b>Mon &ndash; Sat, 9 AM &ndash; 7 PM</b></div>
+        </div>
+        <div class="cta"><h3>Let&rsquo;s build something great</h3><span>www.anqah.com</span></div>
+    </div>
+</section>
+
+</body>
+</html>

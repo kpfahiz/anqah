@@ -20,7 +20,8 @@ def images(folder, pattern='*.webp'):
 # path (relative to the site root, same for /ar/) -> images on that page
 PAGES = {
     '': ['images/og/og-home.jpg'],
-    'products/sello.html': ['images/og/og-sello.jpg', 'images/products/sello-logo.png', *images('sello', '*-device.webp')],
+    'products/sello.html': ['images/og/og-sello.jpg', 'images/products/sello-logo.png', *images('sello', '*-device.webp'),
+                             *sorted(f'images/products/pos-hardware/{p.name}' for p in (ROOT / 'images/products/pos-hardware').glob('*.jpg'))],
     'products/sello-lite.html': ['images/og/og-sello-lite.jpg', 'images/products/sello-lite-logo.png', *images('sello-lite')],
     'products/automatic-bell.html': ['images/og/og-automatic-bell.jpg', *images('automatic-bell')],
     'products/water-monitoring.html': ['images/og/og-water-monitoring.jpg'],

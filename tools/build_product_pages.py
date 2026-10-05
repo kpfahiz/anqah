@@ -19,12 +19,24 @@ PRODUCTS = [
     {
         'slug': 'sello',
         'seo': {
-            'title': 'SELLO POS Software for Retail &amp; Restaurants | UAE, KSA, India',
-            'description': 'SELLO POS software for shops, restaurants &amp; cafés in UAE, Saudi Arabia &amp; India: billing, inventory, kitchen display, VAT/GST and reports, even offline.',
-            'keywords': 'POS software UAE, POS system Saudi Arabia, POS software India, restaurant POS, retail POS, billing software, inventory software, kitchen display system, offline POS, SELLO',
+            'title': 'SELLO POS System &amp; POS Machines for Retail &amp; Restaurants | UAE, KSA, India',
+            'description': 'Complete POS systems for shops, restaurants &amp; cafés in UAE, Saudi Arabia &amp; India: POS machines, printers and cash drawers with SELLO software &mdash; billing, inventory, kitchen display and VAT/GST.',
+            'keywords': 'POS software UAE, POS system Saudi Arabia, POS software India, POS machine Abu Dhabi, POS machine Dubai, POS hardware UAE, receipt printer, cash drawer, touch POS terminal, restaurant POS, retail POS, billing software, inventory software, kitchen display system, offline POS, SELLO',
             'og': 'og-sello.jpg', 'app': ('BusinessApplication', 'Windows, Web'),
         },
         'name': 'SELLO',
+        'hardware': {
+            'items': [
+                ('terminal.jpg', 'Dual-screen POS terminal', 'All-in-one touch terminal with a customer-facing display.'),
+                ('printer.jpg', 'Receipt printer', 'Fast thermal printing for receipts and kitchen tickets.'),
+                ('tablet.jpg', 'Tablet POS', 'Compact counter or table-side billing on a secure stand.'),
+                ('kds.jpg', 'Kitchen display', 'A screen at the kitchen pass, so orders never get lost.'),
+                ('drawer.jpg', 'Cash drawer', 'Opens automatically on cash sales and keeps takings secure.'),
+                ('monitor.jpg', 'Touch-screen POS monitor', 'Large touch screen for busy counters and the back office.'),
+            ],
+            'includes': ['POS hardware', 'SELLO software', 'Installation &amp; setup', 'Product &amp; VAT/GST setup',
+                         'Staff training', 'Support &amp; AMC'],
+        },
         'category': 'POS All-in-One Solution',
         'status': None,
         'logo': 'images/products/sello-logo.png',
@@ -80,6 +92,7 @@ PRODUCTS = [
             ('Does it work for restaurants?', 'Yes. Restaurant and café mode adds floors and tables, reservations, modifiers, kitchen display and bill splitting.'),
             ('Which devices can use it?', 'Any device on the shop network with a web browser &mdash; PCs, tablets or touch terminals.'),
             ('Where is my data stored?', 'In a database on your own shop server. Built-in backup and restore let you keep your own copies.'),
+            ('Do you sell POS hardware?', 'Yes. We supply complete POS systems &mdash; POS terminals, tablets, receipt printers, cash drawers and kitchen displays &mdash; with SELLO installed, set up and supported.'),
         ],
     },
     {
@@ -473,6 +486,25 @@ def gallery_section(p, n, lang, root):
 '''
 
 
+def hardware_section(p, n, lang, root):
+    t = UI[lang]
+    hw = p['hardware']
+    folder = f'{root}images/products/pos-hardware'
+    figs = ''.join(
+        f'<figure class="shot reveal"><img src="{folder}/{f}" alt="{ti}" width="800" height="600" loading="lazy">'
+        f'<figcaption><b>{ti}</b>{c}</figcaption></figure>'
+        for f, ti, c in hw['items'])
+    incl = ''.join(f'<li>{i}</li>' for i in hw['includes'])
+    return f'''
+        <section class="section" id="hardware">
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{t['hw_h']}</h2><p>{t['hw_p']}</p></div></header>
+            <div class="gallery hw-gallery">{figs}</div>
+            <div class="hw-incl hud reveal"><span class="tag">{t['hw_incl']}</span><ul>{incl}</ul>
+                <a href="{wa_link(unescape(t['hw_wa']))}" target="_blank" rel="noopener" class="btn btn-accent">{t['hw_quote']} <span class="arr">&rarr;</span></a></div>
+        </section>
+'''
+
+
 def page(base, lang):
     p = localize(base, lang)
     t = UI[lang]
@@ -500,7 +532,7 @@ def page(base, lang):
     counter = iter(range(1, 20))
     n = lambda: f'{next(counter):02d}'
     gallery = ''.join(
-        fn(p, n, lang, root) for key, fn in (('gallery', gallery_section), ('tabs', tabs_section), ('photos', photos_section)) if p.get(key))
+        fn(p, n, lang, root) for key, fn in (('gallery', gallery_section), ('hardware', hardware_section), ('tabs', tabs_section), ('photos', photos_section)) if p.get(key))
     seo = p['seo']
     title = unescape(seo['title'])
     desc = seo['description']
