@@ -522,7 +522,8 @@ def page(base, lang):
     switch_href = f'../../products/{p["slug"]}.html' if lang == 'ar' else f'../ar/products/{p["slug"]}.html'
     enquire = wa_link(unescape(t['wa_msg'].format(name=name)))
     status = f'<span class="pd-status">{p["status"]}</span>' if p['status'] else ''
-    brochure = (f'<a href="{root}downloads/brochures/{p["brochure"][0]}" download class="btn btn-line btn-dl">'
+    brochure_file = p['brochure'][0].replace('.pdf', '-AR.pdf') if lang == 'ar' and p.get('brochure') else (p.get('brochure') or ('',))[0]
+    brochure = (f'<a href="{root}downloads/brochures/{brochure_file}" download class="btn btn-line btn-dl">'
                 f'{t["brochure"]} <small>PDF &middot; {p["brochure"][1]}</small></a>') if p.get('brochure') else ''
     audience = (f'<ul class="for-chips" aria-label="{t["for"]}"><li class="for-label">{t["for"]}</li>'
                 + ''.join(f'<li>{a}</li>' for a in p['audience']) + '</ul>') if p.get('audience') else ''

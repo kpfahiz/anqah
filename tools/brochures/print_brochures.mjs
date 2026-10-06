@@ -16,6 +16,10 @@ const jobs = [
   ['sello-lite.html', 'Anqah-SELLO-Lite-Brochure.pdf'],
   ['automatic-bell.html', 'Anqah-Automatic-Bell-Brochure.pdf'],
   ['water-monitoring.html', 'Anqah-Water-Monitoring-Brochure.pdf'],
+  ['sello-ar.html', 'Anqah-SELLO-Brochure-AR.pdf'],
+  ['sello-lite-ar.html', 'Anqah-SELLO-Lite-Brochure-AR.pdf'],
+  ['automatic-bell-ar.html', 'Anqah-Automatic-Bell-Brochure-AR.pdf'],
+  ['water-monitoring-ar.html', 'Anqah-Water-Monitoring-Brochure-AR.pdf'],
 ];
 const outDir = path.join(root, 'downloads', 'brochures');
 mkdirSync(outDir, { recursive: true });
