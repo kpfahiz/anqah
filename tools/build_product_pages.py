@@ -25,6 +25,7 @@ PRODUCTS = [
             'og': 'og-sello.jpg', 'app': ('BusinessApplication', 'Windows, Web'),
         },
         'name': 'SELLO',
+        'brochure': ('Anqah-SELLO-Brochure.pdf', '1.8 MB'),
         'hardware': {
             'items': [
                 ('terminal.jpg', 'Dual-screen POS terminal', 'All-in-one touch terminal with a customer-facing display.'),
@@ -104,6 +105,7 @@ PRODUCTS = [
             'og': 'og-sello-lite.jpg', 'app': ('BusinessApplication', 'Android'),
         },
         'name': 'SELLO Lite',
+        'brochure': ('Anqah-SELLO-Lite-Brochure.pdf', '1.1 MB'),
         'category': 'Mobile POS',
         'status': 'Beta',
         'logo': 'images/products/sello-lite-logo.png',
@@ -176,6 +178,7 @@ PRODUCTS = [
             'og': 'og-automatic-bell.jpg', 'app': None,
         },
         'name': 'Automatic Bell',
+        'brochure': ('Anqah-Automatic-Bell-Brochure.pdf', '1.0 MB'),
         'audience': ['Schools', 'Colleges', 'Hostels', 'Madrasas', 'Training centres', 'Factories', 'Offices'],
         'category': 'IoT &middot; School Automation',
         'status': 'Pilot',
@@ -519,6 +522,8 @@ def page(base, lang):
     switch_href = f'../../products/{p["slug"]}.html' if lang == 'ar' else f'../ar/products/{p["slug"]}.html'
     enquire = wa_link(unescape(t['wa_msg'].format(name=name)))
     status = f'<span class="pd-status">{p["status"]}</span>' if p['status'] else ''
+    brochure = (f'<a href="{root}downloads/brochures/{p["brochure"][0]}" download class="btn btn-line btn-dl">'
+                f'{t["brochure"]} <small>PDF &middot; {p["brochure"][1]}</small></a>') if p.get('brochure') else ''
     audience = (f'<ul class="for-chips" aria-label="{t["for"]}"><li class="for-label">{t["for"]}</li>'
                 + ''.join(f'<li>{a}</li>' for a in p['audience']) + '</ul>') if p.get('audience') else ''
     facts = ''.join(f'<div><strong>{v}</strong><span>{k}</span></div>' for v, k in p['facts'])
@@ -616,6 +621,7 @@ def page(base, lang):
                 <div class="hero-actions">
                     <a href="{enquire}" target="_blank" rel="noopener" class="btn btn-accent">{t['enquire']} <span class="arr">&rarr;</span></a>
                     <a href="tel:{PHONE}" class="btn btn-line">{t['call']}</a>
+                    {brochure}
                 </div>
                 <div class="terminal pd-term" dir="ltr">
                     <div class="term-bar"><i></i><i></i><i></i><span>anqah@tech:~/{p["slug"]}</span></div>
@@ -681,6 +687,7 @@ def page(base, lang):
                 <div class="hero-actions">
                     <a href="{enquire}" target="_blank" rel="noopener" class="btn btn-accent">{t['enquire']} <span class="arr">&rarr;</span></a>
                     <a href="../index.html#contact" class="btn btn-line">{t['form']}</a>
+                    {brochure}
                 </div>
             </div>
         </section>

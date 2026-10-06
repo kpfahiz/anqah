@@ -643,3 +643,7 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: var(-
 .fab-pdf { position: fixed; right: 20px; bottom: 84px; z-index: 90; width: 54px; height: 54px; display: grid; place-items: center; background: var(--accent); color: var(--accent-ink); clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px)); transition: transform .2s; }
 .fab-pdf:hover, .fab-pdf:focus-visible { transform: scale(1.08); outline: none; }
 [dir="rtl"] .fab-pdf { right: auto; left: 20px; }
+
+/* ---------- Product brochure download button ---------- */
+.btn-dl small { font-size: 0.7em; opacity: 0.65; margin-left: 6px; letter-spacing: 0.04em; }
+[dir="rtl"] .btn-dl small { margin-left: 0; margin-right: 6px; }
