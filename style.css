@@ -687,3 +687,5 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: var(-
 [dir="rtl"] .case-second { right: auto; left: 0; }
 [dir="rtl"] .case-phone { left: auto; right: 6%; }
 @media (max-width: 900px) { .case { grid-template-columns: 1fr; padding: 18px; gap: 24px; } }
+
+.foot-ig { display: inline-flex; align-items: center; gap: 6px; }

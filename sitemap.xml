@@ -764,4 +764,52 @@
     <image:image><image:loc>https://www.anqah.com/images/products/pos-hardware/tablet.jpg</image:loc></image:image>
     <image:image><image:loc>https://www.anqah.com/images/products/pos-hardware/terminal.jpg</image:loc></image:image>
   </url>
+  <url>
+    <loc>https://www.anqah.com/downloads/Anqah-Tech-Company-Profile-AR.pdf</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.anqah.com/downloads/Anqah-Tech-Company-Profile.pdf</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.anqah.com/downloads/brochures/Anqah-Automatic-Bell-Brochure-AR.pdf</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.anqah.com/downloads/brochures/Anqah-Automatic-Bell-Brochure.pdf</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.anqah.com/downloads/brochures/Anqah-SELLO-Brochure-AR.pdf</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.anqah.com/downloads/brochures/Anqah-SELLO-Brochure.pdf</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.anqah.com/downloads/brochures/Anqah-SELLO-Lite-Brochure-AR.pdf</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.anqah.com/downloads/brochures/Anqah-SELLO-Lite-Brochure.pdf</loc>
+    <lastmod>2026-10-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
 </urlset>

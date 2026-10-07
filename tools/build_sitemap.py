@@ -51,6 +51,10 @@ def main():
             lines = [f'<loc>{loc}</loc>', f'<lastmod>{today}</lastmod>', '<changefreq>monthly</changefreq>',
                      f'<priority>{prio}</priority>', *alternates, *image_tags]
             rows.append('  <url>\n' + ''.join(f'    {line}\n' for line in lines) + '  </url>')
+    # Downloadable PDFs (company profile and product brochures) so Google can index them too.
+    for pdf in sorted((ROOT / 'downloads').rglob('*.pdf')):
+        rows.append(f'  <url>\n    <loc>{SITE}/{pdf.relative_to(ROOT).as_posix()}</loc>\n    <lastmod>{today}</lastmod>\n'
+                    '    <changefreq>monthly</changefreq>\n    <priority>0.4</priority>\n  </url>')
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
            'xmlns:xhtml="http://www.w3.org/1999/xhtml" '

@@ -417,7 +417,7 @@ def footer(lang, root, switch_href, product_dir=''):
             </div>
             <div>
                 <h4>{t['contact']}</h4>
-                <a href="tel:{PHONE}" dir="ltr">+971 50 239 3703</a><a href="https://wa.me/{WHATSAPP}" target="_blank" rel="noopener">{t['whatsapp']}</a><a href="mailto:anqahgroups@gmail.com">anqahgroups@gmail.com</a><span>{t['city']}</span><a href="{root}downloads/Anqah-Tech-Company-Profile{"-AR" if lang == "ar" else ""}.pdf" download>{t['profile']}</a>
+                <a href="tel:{PHONE}" dir="ltr">+971 50 239 3703</a><a href="https://wa.me/{WHATSAPP}" target="_blank" rel="noopener">{t['whatsapp']}</a><a href="mailto:anqahgroups@gmail.com">anqahgroups@gmail.com</a><span>{t['city']}</span><a class="foot-ig" href="https://www.instagram.com/anqahtech/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg> Instagram</a><a href="{root}downloads/Anqah-Tech-Company-Profile{"-AR" if lang == "ar" else ""}.pdf" download>{t['profile']}</a>
             </div>
         </div>
         <div class="footer-bottom">
