@@ -647,3 +647,27 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: var(-
 /* ---------- Product brochure download button ---------- */
 .btn-dl small { font-size: 0.7em; opacity: 0.65; margin-left: 6px; letter-spacing: 0.04em; }
 [dir="rtl"] .btn-dl small { margin-left: 0; margin-right: 6px; }
+
+/* ---------- Service pages ---------- */
+.sv-hero .bl-meta { margin: 18px 0 0; }
+.sv-hero .hero-actions { margin-top: 26px; }
+.sv-related { margin-top: 28px; max-width: 420px; }
+.sv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.sv-card { background: var(--panel); border: 1px solid var(--line); padding: 26px; display: flex; flex-direction: column; gap: 10px; transition: border-color .25s, background .25s; }
+.sv-card .i { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); }
+.sv-card h3 { font-size: 1.15rem; text-transform: uppercase; }
+.sv-card p { color: var(--muted); font-size: 0.93rem; }
+.sv-link { color: inherit; }
+.sv-link:hover { border-color: var(--accent); background: var(--panel-2); }
+.sv-link p { flex: 1; }
+.sv-links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 28px; border-top: 1px solid var(--line-2); }
+.sv-links a { display: flex; justify-content: space-between; gap: 12px; padding: 16px 0; border-bottom: 1px solid var(--line); font-family: var(--font-display); text-transform: uppercase; font-size: 0.98rem; }
+.sv-links a:hover { color: var(--accent); }
+.sv-links .arr { color: var(--accent); }
+.areas.areas-one { grid-template-columns: minmax(0, 520px); }
+.svc-list h3 a { color: inherit; }
+.svc-list h3 a::after { content: ''; position: absolute; inset: 0; }
+.svc-list h3 a:hover, .svc-list li:hover h3 a { color: var(--accent); }
+[dir="rtl"] .sv-card h3, [dir="rtl"] .sv-links a { text-transform: none; }
+@media (max-width: 900px) { .sv-grid, .sv-links { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 620px) { .sv-grid, .sv-links { grid-template-columns: 1fr; } }

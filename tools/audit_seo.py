@@ -8,7 +8,8 @@ from urllib.parse import unquote
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 pages = (['index.html', 'ar/index.html', '404.html'] + sorted(glob.glob('products/*.html')) + sorted(glob.glob('ar/products/*.html'))
-         + sorted(glob.glob('blog/*.html')) + sorted(glob.glob('ar/blog/*.html')))
+         + sorted(glob.glob('blog/*.html')) + sorted(glob.glob('ar/blog/*.html'))
+         + sorted(glob.glob('services/*.html')) + sorted(glob.glob('ar/services/*.html')))
 alts = {}
 for f in pages:
     f = f.replace(os.sep, '/')

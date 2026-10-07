@@ -8,6 +8,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from blog_content import ARTICLES  # noqa: E402
+from service_content import POS_MACHINES, SERVICES  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = 'https://www.anqah.com'
@@ -27,6 +28,9 @@ PAGES = {
     'products/water-monitoring.html': ['images/og/og-water-monitoring.jpg'],
     'blog/': [],
     **{f'blog/{a["slug"]}.html': [f'images/og/og-{a["product"]}.jpg'] for a in ARTICLES},
+    'services/': [],
+    **{f'services/{s["slug"]}.html': [] for s in SERVICES},
+    'services/pos-machines.html': sorted(f'images/products/pos-hardware/{p.name}' for p in (ROOT / 'images/products/pos-hardware').glob('*.jpg')),
 }
 HREFLANG_EN = ('en', 'en-AE', 'en-SA', 'en-IN', 'x-default')
 HREFLANG_AR = ('ar', 'ar-AE', 'ar-SA')
@@ -41,6 +45,7 @@ def main():
         alternates += [f'<xhtml:link rel="alternate" hreflang="{h}" href="{ar}"/>' for h in HREFLANG_AR]
         image_tags = [f'<image:image><image:loc>{SITE}/{i}</image:loc></image:image>' for i in imgs]
         blog = path.startswith('blog/')
+        svc = path.startswith('services/')
         for loc, prio in ((en, '1.0' if not path else '0.6' if blog else '0.8'), (ar, '0.9' if not path else '0.5' if blog else '0.7')):
             lines = [f'<loc>{loc}</loc>', f'<lastmod>{today}</lastmod>', '<changefreq>monthly</changefreq>',
                      f'<priority>{prio}</priority>', *alternates, *image_tags]

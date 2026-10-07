@@ -392,7 +392,11 @@ def header(lang, root, switch_href, active='#products'):
 def footer(lang, root, switch_href, product_dir=''):
     t = UI[lang]
     links = ''.join(f'<a href="{product_dir}{p["slug"]}.html">{localize(p, lang)["name"]}</a>' for p in PRODUCTS)
-    services = ''.join(f'<a href="../index.html#services">{s}</a>' for s in t['services_links'])
+    from service_content import SERVICES as _SV, UI as _SUI  # noqa: E402 (service pages share this footer)
+    names = {x['slug']: x[lang]['name'] for x in _SV}
+    services = ''.join(f'<a href="../services/{k}.html">{names[k]}</a>' for k in
+                       ('web-development', 'mobile-app-development', 'pos-systems', 'cctv-installation', 'home-automation', 'it-solutions'))
+    services += f'<a href="../services/pos-machines.html">{_SUI[lang]["hw_link"]}</a>'
     sw_label, sw_lang = t['switch']
     return f'''    <footer>
         <div class="footer-top">
