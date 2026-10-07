@@ -30,6 +30,7 @@ PAGES = {
     **{f'blog/{a["slug"]}.html': [f'images/og/og-{a["product"]}.jpg'] for a in ARTICLES},
     'services/': [],
     **{f'services/{s["slug"]}.html': [] for s in SERVICES},
+    'services/web-development.html': sorted(f'images/portfolio/{p.name}' for p in (ROOT / 'images/portfolio').glob('*.jpg')),
     'services/pos-machines.html': sorted(f'images/products/pos-hardware/{p.name}' for p in (ROOT / 'images/products/pos-hardware').glob('*.jpg')),
 }
 HREFLANG_EN = ('en', 'en-AE', 'en-SA', 'en-IN', 'x-default')

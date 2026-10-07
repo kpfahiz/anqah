@@ -7,7 +7,7 @@ from html import escape, unescape
 from urllib.parse import quote
 
 from build_product_pages import PHONE, PRODUCTS, ROOT, SITE, UI as PUI, WA_ICON, WHATSAPP, footer, header, localize, logo_tile, text_only
-from service_content import POS_MACHINES, SERVICES, UI
+from service_content import PORTFOLIO, POS_MACHINES, SERVICES, UI
 
 ALL = SERVICES + [POS_MACHINES]
 HREFLANG_EN = ('en', 'en-AE', 'en-SA', 'en-IN')
@@ -139,6 +139,35 @@ def hardware_block(lang, root, t):
         </section>'''
 
 
+def portfolio_block(lang, root, num):
+    """Client work case studies (the same markup is copied into the home pages)."""
+    cards = ''
+    for w in PORTFOLIO:
+        c = w[lang]
+        a, b, m = (f'{root}images/portfolio/{f}' for f in w['images'])
+        built = ''.join(f'<li>{x}</li>' for x in c['built'])
+        cards += f'''
+            <article class="case hud reveal">
+                <div class="case-shots">
+                    <img class="case-main" src="{a}" alt="{c['client']} website home page" width="1200" height="750" loading="lazy">
+                    <img class="case-second" src="{b}" alt="{c['client']} website business verticals" width="1200" height="750" loading="lazy">
+                    <img class="case-phone" src="{m}" alt="{c['client']} website on mobile" width="390" height="844" loading="lazy">
+                </div>
+                <div class="case-copy">
+                    <span class="tag">{c['meta']}</span>
+                    <h3>{c['client']}</h3>
+                    <p>{c['about']}</p>
+                    <ul class="pd-list">{built}</ul>
+                    <a class="btn btn-line" href="{w['url']}" target="_blank" rel="noopener">{c['visit']} <span class="arr">&#8599;</span></a>
+                </div>
+            </article>'''
+    first = PORTFOLIO[0][lang]
+    return f'''
+        <section class="section" id="work">
+            <header class="sec-head reveal"><span class="num">// {num}</span><div><h2>{first['h']}</h2></div></header>{cards}
+        </section>'''
+
+
 def service_page(s, lang):
     t, c = UI[lang], s[lang]
     root = '../../' if lang == 'ar' else '../'
@@ -169,6 +198,8 @@ def service_page(s, lang):
             <header class="sec-head reveal"><span class="num">// 01</span><div><h2>{t['offer']}</h2></div></header>
             <div class="sv-grid">{''.join(f'<div class="sv-card reveal"><span class="i">{i:02d}</span><h3>{a}</h3><p>{b}</p></div>' for i, (a, b) in enumerate(c['offer'], 1))}</div>
         </section>'''
+    if slug == 'web-development':
+        body += portfolio_block(lang, root, 'WORK')
     steps = ''.join(f'<li><span>{"Step" if lang == "en" else "الخطوة"} {i}</span><h3>{a}</h3><p>{b}</p></li>' for i, (a, b) in enumerate(t['steps'], 1))
     faq = ''.join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in c['faq'])
     others = [x for x in ALL if x['slug'] != slug]
@@ -251,6 +282,7 @@ def hub_page(lang):
         <section class="section bl-index">
             <div class="sv-grid sv-hub">{cards}</div>
         </section>
+{portfolio_block(lang, root, 'WORK')}
     </main>
 ''' + tail(lang, root, switch_href)
 

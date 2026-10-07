@@ -671,3 +671,19 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: var(-
 [dir="rtl"] .sv-card h3, [dir="rtl"] .sv-links a { text-transform: none; }
 @media (max-width: 900px) { .sv-grid, .sv-links { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 620px) { .sv-grid, .sv-links { grid-template-columns: 1fr; } }
+
+/* ---------- Portfolio case study ---------- */
+.case { display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; align-items: center; padding: 28px; background: var(--panel); border: 1px solid var(--line); }
+.case + .case { margin-top: 24px; }
+.case-shots { position: relative; padding: 0 40px 56px 0; }
+.case-shots img { display: block; border: 1px solid var(--line-2); box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45); }
+.case-main { width: 100%; height: auto; }
+.case-second { position: absolute; right: 0; bottom: 0; width: 48%; height: auto; }
+.case-phone { position: absolute; left: 6%; bottom: 8px; width: 17%; height: auto; border-radius: 12px; border: 3px solid #1a1d21 !important; }
+.case-copy { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+.case-copy h3 { font-size: clamp(1.6rem, 3vw, 2.3rem); text-transform: uppercase; }
+.case-copy p { color: var(--muted); }
+[dir="rtl"] .case-shots { padding: 0 0 56px 40px; }
+[dir="rtl"] .case-second { right: auto; left: 0; }
+[dir="rtl"] .case-phone { left: auto; right: 6%; }
+@media (max-width: 900px) { .case { grid-template-columns: 1fr; padding: 18px; gap: 24px; } }

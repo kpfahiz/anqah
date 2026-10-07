@@ -395,6 +395,9 @@
     <xhtml:link rel="alternate" hreflang="ar" href="https://www.anqah.com/ar/services/web-development.html"/>
     <xhtml:link rel="alternate" hreflang="ar-AE" href="https://www.anqah.com/ar/services/web-development.html"/>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://www.anqah.com/ar/services/web-development.html"/>
+    <image:image><image:loc>https://www.anqah.com/images/portfolio/succex-home.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/portfolio/succex-mobile.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/portfolio/succex-verticals.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.anqah.com/ar/services/web-development.html</loc>
@@ -409,6 +412,9 @@
     <xhtml:link rel="alternate" hreflang="ar" href="https://www.anqah.com/ar/services/web-development.html"/>
     <xhtml:link rel="alternate" hreflang="ar-AE" href="https://www.anqah.com/ar/services/web-development.html"/>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://www.anqah.com/ar/services/web-development.html"/>
+    <image:image><image:loc>https://www.anqah.com/images/portfolio/succex-home.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/portfolio/succex-mobile.jpg</image:loc></image:image>
+    <image:image><image:loc>https://www.anqah.com/images/portfolio/succex-verticals.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://www.anqah.com/services/mobile-app-development.html</loc>

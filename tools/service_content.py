@@ -631,3 +631,25 @@ UI = {
         'hw_link': 'أجهزة الكاشير ونقاط البيع',
     },
 }
+
+# Client work shown as case studies (screenshots in images/portfolio/). Describe only what the live site has.
+PORTFOLIO = [
+    {
+        'slug': 'succex-ventures', 'url': 'https://www.succexventures.com/', 'service': 'web-development',
+        'images': ('succex-home.jpg', 'succex-verticals.jpg', 'succex-mobile.jpg'),
+        'en': {
+            'client': 'SuccEx Ventures', 'meta': 'Corporate website &middot; Saudi Arabia',
+            'about': 'An industrial trading, support services and equipment rental company serving the industrial, construction, infrastructure, marine and energy sectors in Saudi Arabia.',
+            'built': ['Corporate website presenting three business verticals', 'Interactive catalogue of 11 industrial product groups with search',
+                      'Products page with quote requests', 'Careers page and contact enquiries', 'Responsive design for mobile, tablet and desktop'],
+            'visit': 'Visit website', 'label': 'Recent work', 'h': 'Websites we&rsquo;ve built',
+        },
+        'ar': {
+            'client': 'SuccEx Ventures', 'meta': 'موقع شركة &middot; المملكة العربية السعودية',
+            'about': 'شركة للتجارة الصناعية وخدمات الدعم الصناعي وتأجير المعدات، تخدم قطاعات الصناعة والإنشاءات والبنية التحتية والبحرية والطاقة في المملكة العربية السعودية.',
+            'built': ['موقع للشركة يعرض قطاعات أعمالها الثلاثة', 'كتالوج تفاعلي لـ 11 مجموعة منتجات صناعية مع البحث',
+                      'صفحة منتجات مع طلب عروض الأسعار', 'صفحة الوظائف واستفسارات التواصل', 'تصميم متجاوب للجوال والجهاز اللوحي والحاسوب'],
+            'visit': 'زيارة الموقع', 'label': 'من أعمالنا', 'h': 'مواقع قمنا ببنائها',
+        },
+    },
+]
