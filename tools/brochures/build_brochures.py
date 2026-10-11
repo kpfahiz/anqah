@@ -107,6 +107,14 @@ ul.ticks li::before { content: ''; position: absolute; left: 0; top: 1.6mm; widt
 .callouts h3 { font-size: 10pt; }
 .callouts p { font-size: 8.6pt; line-height: 1.5; }
 .mt { margin-top: 7mm; }
+.fgrid.compact { gap: 2.6mm; }
+.fgrid.compact div { padding: 3mm 3.6mm; }
+.fgrid.compact div::before { margin-bottom: 0.6mm; }
+.fgrid.compact h3 { font-size: 9.6pt; }
+.fgrid.compact p { font-size: 8pt; line-height: 1.42; }
+.fgrid.compact ~ .sub2 { margin-top: 4.5mm; }
+.fgrid.compact ~ .flow { gap: 1.8mm; }
+.fgrid.compact ~ .flow li { font-size: 9pt; }
 .tablets2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm 6mm; }
 .device-photo { border: 0.3mm solid var(--line); overflow: hidden; }
 .device-photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
@@ -221,8 +229,8 @@ def features_page(p, n, kicker, cols='', extra=''):
         {extra}''', n, p['name'], geo='trbl')
 
 
-def closing(p, n):
-    faq = ''.join(f'<div><h3>{q}</h3><p>{a}</p></div>' for q, a in p['faq'])
+def closing(p, n, faq_max=None):
+    faq = ''.join(f'<div><h3>{q}</h3><p>{a}</p></div>' for q, a in p['faq'][:faq_max])
     privacy = f'<div class="panel lime mt-s"><h3>{tr("Your data", "بياناتك")}</h3><p>{p["privacy"]}</p></div>' if p.get('privacy') else ''
     return page(f'''
         <div class="kicker">{tr('Technical details', 'التفاصيل التقنية')}</div>
@@ -511,7 +519,7 @@ def sello_retail():
                   ('شاشة العميل', 'شاشة ثانية على ويندوز مواجهة للعميل.')])
     dev_html = ''.join(f'<div><h3>{a}</h3><p>{b}</p></div>' for a, b in devices)
     pages = [
-        cover(p, tr('Retail POS &middot; Windows, tablet &amp; phone', 'كاشير التجزئة &middot; ويندوز وتابلت وجوال'),
+        cover(p, tr('Retail POS &middot; Windows, Android &amp; iOS', 'كاشير التجزئة &middot; ويندوز وأندرويد و iOS'),
               tr('SELLO Retail<span>retail POS</span>', 'SELLO Retail<span>كاشير التجزئة</span>'),
               '<div class="visual"><img src="img/retail-win-billing-device.jpg" alt=""></div>', logo='images/products/sello-retail-logo.png'),
         overview(p, 2, tr('01 &middot; Overview', '01 &middot; نظرة عامة'),
@@ -528,12 +536,12 @@ def sello_retail():
         page(f'''
         <div class="kicker">{tr('03 &middot; Tablet &amp; phone', '03 &middot; التابلت والجوال')}</div>
         <h2>{tr('Also on <em>tablet &amp; phone</em>', 'أيضًا على <em>التابلت والجوال</em>')}</h2>
-        <p class="lead" style="margin-bottom:5mm">{tr('One app on Android tablets and phones, with the same data and features.', 'تطبيق واحد على أجهزة أندرويد اللوحية والهواتف، بالبيانات والمزايا نفسها.')}</p>
+        <p class="lead" style="margin-bottom:5mm">{tr('One app on Windows, Android and iOS &mdash; tablets and phones included, with the same features.', 'تطبيق واحد على ويندوز وأندرويد و iOS &mdash; بما في ذلك الأجهزة اللوحية والهواتف، بالمزايا نفسها.')}</p>
         <h3 class="sub2" style="margin-top:0">{tr('Tablet view', 'عرض التابلت')}</h3>
         <div class="tablets2">{tabs}</div>
         <h3 class="sub2">{tr('On the phone', 'على الجوال')}</h3>
         <div class="phones4 phones4-sm">{phones}</div>''', 5, p['name']),
-        features_page(p, 6, tr('04 &middot; Capabilities', '04 &middot; الإمكانات')),
+        features_page(p, 6, tr('04 &middot; Capabilities', '04 &middot; الإمكانات'), cols='compact'),
         page(f'''
         <div class="kicker">{tr('05 &middot; The devices', '05 &middot; الأجهزة')}</div>
         <h2>{tr('POS <em>hardware</em>', 'أجهزة <em>نقاط البيع</em>')}</h2>
@@ -542,7 +550,7 @@ def sello_retail():
         <h3 class="sub2">{tr('Works with', 'يعمل مع')}</h3>
         <div class="callouts">{dev_html}</div>
         <div class="incl mt-s"><span class="kicker">{tr('Every POS package includes', 'تشمل كل باقة نقاط بيع')}</span><ul>{incl.replace('SELLO software', 'SELLO Retail').replace('برنامج SELLO', 'برنامج SELLO Retail')}</ul></div>''', 7, p['name'], geo='tl'),
-        closing(p, 8),
+        closing(p, 8, faq_max=tr(6, 5)),
     ]
     return html_doc(tr('SELLO Retail - Product Brochure', 'SELLO Retail - كتيّب المنتج'), ''.join(pages))
 

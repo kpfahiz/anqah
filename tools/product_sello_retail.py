@@ -6,19 +6,19 @@ Not claimed: the remote/cloud edition (not built yet) or ZATCA certification (th
 SELLO_RETAIL = {
     'slug': 'sello-retail',
     'seo': {
-        'title': 'SELLO Retail POS for Supermarkets &amp; Shops | Windows, Tablet &amp; Mobile | UAE, KSA, India',
-        'description': 'SELLO Retail: offline retail POS and inventory for supermarkets, grocery and general stores on Windows, Android tablets and phones. Barcode billing, GST &amp; VAT, UPI, installments, Arabic &amp; Hindi.',
-        'keywords': 'retail POS software, supermarket POS UAE, grocery billing software India, retail billing software Saudi Arabia, barcode billing software, GST billing software, VAT POS UAE, POS for Windows, Android POS app, inventory software, SELLO Retail',
+        'title': 'SELLO Retail POS for Retail Shops &amp; Supermarkets | Windows, Android &amp; iOS | UAE, KSA, India',
+        'description': 'SELLO Retail: offline POS and inventory for retail shops and supermarkets on Windows, Android and iOS. Barcode &amp; QR labels, bulk product import, WhatsApp bills, scheduled email reports, GST &amp; VAT.',
+        'keywords': 'retail POS software, supermarket POS UAE, retail shop billing software, barcode label printing software, QR code labels, bulk product import, WhatsApp bill software, iPad POS app, iOS POS app, grocery billing software India, retail billing software Saudi Arabia, barcode billing software, GST billing software, VAT POS UAE, POS for Windows, Android POS app, inventory software, SELLO Retail',
         'og': 'og-sello-retail.jpg', 'app': ('BusinessApplication', 'Windows, Android, iOS'),
     },
     'name': 'SELLO Retail',
     'brochure': ('Anqah-SELLO-Retail-Brochure.pdf', '2 MB'),
-    'category': 'Retail POS &middot; Windows, Tablet &amp; Mobile',
+    'category': 'Retail POS &middot; Windows, Android &amp; iOS',
     'status': None,
     'logo': 'images/products/sello-retail-logo.png',
     'scene': None,
     'hero_img': 'win-billing-device.webp',
-    'hero_tag': 'WINDOWS // TABLET // PHONE',
+    'hero_tag': 'WINDOWS // ANDROID // iOS',
     # Real POS photos with real SELLO Retail screens: (screen, title, caption, url)
     'gallery': [
         ('win-billing.webp', 'Scan &amp; bill', 'A Windows counter: scan a barcode, see GST worked out per line, press F12 to pay.', ''),
@@ -72,9 +72,9 @@ SELLO_RETAIL = {
          ['Export to PDF, Excel or CSV', 'Share on WhatsApp or email', 'Filter by date, user and payment']),
     ],
     'terminal': 'sello-retail --edition=offline|sello-retail bill --scan 8901234567890|sello-retail report sales --export=pdf',
-    'statement': 'A fast retail POS and inventory app for supermarkets, grocery, electronics and general stores &mdash; '
-                 'on Windows PCs, Android tablets and phones, working fully offline, with GST and VAT built in.',
-    'facts': [('3', 'Platforms: Windows, tablet, phone'), ('100%', 'Offline billing'), ('3', 'Languages: English, Arabic, Hindi'),
+    'statement': 'A fast POS and inventory app for retail shops and supermarkets &mdash; on Windows, Android and iOS, '
+                 'working fully offline, with GST and VAT built in.',
+    'facts': [('3', 'Platforms: Windows, Android, iOS'), ('100%', 'Offline billing'), ('3', 'Languages: English, Arabic, Hindi'),
               ('GST &middot; VAT', 'India, UAE &amp; Saudi tax')],
     'problem': 'Busy shops need billing that is fast at the counter, stock that stays accurate, and credit customers who '
                'are easy to follow up &mdash; without paying a monthly cloud fee or stopping when the internet drops.',
@@ -84,14 +84,17 @@ SELLO_RETAIL = {
     'features': [
         ('Scan-and-bill', 'Barcode or name search, item and bill discounts, hold and resume, returns and exchanges, F1 / F2 / F12 shortcuts.'),
         ('Every way to pay', 'Cash with change, card, UPI with QR, bank transfer, credit, installments and split payments.'),
+        ('Bills on WhatsApp, automatically', 'After each sale the bill is sent to the customer&rsquo;s WhatsApp as a PDF &mdash; or share it with one tap.'),
         ('Customer display', 'A second screen shows each item, the tax and the total as you scan, plus the UPI QR to pay.'),
-        ('Products &amp; stock', 'Barcodes, variants, batch and expiry, low-stock alerts, stock adjustments, Excel import/export and bulk edit.'),
-        ('Barcode labels', 'Generate barcodes for products that have none and print labels.'),
+        ('Products &amp; stock', 'Barcodes, variants, batch and expiry, low-stock alerts and stock adjustments with a reason.'),
+        ('Bulk product add', 'Add hundreds of products at once from Excel or CSV, and edit prices, MRP, HSN or reorder levels in bulk.'),
+        ('Barcode &amp; QR labels', 'Generate barcodes for products that have none and print barcode or QR code labels.'),
         ('Purchases &amp; suppliers', 'Stock in from suppliers &mdash; and scan a supplier&rsquo;s paper bill to fill the purchase in.'),
         ('Customers &amp; installments', 'Credit limits, installment plans with due dates, payments and printable receipts.'),
         ('Ledgers &amp; expenses', 'Customer and supplier ledgers, cash book, bank book, expenses and multiple bank accounts.'),
         ('Shifts', 'Opening cash, and an automatic shift report with expected vs counted cash at closing.'),
-        ('Reports &amp; dashboard', 'Sales, cashier, item, category, tax, HSN, profit and stock reports &mdash; PDF, Excel, CSV, WhatsApp or email.'),
+        ('Reports &amp; dashboard', 'Sales, cashier, item, category, tax, HSN, profit and stock reports &mdash; PDF, Excel or CSV.'),
+        ('Scheduled email reports', 'A daily summary emailed to the owner at a time you choose, plus every shift report &mdash; automatically.'),
         ('Tax for 3 countries', 'India GST (CGST, SGST, IGST), UAE VAT and Saudi VAT, with support for ZATCA e-invoicing.'),
         ('Roles &amp; security', 'Owner, manager, cashier and stock-keeper roles, PIN lock, auto-lock and a full audit log.'),
     ],
@@ -101,9 +104,9 @@ SELLO_RETAIL = {
         'Bill at the counter: scan, take payment and print or share the bill, with the customer display showing the total.',
         'Close each shift with its report, follow up credit and installments, and check the dashboard and reports.',
     ],
-    'use_cases': ['Supermarkets and grocery stores', 'Electronics, mobile and appliance shops selling on installments',
-                  'Hardware, stationery and general stores', 'Shops in India, the UAE and Saudi Arabia, each with its own tax'],
-    'benefits': ['Billing never waits for the internet', 'One app on Windows, Android tablets and phones',
+    'use_cases': ['Retail shops and supermarkets', 'Grocery and general stores', 'Electronics, mobile and appliance shops selling on installments',
+                  'Hardware, stationery and gift shops', 'Shops in India, the UAE and Saudi Arabia, each with its own tax'],
+    'benefits': ['Billing never waits for the internet', 'One app on Windows, Android and iOS',
                  'Credit and installment customers always up to date', 'Your data stays encrypted on your own device'],
     'tech': 'Flutter app for Windows, Android and iOS with an encrypted SQLite database (SQLCipher) on the device. Money is '
             'stored in the smallest currency unit and tax is rounded per line by country. Prints to 58 / 80 mm thermal '
@@ -113,7 +116,11 @@ SELLO_RETAIL = {
                'Backup and restore to a file is built in.',
     'faq': [
         ('Does SELLO Retail need the internet?', 'No. Billing, stock, customers and reports all work offline on the device.'),
-        ('Which devices does it run on?', 'Windows PCs, Android tablets and Android phones. An iPad / iPhone version is also available.'),
+        ('Which devices does it run on?', 'Windows PCs, Android tablets and phones, and iPad / iPhone (iOS).'),
+        ('Can bills be sent to customers on WhatsApp?', 'Yes. Turn on auto-send and every bill goes to the customer&rsquo;s WhatsApp as a PDF after the sale &mdash; or send any bill with one tap.'),
+        ('Can the owner get reports by email?', 'Yes. Schedule a daily summary at the time you choose; shift reports are emailed automatically too.'),
+        ('Can I print barcode and QR labels?', 'Yes. Generate barcodes for products that have none and print barcode or QR code labels.'),
+        ('Can I add many products at once?', 'Yes. Import products in bulk from Excel or CSV, and edit prices and other fields for many products at once.'),
         ('Does it support GST and VAT?', 'Yes &mdash; India GST (CGST, SGST, IGST), UAE VAT and Saudi VAT, with tax-inclusive or exclusive prices.'),
         ('Can I sell on installments?', 'Yes. Set a down payment and installments with due dates; SELLO Retail tracks what is paid, due and overdue.'),
         ('Is there a free trial?', 'Yes. Every install starts with a 7-day free trial; after that, an activation code unlocks a 1, 2, 3 or 5-year plan.'),
@@ -123,12 +130,12 @@ SELLO_RETAIL = {
 
 SELLO_RETAIL_AR = {
     'seo': {
-        'title': 'برنامج SELLO Retail لنقاط البيع للسوبرماركت والمحلات | ويندوز وتابلت وجوال',
-        'description': 'SELLO Retail: برنامج كاشير ومخزون يعمل دون إنترنت للسوبرماركت والبقالات والمحلات على ويندوز وأجهزة أندرويد اللوحية والهواتف. فوترة بالباركود وضريبة القيمة المضافة والأقساط والعربية.',
-        'keywords': 'برنامج كاشير للسوبرماركت, برنامج نقاط بيع للمحلات, برنامج كاشير بالباركود, برنامج كاشير ويندوز, تطبيق كاشير أندرويد, برنامج مخزون ومبيعات, برنامج فواتير ضريبية, SELLO Retail',
+        'title': 'برنامج SELLO Retail لنقاط البيع لمحلات التجزئة والسوبرماركت | ويندوز وأندرويد و iOS',
+        'description': 'SELLO Retail: برنامج كاشير ومخزون يعمل دون إنترنت لمحلات التجزئة والسوبرماركت على ويندوز وأندرويد و iOS. ملصقات باركود و QR، واستيراد المنتجات بالجملة، وفواتير واتساب، وتقارير بريد مجدولة.',
+        'keywords': 'برنامج كاشير للسوبرماركت, برنامج كاشير لمحلات التجزئة, طباعة ملصقات الباركود, استيراد المنتجات من اكسل, إرسال الفاتورة واتساب, تطبيق كاشير للآيباد, برنامج نقاط بيع للمحلات, برنامج كاشير بالباركود, برنامج كاشير ويندوز, تطبيق كاشير أندرويد, برنامج مخزون ومبيعات, برنامج فواتير ضريبية, SELLO Retail',
     },
-    'category': 'كاشير التجزئة &middot; ويندوز وتابلت وجوال',
-    'hero_tag': 'WINDOWS // TABLET // PHONE',
+    'category': 'كاشير التجزئة &middot; ويندوز وأندرويد و iOS',
+    'hero_tag': 'WINDOWS // ANDROID // iOS',
     'gallery': [
         ('win-billing.webp', 'امسح واحسب', 'كاونتر على ويندوز: امسح الباركود وشاهد الضريبة لكل صنف، واضغط F12 للدفع.', ''),
         ('tab-home.webp', 'كل شيء في مكان واحد', 'الفوترة والمرتجعات والمنتجات والمخزون والمشتريات والعملاء والأقساط والدفاتر والتقارير وغيرها.', ''),
@@ -172,9 +179,9 @@ SELLO_RETAIL_AR = {
         ('التقارير', 'phone-reports.webp', 'التقارير أينما كنت', 'تقارير المبيعات والكاشير وطرق الدفع والأصناف والفئات والضريبة و HSN والأرباح.',
          ['تصدير PDF و Excel و CSV', 'مشاركة عبر واتساب أو البريد', 'تصفية بالتاريخ والمستخدم والدفع']),
     ],
-    'statement': 'برنامج كاشير ومخزون سريع للسوبرماركت والبقالات ومحلات الإلكترونيات والمحلات العامة &mdash; على حواسيب ويندوز '
-                 'وأجهزة أندرويد اللوحية والهواتف، يعمل دون إنترنت بالكامل، مع ضريبة السلع والخدمات وضريبة القيمة المضافة.',
-    'facts': [('3', 'منصات: ويندوز وتابلت وجوال'), ('100%', 'فوترة دون إنترنت'), ('3', 'لغات: العربية والإنجليزية والهندية'),
+    'statement': 'برنامج كاشير ومخزون سريع لمحلات التجزئة والسوبرماركت &mdash; على ويندوز وأندرويد و iOS، '
+                 'يعمل دون إنترنت بالكامل، مع ضريبة السلع والخدمات وضريبة القيمة المضافة.',
+    'facts': [('3', 'منصات: ويندوز وأندرويد و iOS'), ('100%', 'فوترة دون إنترنت'), ('3', 'لغات: العربية والإنجليزية والهندية'),
               ('GST &middot; VAT', 'ضرائب الهند والإمارات والسعودية')],
     'problem': 'تحتاج المحلات المزدحمة إلى فوترة سريعة على الكاونتر ومخزون دقيق وعملاء آجلين سهل متابعتهم &mdash; دون رسوم سحابية '
                'شهرية ودون توقف عند انقطاع الإنترنت.',
@@ -184,14 +191,17 @@ SELLO_RETAIL_AR = {
     'features': [
         ('امسح واحسب', 'البحث بالباركود أو الاسم، وخصم الصنف والفاتورة، والتعليق والاستئناف، والمرتجعات والاستبدال، واختصارات F1 / F2 / F12.'),
         ('كل طرق الدفع', 'نقد مع الباقي، بطاقة، UPI برمز QR، تحويل بنكي، آجل، أقساط ودفع مجزّأ.'),
+        ('الفواتير عبر واتساب تلقائيًا', 'بعد كل عملية بيع تُرسل الفاتورة إلى واتساب العميل بصيغة PDF &mdash; أو شاركها بلمسة واحدة.'),
         ('شاشة العميل', 'شاشة ثانية تعرض كل صنف والضريبة والإجمالي أثناء المسح، مع رمز QR للدفع.'),
-        ('المنتجات والمخزون', 'الباركود والأصناف المتعددة والدفعات وتواريخ الانتهاء وتنبيهات المخزون والتعديلات والاستيراد والتصدير من Excel والتعديل الجماعي.'),
-        ('ملصقات الباركود', 'إنشاء باركود للمنتجات التي ليس لها باركود وطباعة الملصقات.'),
+        ('المنتجات والمخزون', 'الباركود والأصناف المتعددة والدفعات وتواريخ الانتهاء وتنبيهات المخزون وتعديل المخزون مع السبب.'),
+        ('إضافة المنتجات بالجملة', 'أضف مئات المنتجات دفعة واحدة من Excel أو CSV، وعدّل الأسعار وسعر التجزئة ورمز HSN وحد إعادة الطلب جماعيًا.'),
+        ('ملصقات الباركود و QR', 'إنشاء باركود للمنتجات التي ليس لها باركود وطباعة ملصقات الباركود أو رمز QR.'),
         ('المشتريات والموردون', 'إدخال المخزون من الموردين &mdash; ومسح فاتورة المورد الورقية لتعبئة المشتريات.'),
         ('العملاء والأقساط', 'حدود ائتمان وخطط أقساط بتواريخ استحقاق ودفعات وإيصالات قابلة للطباعة.'),
         ('الدفاتر والمصروفات', 'دفاتر العملاء والموردين ودفتر النقدية ودفتر البنك والمصروفات وحسابات بنكية متعددة.'),
         ('الورديات', 'نقد افتتاحي وتقرير وردية تلقائي يقارن النقد المتوقع بالمعدود عند الإغلاق.'),
-        ('التقارير ولوحة التحكم', 'تقارير المبيعات والكاشير والأصناف والفئات والضريبة و HSN والأرباح والمخزون &mdash; PDF و Excel و CSV وواتساب والبريد.'),
+        ('التقارير ولوحة التحكم', 'تقارير المبيعات والكاشير والأصناف والفئات والضريبة و HSN والأرباح والمخزون &mdash; PDF و Excel و CSV.'),
+        ('تقارير مجدولة بالبريد', 'ملخص يومي يُرسل إلى المالك بالبريد في الوقت الذي تختاره، مع كل تقرير وردية &mdash; تلقائيًا.'),
         ('ضرائب 3 دول', 'ضريبة السلع والخدمات في الهند (CGST و SGST و IGST) وضريبة القيمة المضافة في الإمارات والسعودية، مع دعم الفوترة الإلكترونية (فاتورة).'),
         ('الأدوار والأمان', 'أدوار المالك والمدير والكاشير وأمين المخزن، وقفل برمز PIN، وقفل تلقائي، وسجل تدقيق كامل.'),
     ],
@@ -201,9 +211,9 @@ SELLO_RETAIL_AR = {
         'افوتر على الكاونتر: امسح واستلم الدفع واطبع الفاتورة أو شاركها، مع عرض الإجمالي على شاشة العميل.',
         'أغلق كل وردية بتقريرها، وتابع الآجل والأقساط، وراجع لوحة التحكم والتقارير.',
     ],
-    'use_cases': ['السوبرماركت والبقالات', 'محلات الإلكترونيات والجوالات والأجهزة التي تبيع بالأقساط',
-                  'محلات العدد والقرطاسية والمحلات العامة', 'المحلات في الهند والإمارات والسعودية، لكلٍّ ضريبته'],
-    'benefits': ['الفوترة لا تنتظر الإنترنت أبدًا', 'تطبيق واحد على ويندوز وأجهزة أندرويد اللوحية والهواتف',
+    'use_cases': ['محلات التجزئة والسوبرماركت', 'البقالات والمحلات العامة', 'محلات الإلكترونيات والجوالات والأجهزة التي تبيع بالأقساط',
+                  'محلات العدد والقرطاسية والهدايا', 'المحلات في الهند والإمارات والسعودية، لكلٍّ ضريبته'],
+    'benefits': ['الفوترة لا تنتظر الإنترنت أبدًا', 'تطبيق واحد على ويندوز وأندرويد و iOS',
                  'عملاء الآجل والأقساط محدَّثون دائمًا', 'بياناتك مشفّرة على جهازك'],
     'tech': 'تطبيق Flutter لأنظمة ويندوز وأندرويد و iOS بقاعدة بيانات SQLite مشفّرة (SQLCipher) على الجهاز. تُحفظ المبالغ بأصغر وحدة '
             'للعملة وتُقرّب الضريبة لكل صنف حسب الدولة. يطبع على طابعات حرارية 58 / 80 مم عبر USB أو بلوتوث أو الشبكة، وعلى A4. '
@@ -211,7 +221,11 @@ SELLO_RETAIL_AR = {
     'privacy': 'تُحفظ بيانات المتجر والمبيعات والعملاء مشفّرة على جهازك &mdash; لا على سحابة طرف ثالث. والنسخ الاحتياطي والاستعادة إلى ملف مدمجان.',
     'faq': [
         ('هل يحتاج SELLO Retail إلى الإنترنت؟', 'لا. تعمل الفوترة والمخزون والعملاء والتقارير دون إنترنت على الجهاز.'),
-        ('على أي أجهزة يعمل؟', 'حواسيب ويندوز وأجهزة أندرويد اللوحية وهواتف أندرويد. ويتوفر أيضًا إصدار للآيباد والآيفون.'),
+        ('على أي أجهزة يعمل؟', 'حواسيب ويندوز وأجهزة أندرويد اللوحية والهواتف، والآيباد والآيفون (iOS).'),
+        ('هل يمكن إرسال الفواتير للعملاء عبر واتساب؟', 'نعم. فعّل الإرسال التلقائي لتصل كل فاتورة إلى واتساب العميل بصيغة PDF بعد البيع &mdash; أو أرسل أي فاتورة بلمسة.'),
+        ('هل يستلم المالك التقارير بالبريد؟', 'نعم. جدولة ملخص يومي في الوقت الذي تختاره، وتُرسل تقارير الورديات تلقائيًا أيضًا.'),
+        ('هل يمكنني طباعة ملصقات الباركود و QR؟', 'نعم. أنشئ باركود للمنتجات التي ليس لها باركود واطبع ملصقات الباركود أو رمز QR.'),
+        ('هل يمكنني إضافة منتجات كثيرة دفعة واحدة؟', 'نعم. استورد المنتجات بالجملة من Excel أو CSV، وعدّل الأسعار وحقولًا أخرى لعدة منتجات معًا.'),
         ('هل يدعم ضريبة القيمة المضافة؟', 'نعم &mdash; ضريبة السلع والخدمات في الهند وضريبة القيمة المضافة في الإمارات والسعودية، بأسعار شاملة أو غير شاملة للضريبة.'),
         ('هل يمكنني البيع بالأقساط؟', 'نعم. حدّد الدفعة الأولى والأقساط بتواريخ الاستحقاق، ويتابع SELLO Retail المدفوع والمستحق والمتأخر.'),
         ('هل توجد تجربة مجانية؟', 'نعم. يبدأ كل تثبيت بتجربة مجانية 7 أيام، ثم يفتح رمز تفعيل خطة لسنة أو 2 أو 3 أو 5 سنوات.'),

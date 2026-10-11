@@ -244,6 +244,14 @@ ul.ticks li::before { content: ''; position: absolute; left: 0; top: 1.6mm; widt
 .callouts h3 { font-size: 10pt; }
 .callouts p { font-size: 8.6pt; line-height: 1.5; }
 .mt { margin-top: 7mm; }
+.fgrid.compact { gap: 2.6mm; }
+.fgrid.compact div { padding: 3mm 3.6mm; }
+.fgrid.compact div::before { margin-bottom: 0.6mm; }
+.fgrid.compact h3 { font-size: 9.6pt; }
+.fgrid.compact p { font-size: 8pt; line-height: 1.42; }
+.fgrid.compact ~ .sub2 { margin-top: 4.5mm; }
+.fgrid.compact ~ .flow { gap: 1.8mm; }
+.fgrid.compact ~ .flow li { font-size: 9pt; }
 .tablets2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm 6mm; }
 .device-photo { border: 0.3mm solid var(--line); overflow: hidden; }
 .device-photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
@@ -267,15 +275,15 @@ ul.ticks li::before { content: ''; position: absolute; left: 0; top: 1.6mm; widt
 <body>
 <section class="page cover">
     <div class="brand"><img src="../../images/logo-mark-white.png" alt=""><span>Anqah Tech</span></div>
-    <div class="status"><i></i>PRODUCT BROCHURE<br>RETAIL POS &middot; WINDOWS, TABLET &amp; MOBILE</div>
+    <div class="status"><i></i>PRODUCT BROCHURE<br>RETAIL POS &middot; WINDOWS, ANDROID &amp; IOS</div>
     <img class="logo-tile" src="../../images/products/sello-retail-logo.png" alt="">
     <div class="title">
-        <div class="kicker">Retail POS &middot; Windows, tablet &amp; phone</div>
+        <div class="kicker">Retail POS &middot; Windows, Android &amp; iOS</div>
         <h1>SELLO Retail<span>retail POS</span></h1>
-        <p>A fast retail POS and inventory app for supermarkets, grocery, electronics and general stores &mdash; on Windows PCs, Android tablets and phones, working fully offline, with GST and VAT built in.</p>
+        <p>A fast POS and inventory app for retail shops and supermarkets &mdash; on Windows, Android and iOS, working fully offline, with GST and VAT built in.</p>
     </div>
     <div class="visual"><img src="img/retail-win-billing-device.jpg" alt=""></div>
-    <div class="facts"><div><b>3</b><span>Platforms: Windows, tablet, phone</span></div><div><b>100%</b><span>Offline billing</span></div><div><b>3</b><span>Languages: English, Arabic, Hindi</span></div><div><b>GST &middot; VAT</b><span>India, UAE &amp; Saudi tax</span></div></div>
+    <div class="facts"><div><b>3</b><span>Platforms: Windows, Android, iOS</span></div><div><b>100%</b><span>Offline billing</span></div><div><b>3</b><span>Languages: English, Arabic, Hindi</span></div><div><b>GST &middot; VAT</b><span>India, UAE &amp; Saudi tax</span></div></div>
     <div class="web"><span><b>www.anqah.com</b></span><span class="ltr">+971 50 239 3703 &middot; anqahgroups@gmail.com</span></div>
 </section>
 <section class="page ">
@@ -288,8 +296,8 @@ ul.ticks li::before { content: ''; position: absolute; left: 0; top: 1.6mm; widt
             <div class="panel lime"><h3>The SELLO Retail solution</h3><p>SELLO Retail runs on the counter PC, a tablet or a phone, with an encrypted database on the device. Billing, stock, purchases, customers, installments, ledgers, shifts and reports all work offline, in English, Arabic or Hindi, with the right tax for India, the UAE or Saudi Arabia.</p></div>
         </div>
         <div class="two mt">
-            <div><h3 class="sub2" style="margin-top:0">Built for</h3><ul class="ticks"><li>Supermarkets and grocery stores</li><li>Electronics, mobile and appliance shops selling on installments</li><li>Hardware, stationery and general stores</li><li>Shops in India, the UAE and Saudi Arabia, each with its own tax</li></ul></div>
-            <div><h3 class="sub2" style="margin-top:0">What you get</h3><ul class="ticks"><li>Billing never waits for the internet</li><li>One app on Windows, Android tablets and phones</li><li>Credit and installment customers always up to date</li><li>Your data stays encrypted on your own device</li></ul></div>
+            <div><h3 class="sub2" style="margin-top:0">Built for</h3><ul class="ticks"><li>Retail shops and supermarkets</li><li>Grocery and general stores</li><li>Electronics, mobile and appliance shops selling on installments</li><li>Hardware, stationery and gift shops</li><li>Shops in India, the UAE and Saudi Arabia, each with its own tax</li></ul></div>
+            <div><h3 class="sub2" style="margin-top:0">What you get</h3><ul class="ticks"><li>Billing never waits for the internet</li><li>One app on Windows, Android and iOS</li><li>Credit and installment customers always up to date</li><li>Your data stays encrypted on your own device</li></ul></div>
         </div>
         <figure class="figure-wide"><img src="img/retail-tab-billing-device.jpg" alt=""><figcaption class="cap"><b>On a tablet</b>The same fast billing screen on an Android tablet at the counter.</figcaption></figure>
     </div>
@@ -319,7 +327,7 @@ ul.ticks li::before { content: ''; position: absolute; left: 0; top: 1.6mm; widt
     <div class="inner tight">
         <div class="kicker">03 &middot; Tablet &amp; phone</div>
         <h2>Also on <em>tablet &amp; phone</em></h2>
-        <p class="lead" style="margin-bottom:5mm">One app on Android tablets and phones, with the same data and features.</p>
+        <p class="lead" style="margin-bottom:5mm">One app on Windows, Android and iOS &mdash; tablets and phones included, with the same features.</p>
         <h3 class="sub2" style="margin-top:0">Tablet view</h3>
         <div class="tablets2"><figure><div class="device-photo"><img src="img/retail-tab-home-tab.jpg" alt=""></div><figcaption><b>Home</b>Every module on a counter tablet.</figcaption></figure><figure><div class="device-photo"><img src="img/retail-tab-billing-tab.jpg" alt=""></div><figcaption><b>Billing</b>Scan and bill with GST on the tablet.</figcaption></figure><figure><div class="device-photo"><img src="img/retail-tab-payment-tab.jpg" alt=""></div><figcaption><b>Payment</b>Cash, card, UPI or split by touch.</figcaption></figure><figure><div class="device-photo"><img src="img/retail-tab-products-tab.jpg" alt=""></div><figcaption><b>Products &amp; stock</b>Barcodes, prices, stock and low-stock flags.</figcaption></figure></div>
         <h3 class="sub2">On the phone</h3>
@@ -332,7 +340,7 @@ ul.ticks li::before { content: ''; position: absolute; left: 0; top: 1.6mm; widt
     <div class="inner tight">
         <div class="kicker">04 &middot; Capabilities</div>
         <h2>Key <em>features</em></h2>
-        <div class="fgrid "><div data-n="01"><h3>Scan-and-bill</h3><p>Barcode or name search, item and bill discounts, hold and resume, returns and exchanges, F1 / F2 / F12 shortcuts.</p></div><div data-n="02"><h3>Every way to pay</h3><p>Cash with change, card, UPI with QR, bank transfer, credit, installments and split payments.</p></div><div data-n="03"><h3>Customer display</h3><p>A second screen shows each item, the tax and the total as you scan, plus the UPI QR to pay.</p></div><div data-n="04"><h3>Products &amp; stock</h3><p>Barcodes, variants, batch and expiry, low-stock alerts, stock adjustments, Excel import/export and bulk edit.</p></div><div data-n="05"><h3>Barcode labels</h3><p>Generate barcodes for products that have none and print labels.</p></div><div data-n="06"><h3>Purchases &amp; suppliers</h3><p>Stock in from suppliers &mdash; and scan a supplier&rsquo;s paper bill to fill the purchase in.</p></div><div data-n="07"><h3>Customers &amp; installments</h3><p>Credit limits, installment plans with due dates, payments and printable receipts.</p></div><div data-n="08"><h3>Ledgers &amp; expenses</h3><p>Customer and supplier ledgers, cash book, bank book, expenses and multiple bank accounts.</p></div><div data-n="09"><h3>Shifts</h3><p>Opening cash, and an automatic shift report with expected vs counted cash at closing.</p></div><div data-n="10"><h3>Reports &amp; dashboard</h3><p>Sales, cashier, item, category, tax, HSN, profit and stock reports &mdash; PDF, Excel, CSV, WhatsApp or email.</p></div><div data-n="11"><h3>Tax for 3 countries</h3><p>India GST (CGST, SGST, IGST), UAE VAT and Saudi VAT, with support for ZATCA e-invoicing.</p></div><div data-n="12"><h3>Roles &amp; security</h3><p>Owner, manager, cashier and stock-keeper roles, PIN lock, auto-lock and a full audit log.</p></div></div>
+        <div class="fgrid compact"><div data-n="01"><h3>Scan-and-bill</h3><p>Barcode or name search, item and bill discounts, hold and resume, returns and exchanges, F1 / F2 / F12 shortcuts.</p></div><div data-n="02"><h3>Every way to pay</h3><p>Cash with change, card, UPI with QR, bank transfer, credit, installments and split payments.</p></div><div data-n="03"><h3>Bills on WhatsApp, automatically</h3><p>After each sale the bill is sent to the customer&rsquo;s WhatsApp as a PDF &mdash; or share it with one tap.</p></div><div data-n="04"><h3>Customer display</h3><p>A second screen shows each item, the tax and the total as you scan, plus the UPI QR to pay.</p></div><div data-n="05"><h3>Products &amp; stock</h3><p>Barcodes, variants, batch and expiry, low-stock alerts and stock adjustments with a reason.</p></div><div data-n="06"><h3>Bulk product add</h3><p>Add hundreds of products at once from Excel or CSV, and edit prices, MRP, HSN or reorder levels in bulk.</p></div><div data-n="07"><h3>Barcode &amp; QR labels</h3><p>Generate barcodes for products that have none and print barcode or QR code labels.</p></div><div data-n="08"><h3>Purchases &amp; suppliers</h3><p>Stock in from suppliers &mdash; and scan a supplier&rsquo;s paper bill to fill the purchase in.</p></div><div data-n="09"><h3>Customers &amp; installments</h3><p>Credit limits, installment plans with due dates, payments and printable receipts.</p></div><div data-n="10"><h3>Ledgers &amp; expenses</h3><p>Customer and supplier ledgers, cash book, bank book, expenses and multiple bank accounts.</p></div><div data-n="11"><h3>Shifts</h3><p>Opening cash, and an automatic shift report with expected vs counted cash at closing.</p></div><div data-n="12"><h3>Reports &amp; dashboard</h3><p>Sales, cashier, item, category, tax, HSN, profit and stock reports &mdash; PDF, Excel or CSV.</p></div><div data-n="13"><h3>Scheduled email reports</h3><p>A daily summary emailed to the owner at a time you choose, plus every shift report &mdash; automatically.</p></div><div data-n="14"><h3>Tax for 3 countries</h3><p>India GST (CGST, SGST, IGST), UAE VAT and Saudi VAT, with support for ZATCA e-invoicing.</p></div><div data-n="15"><h3>Roles &amp; security</h3><p>Owner, manager, cashier and stock-keeper roles, PIN lock, auto-lock and a full audit log.</p></div></div>
         <h3 class="sub2">How it works</h3>
         <ol class="flow"><li>Install SELLO Retail on the counter PC, tablet or phone &mdash; each starts with a 7-day free trial.</li><li>Set up the shop: country and tax, products (or import them from Excel), printers and users.</li><li>Bill at the counter: scan, take payment and print or share the bill, with the customer display showing the total.</li><li>Close each shift with its report, follow up credit and installments, and check the dashboard and reports.</li></ol>
         
@@ -360,7 +368,7 @@ ul.ticks li::before { content: ''; position: absolute; left: 0; top: 1.6mm; widt
         <div class="techbox"><span class="kicker">Technology</span><p>Flutter app for Windows, Android and iOS with an encrypted SQLite database (SQLCipher) on the device. Money is stored in the smallest currency unit and tax is rounded per line by country. Prints to 58 / 80 mm thermal printers over USB, Bluetooth or network, and A4. Supplier-bill scanning reads text on the device without internet. Licensed by offline activation codes: 7-day trial, then 1, 2, 3 or 5-year plans.</p></div>
         <div class="panel lime mt-s"><h3>Your data</h3><p>Shop, sales and customer data is stored encrypted on your own device &mdash; not on a third-party cloud. Backup and restore to a file is built in.</p></div>
         <h3 class="sub2">Frequently asked questions</h3>
-        <div class="faq-list"><div><h3>Does SELLO Retail need the internet?</h3><p>No. Billing, stock, customers and reports all work offline on the device.</p></div><div><h3>Which devices does it run on?</h3><p>Windows PCs, Android tablets and Android phones. An iPad / iPhone version is also available.</p></div><div><h3>Does it support GST and VAT?</h3><p>Yes &mdash; India GST (CGST, SGST, IGST), UAE VAT and Saudi VAT, with tax-inclusive or exclusive prices.</p></div><div><h3>Can I sell on installments?</h3><p>Yes. Set a down payment and installments with due dates; SELLO Retail tracks what is paid, due and overdue.</p></div><div><h3>Is there a free trial?</h3><p>Yes. Every install starts with a 7-day free trial; after that, an activation code unlocks a 1, 2, 3 or 5-year plan.</p></div><div><h3>Do you supply POS hardware too?</h3><p>Yes. We supply complete POS systems &mdash; terminals, tablets, printers, scanners and cash drawers &mdash; with SELLO Retail installed.</p></div></div>
+        <div class="faq-list"><div><h3>Does SELLO Retail need the internet?</h3><p>No. Billing, stock, customers and reports all work offline on the device.</p></div><div><h3>Which devices does it run on?</h3><p>Windows PCs, Android tablets and phones, and iPad / iPhone (iOS).</p></div><div><h3>Can bills be sent to customers on WhatsApp?</h3><p>Yes. Turn on auto-send and every bill goes to the customer&rsquo;s WhatsApp as a PDF after the sale &mdash; or send any bill with one tap.</p></div><div><h3>Can the owner get reports by email?</h3><p>Yes. Schedule a daily summary at the time you choose; shift reports are emailed automatically too.</p></div><div><h3>Can I print barcode and QR labels?</h3><p>Yes. Generate barcodes for products that have none and print barcode or QR code labels.</p></div><div><h3>Can I add many products at once?</h3><p>Yes. Import products in bulk from Excel or CSV, and edit prices and other fields for many products at once.</p></div></div>
         <div class="cta-strip">
             <div><h3>Get SELLO Retail for your business</h3><p>Talk to us for a demo, pricing and installation &mdash; we reply within 24 hours.</p></div>
             <div class="contacts"><b>Phone</b> <span class="ltr">+971 50 239 3703</span><br><b>WhatsApp</b> <span class="ltr">+971 50 576 2100</span><br><b>Email</b> <span class="ltr">anqahgroups@gmail.com</span><br><b>Web</b> <span class="ltr">www.anqah.com</span></div>
