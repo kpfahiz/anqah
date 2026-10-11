@@ -1,0 +1,47 @@
+# --- OS junk -------------------------------------------------------------
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+._*
+
+# --- Editors / IDEs --------------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# --- Python (tools/*.py build scripts) ----------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# --- Node (only used for local tooling) --------------------------------------
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# --- Logs & temp files -------------------------------------------------------
+*.log
+*.tmp
+*.bak
+tmp/
+temp/
+
+# --- Claude Code: keep the shared preview config, ignore personal settings ----
+.claude/settings.local.json
+.claude/*.local.*
+
+# --- Secrets (never commit) -------------------------------------------------
+.env
+.env.*
+*.pem
+*.key
+credentials*.txt
+
+# --- Instagram content workspace (local only) ---------------------------------
+tools/instagram/
