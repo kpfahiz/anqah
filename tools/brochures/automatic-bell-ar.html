@@ -244,6 +244,17 @@ ul.ticks li::before { content: ''; position: absolute; left: 0; top: 1.6mm; widt
 .callouts h3 { font-size: 10pt; }
 .callouts p { font-size: 8.6pt; line-height: 1.5; }
 .mt { margin-top: 7mm; }
+.tablets2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm 6mm; }
+.device-photo { border: 0.3mm solid var(--line); overflow: hidden; }
+.device-photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.tablets2 .device-photo img { aspect-ratio: 16 / 9; }
+.tablets2 figure, .phones4-sm figure { margin: 0; }
+.tablet { border-radius: 4mm; border: 2.2mm solid #1a1d21; background: #000; overflow: hidden; box-shadow: 0 2mm 6mm rgba(0,0,0,.25); aspect-ratio: 16 / 10; }
+.tablet img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.tablets2 figcaption { margin-top: 2.6mm; font-size: 8.4pt; color: var(--muted); line-height: 1.45; }
+.tablets2 figcaption b { display: block; font-family: var(--display); text-transform: uppercase; color: var(--ink); font-size: 10pt; }
+.phones4-sm { grid-template-columns: repeat(4, 29mm); justify-content: space-between; }
+.phones4-sm .phone { aspect-ratio: 432 / 848; }
 .ring-two { margin-top: auto; display: grid; grid-template-columns: 34mm 40mm 1fr; gap: 6mm; align-items: end; }
 .ring-two figure { margin: 0; }
 .ring-two img { display: block; width: 100%; height: 82mm; object-fit: cover; border: 0.3mm solid var(--line); }

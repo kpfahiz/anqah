@@ -22,7 +22,7 @@
         .nf .ar { display: none; }
         [dir="rtl"] .nf .en { display: none; }
         [dir="rtl"] .nf .ar { display: block; }
-        [dir="rtl"] .nf h1 { text-transform: none; line-height: 1.4; }
+        .nf .nf-h { font-size: clamp(2.4rem, 7vw, 4.5rem); margin: 16px 0; line-height: 1.4; }
     </style>
     <script>
         // GitHub Pages serves this one file for every missing page; switch to Arabic for addresses under /ar/.
@@ -52,7 +52,7 @@
         </div>
         <div class="ar" lang="ar">
             <span class="code">// ERROR 404</span>
-            <h1>الصفحة غير موجودة</h1>
+            <h2 class="nf-h">الصفحة غير موجودة</h2>
             <p>الصفحة التي تبحث عنها نُقلت أو غير موجودة. جرّب إحدى هذه الصفحات:</p>
             <div class="links">
                 <a class="btn btn-accent" href="/ar/">الرئيسية <span class="arr">&rarr;</span></a>

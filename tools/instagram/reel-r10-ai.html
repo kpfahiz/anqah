@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<!-- Reel R10 "AI replies at 2 am" (1080x1920, 14.5 s). Fully deterministic: window.renderAt(t) draws the frame for time t
+     (seconds), so render_reel.mjs can capture it frame by frame at 30 fps and encode an MP4. Open the file in a browser to
+     preview it playing in real time. Text stays between y=260 and y=1600 (Instagram UI covers the rest). -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Reel R10 AI replies at 2 am</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Cairo:wght@600;700;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+#stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: 'Inter', sans-serif; color: #fff; }
+.layer { position: absolute; inset: 0; }
+#night { background: radial-gradient(900px 700px at 80% 12%, #1f2a6b 0%, transparent 60%), linear-gradient(#050816, #0b1030 60%, #120b2a); }
+#morning { background: radial-gradient(700px 700px at 50% 108%, #ffe08a 0%, #ffb86b 30%, transparent 62%), linear-gradient(#7fb7ff, #bcd8ff 50%, #ffd6a8); }
+#endbg { background: radial-gradient(700px 600px at 15% 20%, #7c3aed, transparent 60%), radial-gradient(700px 700px at 95% 55%, #2563eb, transparent 60%), radial-gradient(800px 600px at 30% 100%, #db2777, transparent 60%), #0b0618; }
+.star { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #fff; }
+#moon { position: absolute; right: 70px; top: 560px; width: 96px; height: 96px; border-radius: 50%; box-shadow: -22px 14px 0 0 #f4f1d0; }
+#sun { position: absolute; left: 50%; width: 260px; height: 260px; margin-left: -130px; border-radius: 50%; background: radial-gradient(#fff6c8, #ffd36b 60%, #ffb347); box-shadow: 0 0 120px 40px rgba(255, 200, 90, 0.6); }
+
+/* captions */
+.cap { position: absolute; left: 70px; right: 70px; top: 270px; text-align: center; }
+.cap b { display: block; font: 800 66px/1.12 'Sora'; letter-spacing: -0.02em; text-shadow: 0 4px 30px rgba(0,0,0,0.35); }
+.cap b em { font-style: normal; background: linear-gradient(90deg, #f0abfc, #93c5fd); -webkit-background-clip: text; color: transparent; }
+.cap span { display: block; font: 900 48px/1.4 'Cairo'; direction: rtl; margin-top: 8px; opacity: 0.92; }
+.cap.dark b, .cap.dark span { color: #1a1033; text-shadow: none; }
+.cap.dark b em { background: linear-gradient(90deg, #7c3aed, #db2777); -webkit-background-clip: text; }
+#zzz { position: absolute; left: 70px; top: 700px; font: 800 64px 'Sora'; color: #c7d2fe; }
+#zzz i { position: absolute; font-style: normal; }
+
+/* phone */
+#phone { position: absolute; left: 290px; top: 580px; transform-origin: 50% 0; width: 500px; height: 1000px; border-radius: 64px; background: #0e0e12; padding: 16px; box-shadow: 0 0 0 3px #2b2b33, 0 40px 120px rgba(0,0,0,0.6), 0 0 160px rgba(124, 58, 237, 0.25); }
+#screen { position: relative; width: 100%; height: 100%; border-radius: 50px; overflow: hidden; background: #000; }
+#island { position: absolute; z-index: 9; left: 50%; top: 14px; width: 130px; height: 36px; margin-left: -65px; border-radius: 20px; background: #000; }
+.scr { position: absolute; inset: 0; }
+/* lock screens */
+.lock { background: linear-gradient(160deg, #1b1446, #0b0a1f); display: flex; flex-direction: column; align-items: center; padding-top: 110px; }
+.lock.am { background: linear-gradient(160deg, #ffcf99, #ff9f7a 45%, #7b6cff); }
+.lock .date { font: 600 22px 'Inter'; opacity: 0.85; }
+.lock .time { font: 700 118px/1 'Sora'; letter-spacing: -0.03em; margin-top: 6px; }
+.notif { position: absolute; left: 18px; right: 18px; border-radius: 26px; padding: 18px 20px; background: rgba(255,255,255,0.18); backdrop-filter: blur(14px); display: flex; gap: 14px; align-items: flex-start; }
+.notif .ic { flex: none; width: 50px; height: 50px; border-radius: 14px; display: grid; place-items: center; font-size: 26px; background: linear-gradient(135deg, #7c3aed, #2563eb); }
+.notif .tx { flex: 1; min-width: 0; }
+.notif .t1 { font: 700 19px 'Inter'; display: flex; justify-content: space-between; }
+.notif .t1 small { font: 500 16px 'Inter'; opacity: 0.7; }
+.notif .t2 { font: 500 20px/1.35 'Inter'; margin-top: 4px; }
+.lock.am .notif { background: rgba(255,255,255,0.5); color: #1a1033; }
+.lock.am .notif .ic { background: linear-gradient(135deg, #16a34a, #22c55e); }
+/* chat */
+.chat { background: #f4f2fb; color: #1a1033; }
+.chat .hd { height: 130px; padding: 62px 22px 0; display: flex; gap: 14px; align-items: center; background: linear-gradient(135deg, #7c3aed, #2563eb); color: #fff; }
+.chat .av { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.22); display: grid; place-items: center; font-size: 26px; }
+.chat .nm { font: 700 21px 'Inter'; } .chat .st { font: 500 16px 'Inter'; opacity: 0.85; }
+.msgs { position: absolute; left: 0; right: 0; top: 140px; padding: 14px 18px; display: flex; flex-direction: column; gap: 12px; }
+.m { max-width: 84%; padding: 14px 18px; border-radius: 22px; font: 500 21px/1.38 'Inter'; transform-origin: bottom left; }
+.m.in { align-self: flex-start; background: #fff; border-bottom-left-radius: 6px; box-shadow: 0 2px 6px rgba(26,16,51,0.08); }
+.m.out { align-self: flex-end; background: linear-gradient(135deg, #7c3aed, #4f46e5); color: #fff; border-bottom-right-radius: 6px; transform-origin: bottom right; }
+.m.ar { direction: rtl; font-family: 'Cairo'; font-weight: 700; font-size: 22px; }
+.m small { display: block; font: 600 14px 'JetBrains Mono'; opacity: 0.75; margin-top: 6px; direction: ltr; text-align: right; }
+.typing { align-self: flex-end; background: #e4ddff; border-radius: 22px; padding: 16px 20px; display: flex; gap: 8px; }
+.typing i { width: 12px; height: 12px; border-radius: 50%; background: #7c3aed; }
+.sys { align-self: center; background: #dcfce7; color: #166534; font: 700 17px 'Inter'; padding: 10px 18px; border-radius: 999px; }
+.badge { position: absolute; z-index: 10; padding: 14px 24px; border-radius: 999px; font: 700 28px 'Sora'; background: #fff; color: #4c1d95; box-shadow: 0 16px 40px rgba(0,0,0,0.35); white-space: nowrap; }
+
+/* end card */
+#end { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 80px; }
+#end img { height: 120px; }
+#end .k { font: 700 30px 'JetBrains Mono'; letter-spacing: 0.12em; margin-top: 40px; opacity: 0.85; }
+#end h2 { font: 800 96px/1.05 'Sora'; letter-spacing: -0.03em; margin-top: 18px; }
+#end h2 em { font-style: normal; background: linear-gradient(90deg, #f0abfc, #93c5fd); -webkit-background-clip: text; color: transparent; }
+#end .ar { font: 900 54px/1.4 'Cairo'; direction: rtl; margin-top: 14px; }
+#end .cta { margin-top: 60px; background: #fff; color: #4c1d95; font: 800 46px 'Sora'; padding: 26px 50px; border-radius: 999px; }
+#end .cta span { font-family: 'Cairo'; }
+#end .h { font: 700 30px 'JetBrains Mono'; margin-top: 50px; opacity: 0.85; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="layer" id="night"><div id="moon"></div></div>
+  <div class="layer" id="morning"><div id="sun"></div></div>
+
+  <div class="cap" id="c1"><b>A customer messaged <em>at 2 am…</em></b><span>عميل راسلك الساعة 2 فجرًا…</span></div>
+  <div class="cap" id="c2"><b>…and AI answered <em>in 2 seconds</em> 🤖</b><span>…والذكاء الاصطناعي ردّ في ثانيتين</span></div>
+  <div class="cap" id="c3"><b>In English <em>&amp; Arabic</em> 🌐</b><span>بالعربية والإنجليزية</span></div>
+  <div class="cap dark" id="c4"><b>You slept. <em>Sales didn't.</em> ☀️</b><span>أنت نمت. والمبيعات لم تنم.</span></div>
+  <div id="zzz"><i>z</i><i>z</i><i>Z</i></div>
+
+  <div id="phone"><div id="screen"><div id="island"></div>
+    <div class="scr lock" id="lock1">
+      <div class="date">Saturday, 31 October</div><div class="time">2:07</div>
+      <div class="notif" id="n1" style="top:330px"><div class="ic">💬</div><div class="tx">
+        <div class="t1">Your Café · Customer <small>now</small></div><div class="t2">Hi, are you open for orders now? 🌙</div></div></div>
+    </div>
+    <div class="scr chat" id="chat">
+      <div class="hd"><div class="av">✦</div><div><div class="nm">Your Café · AI assistant</div><div class="st" id="st">online</div></div></div>
+      <div class="msgs">
+        <div class="m in" id="m1">Hi, are you open for orders now? 🌙<small>02:07</small></div>
+        <div class="typing" id="ty1"><i></i><i></i><i></i></div>
+        <div class="m out" id="m2">Yes! I can take your order right now 🙌 What would you like?<small>02:07 ✓✓</small></div>
+        <div class="m in ar" id="m3">2 لاتيه وكرواسون لو سمحت ☕<small>02:08</small></div>
+        <div class="typing" id="ty2"><i></i><i></i><i></i></div>
+        <div class="m out ar" id="m4">تم ✅ المجموع 42 درهم، وطلبك جاهز للاستلام الساعة 8 صباحًا.<small>02:08 ✓✓</small></div>
+        <div class="sys" id="sys">✓ Order #1042 confirmed · AED 42</div>
+      </div>
+    </div>
+    <div class="scr lock am" id="lock2">
+      <div class="date">Saturday, 31 October</div><div class="time">7:30</div>
+      <div class="notif" id="n2" style="top:330px"><div class="ic">✅</div><div class="tx"><div class="t1">New order confirmed <small>2:08 am</small></div><div class="t2">#1042 · 2 lattes + croissant · AED 42</div></div></div>
+      <div class="notif" id="n3" style="top:460px"><div class="ic">✅</div><div class="tx"><div class="t1">New order confirmed <small>4:15 am</small></div><div class="t2">#1043 · Cappuccino · AED 18</div></div></div>
+      <div class="notif" id="n4" style="top:590px"><div class="ic">✦</div><div class="tx"><div class="t1">AI assistant <small>7:00 am</small></div><div class="t2">Overnight: 6 chats answered · 3 orders</div></div></div>
+    </div>
+  </div></div>
+  <div class="badge" id="b1" style="left:745px; top:835px">⚡ 2s reply</div>
+
+  <div class="layer" id="endbg"></div>
+  <div class="layer" id="end">
+    <img src="../../images/logo-mark-white.png" alt="">
+    <div class="k">ANQAH TECH · AI SOLUTIONS</div>
+    <h2>Your smartest employee <em>never sleeps.</em></h2>
+    <div class="ar">أذكى موظف لديك لا ينام أبدًا</div>
+    <div class="cta">Comment “AI” · <span>علّق AI</span></div>
+    <div class="h">@anqahtech · anqah.com</div>
+  </div>
+</div>
+
+<script>
+const DURATION = 14.5;
+const $ = id => document.getElementById(id);
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const prog = (t, a, b) => clamp((t - a) / (b - a));                    // 0..1 between a and b
+const ease = x => 1 - Math.pow(1 - x, 3);                              // easeOutCubic
+const back = x => { const c = 1.6; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); }; // easeOutBack
+const fade = (t, a, b, d = 0.3) => Math.min(prog(t, a, a + d), 1 - prog(t, b - d, b)); // in at a, out at b
+
+// deterministic stars
+const night = $('night');
+for (let i = 0; i < 70; i++) {
+  const s = document.createElement('div'); s.className = 'star';
+  const r = Math.sin(i * 12.9898) * 43758.5453; const x = r - Math.floor(r);
+  const r2 = Math.sin(i * 78.233) * 12543.123; const y = r2 - Math.floor(r2);
+  s.style.left = (x * 1080) + 'px'; s.style.top = (y * 1200) + 'px'; s.dataset.ph = i;
+  night.appendChild(s);
+}
+const stars = [...night.querySelectorAll('.star')];
+
+function show(el, o, dy = 0, sc = 1) { el.style.opacity = o; el.style.transform = `translateY(${dy}px) scale(${sc})`; }
+function pop(el, t, at) { // chat bubble entrance; hidden (and collapsed) before `at`
+  const p = prog(t, at, at + 0.35);
+  el.style.display = t < at ? 'none' : '';
+  el.style.opacity = ease(p); el.style.transform = `translateY(${(1 - ease(p)) * 24}px) scale(${0.85 + 0.15 * back(p)})`;
+}
+function typing(el, t, a, b) {
+  el.style.display = t >= a && t < b ? 'flex' : 'none';
+  [...el.children].forEach((d, i) => d.style.transform = `translateY(${Math.sin((t * 9) - i * 0.9) * -6}px)`);
+}
+
+window.renderAt = function (t) {
+  // backgrounds
+  const m = prog(t, 9.0, 9.7);
+  $('night').style.opacity = 1 - m;
+  $('morning').style.opacity = m;
+  $('sun').style.top = (1500 - ease(prog(t, 9.0, 11.5)) * 380) + 'px';
+  stars.forEach(s => s.style.opacity = 0.35 + 0.5 * Math.abs(Math.sin(t * 1.7 + +s.dataset.ph)));
+
+  // captions
+  const cs = [['c1', 0.15, 3.3], ['c2', 3.4, 7.5], ['c3', 7.6, 9.1], ['c4', 9.4, 12.1]];
+  for (const [id, a, b] of cs) { const o = fade(t, a, b); show($(id), o, (1 - ease(prog(t, a, a + 0.4))) * 30); }
+
+  // zzz (scene 1)
+  const zz = $('zzz'); zz.style.opacity = 1 - prog(t, 2.8, 3.2);
+  [...zz.children].forEach((z, i) => {
+    const p = ((t * 0.55) + i / 3) % 1;
+    z.style.transform = `translate(${i * 46 + p * 40}px, ${-p * 160}px) scale(${0.7 + i * 0.25})`;
+    z.style.opacity = Math.sin(p * Math.PI);
+  });
+
+  // phone: buzz when the message lands, small zoom-in at the start
+  const buzz = t > 1.0 && t < 1.7 ? Math.sin(t * 70) * 7 * (1 - prog(t, 1.0, 1.7)) : 0;
+  const zoom = 1.24 * (0.96 + 0.04 * ease(prog(t, 0, 1.2)));  // 1.24 = phone size on screen
+  $('phone').style.transform = `translateX(${buzz}px) scale(${zoom})`;
+  $('phone').style.opacity = 1;
+
+  // lock screen 1 + notification
+  $('lock1').style.opacity = 1 - prog(t, 3.2, 3.5);
+  const np = ease(prog(t, 1.0, 1.4));
+  $('n1').style.transform = `translateY(${(1 - np) * -180}px)`; $('n1').style.opacity = np;
+
+  // chat
+  $('chat').style.opacity = prog(t, 3.2, 3.5) * (1 - prog(t, 9.1, 9.5));
+  pop($('m1'), t, 3.4);
+  typing($('ty1'), t, 3.9, 4.6);
+  pop($('m2'), t, 4.6);
+  pop($('m3'), t, 5.9);
+  typing($('ty2'), t, 6.3, 7.0);
+  pop($('m4'), t, 7.0);
+  pop($('sys'), t, 7.9);
+  $('st').textContent = (t >= 3.9 && t < 4.6) || (t >= 6.3 && t < 7.0) ? 'typing…' : 'online';
+  const bp = prog(t, 4.75, 5.15);
+  $('b1').style.opacity = bp * (1 - prog(t, 7.2, 7.5));
+  $('b1').style.transform = `scale(${t < 4.75 ? 0.5 : back(bp)}) rotate(-4deg)`;
+
+  // lock screen 2 (morning) with stacked notifications
+  $('lock2').style.opacity = prog(t, 9.1, 9.5);
+  [['n2', 9.7], ['n3', 10.15], ['n4', 10.6]].forEach(([id, a]) => {
+    const p = ease(prog(t, a, a + 0.4)); $(id).style.opacity = p; $(id).style.transform = `translateY(${(1 - p) * -60}px)`;
+  });
+
+  // end card
+  const e = prog(t, 12.0, 12.4);
+  $('endbg').style.opacity = e; $('end').style.opacity = e;
+  [...$('end').children].forEach((c, i) => {
+    const p = ease(prog(t, 12.1 + i * 0.12, 12.5 + i * 0.12));
+    c.style.opacity = p; c.style.transform = `translateY(${(1 - p) * 40}px)`;
+  });
+  const cta = $('end').querySelector('.cta');
+  cta.style.transform += ` scale(${1 + 0.04 * Math.sin(Math.max(0, t - 13) * 6)})`;
+};
+
+// live preview when opened directly (the renderer sets window.__capture before load)
+window.renderAt(0);
+if (!window.__capture) {
+  const t0 = performance.now();
+  const loop = now => { window.renderAt(((now - t0) / 1000) % DURATION); requestAnimationFrame(loop); };
+  document.fonts.ready.then(() => requestAnimationFrame(loop));
+}
+</script>
+</body>
+</html>

@@ -24,6 +24,7 @@ PAGES = {
     'products/sello.html': ['images/og/og-sello.jpg', 'images/products/sello-logo.png', *images('sello', '*-device.webp'),
                              *sorted(f'images/products/pos-hardware/{p.name}' for p in (ROOT / 'images/products/pos-hardware').glob('*.jpg'))],
     'products/sello-lite.html': ['images/og/og-sello-lite.jpg', 'images/products/sello-lite-logo.png', *images('sello-lite')],
+    'products/sello-retail.html': ['images/og/og-sello-retail.jpg', 'images/products/sello-retail-logo.png', *images('sello-retail')],
     'products/automatic-bell.html': ['images/og/og-automatic-bell.jpg', *images('automatic-bell')],
     'products/water-monitoring.html': ['images/og/og-water-monitoring.jpg'],
     'blog/': [],

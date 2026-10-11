@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<!-- Reel R14 "Excel chaos vs. CRM calm" (1080x1920, 14 s). Deterministic: window.renderAt(t) draws the frame for time t,
+     so render_reel.mjs captures it frame by frame. Open in a browser to preview it playing.
+     Demo data only: every name and number below is made up. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Reel R14 Excel vs CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=Cairo:wght@600;700;900&family=JetBrains+Mono:wght@500;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+#stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: 'Inter', sans-serif; }
+.layer { position: absolute; inset: 0; }
+
+/* ---------- captions ---------- */
+.cap { position: absolute; left: 60px; right: 60px; top: 270px; text-align: center; z-index: 20; }
+.cap b { display: block; font: 800 68px/1.1 'Plus Jakarta Sans'; letter-spacing: -0.02em; }
+.cap span { display: block; font: 900 48px/1.4 'Cairo'; direction: rtl; margin-top: 6px; }
+.cap.dark b, .cap.dark span { color: #fff; text-shadow: 0 4px 24px rgba(0,0,0,0.6); }
+.cap.dark b em { font-style: normal; color: #ff5b5b; }
+.cap.light b, .cap.light span { color: #111827; }
+.cap.light b em { font-style: normal; color: #4f46e5; }
+
+/* ---------- chaos ---------- */
+#chaos { background: radial-gradient(900px 700px at 50% 40%, #3b1414, #120707 70%); }
+#sheet { position: absolute; left: 60px; top: 610px; width: 960px; height: 960px; background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+#sheet .bar, #sheet .cols { position: relative; z-index: 2; }
+#sheet .bar { height: 64px; background: #1d6f42; color: #fff; display: flex; align-items: center; gap: 14px; padding: 0 22px; font: 700 24px 'Inter'; }
+#sheet .bar small { font: 500 19px 'JetBrains Mono'; opacity: 0.8; margin-left: auto; }
+#sheet .cols, .row { display: grid; grid-template-columns: 56px 210px 200px 190px 300px; }
+#sheet .cols { background: #f1f3f4; border-bottom: 2px solid #d5d8db; font: 700 20px 'Inter'; color: #5f6368; }
+#sheet .cols div, .row div { padding: 14px 12px; border-right: 1px solid #e3e5e8; white-space: nowrap; overflow: hidden; }
+.row { font: 500 22px 'Inter'; color: #202124; border-bottom: 1px solid #e3e5e8; }
+.row div:first-child { background: #f8f9fa; color: #9aa0a6; text-align: center; font-size: 18px; }
+.err { color: #d93025; font-weight: 700; } .hl { background: #fff3a8; } .red { background: #fde2e1; }
+#rows { position: absolute; left: 0; right: 0; top: 118px; }
+.sticky { position: absolute; width: 300px; padding: 26px 24px; font: 700 40px/1.15 'Caveat'; color: #3b3b00; box-shadow: 0 14px 30px rgba(0,0,0,0.35); z-index: 5; }
+.notif { position: absolute; right: 40px; width: 560px; padding: 18px 22px; border-radius: 22px; background: rgba(255,255,255,0.96); color: #111; display: flex; gap: 14px; align-items: center; font: 600 24px 'Inter'; box-shadow: 0 18px 40px rgba(0,0,0,0.45); z-index: 8; }
+.notif i { flex: none; width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; font-style: normal; font-size: 24px; background: #22c55e; }
+.notif small { display: block; font: 500 17px 'Inter'; color: #6b7280; }
+.notif.bad { background: #fff1f1; border: 3px solid #ef4444; }
+#unread { position: absolute; left: 70px; top: 535px; z-index: 9; background: #ef4444; color: #fff; font: 800 30px 'Inter'; padding: 10px 22px; border-radius: 999px; box-shadow: 0 10px 30px rgba(239,68,68,0.5); }
+
+/* ---------- wipe ---------- */
+#wipe { background: linear-gradient(135deg, #4f46e5, #7c3aed); z-index: 15; }
+
+/* ---------- calm ---------- */
+#calm { background: radial-gradient(700px 600px at 10% 30%, #e0e7ff, transparent 60%), radial-gradient(700px 600px at 95% 80%, #ffedd5, transparent 60%), #f5f6fb; }
+#dash { position: absolute; left: 50px; top: 560px; width: 980px; height: 1020px; background: #fff; border-radius: 32px; box-shadow: 0 30px 80px rgba(17,24,39,0.14); padding: 28px; }
+.top { display: flex; align-items: center; gap: 16px; }
+.logo { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(135deg, #4f46e5, #7c3aed); display: grid; place-items: center; color: #fff; font: 800 24px 'Plus Jakarta Sans'; }
+.top b { font: 800 30px 'Plus Jakarta Sans'; color: #111827; }
+.search { margin-left: auto; width: 300px; height: 48px; border-radius: 14px; background: #f3f4f6; color: #9ca3af; font: 500 20px 'Inter'; display: flex; align-items: center; padding: 0 18px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+.stat { background: #f5f6fb; border-radius: 18px; padding: 18px 22px; font: 600 21px 'Inter'; color: #6b7280; }
+.stat b { display: block; font: 800 50px 'Plus Jakarta Sans'; color: #111827; margin-top: 4px; }
+.stat small { font: 700 18px 'Inter'; color: #16a34a; }
+#pipe { position: relative; margin-top: 26px; height: 560px; }
+.col { position: absolute; top: 0; width: 218px; height: 100%; border-radius: 18px; background: #f8f9fc; padding: 14px; }
+.col h4 { font: 700 20px 'Inter'; color: #6b7280; display: flex; align-items: center; gap: 8px; }
+.col h4 i { width: 12px; height: 12px; border-radius: 50%; background: var(--d); }
+.col h4 span { margin-left: auto; background: #e5e7eb; color: #374151; border-radius: 999px; padding: 2px 10px; font-size: 17px; }
+.card { position: absolute; width: 190px; height: 96px; background: #fff; border-radius: 14px; border: 2px solid #eef0f5; border-left: 6px solid var(--d); padding: 12px 14px; font: 700 20px 'Inter'; color: #111827; box-shadow: 0 2px 6px rgba(17,24,39,0.05); }
+.card small { display: block; font: 600 16px 'Inter'; color: #9ca3af; margin-top: 4px; }
+#mover { z-index: 6; box-shadow: 0 20px 40px rgba(79,70,229,0.35); border-color: #c7d2fe; }
+.toast { position: absolute; left: 28px; right: 28px; padding: 18px 22px; border-radius: 18px; background: #111827; color: #fff; display: flex; align-items: center; gap: 16px; font: 600 23px 'Inter'; z-index: 7; box-shadow: 0 20px 40px rgba(17,24,39,0.35); }
+.toast small { display: block; font: 500 18px 'Inter'; color: #9ca3af; margin-top: 2px; }
+.toast .btn { margin-left: auto; background: #4f46e5; padding: 10px 18px; border-radius: 12px; font: 700 19px 'Inter'; }
+.toast .btn.wa { background: #22c55e; }
+.conf { position: absolute; width: 14px; height: 22px; border-radius: 3px; z-index: 9; }
+
+/* ---------- end card ---------- */
+#endbg { background: radial-gradient(800px 700px at 20% 20%, #7c3aed, transparent 60%), radial-gradient(800px 700px at 90% 80%, #fb923c, transparent 60%), #312e81; z-index: 30; }
+#end { z-index: 31; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 80px; color: #fff; }
+#end img { height: 120px; }
+#end .k { font: 700 30px 'JetBrains Mono'; letter-spacing: 0.12em; margin-top: 40px; opacity: 0.85; }
+#end h2 { font: 800 98px/1.04 'Plus Jakarta Sans'; letter-spacing: -0.03em; margin-top: 18px; }
+#end h2 em { font-style: normal; color: #fdba74; }
+#end .ar { font: 900 56px/1.4 'Cairo'; direction: rtl; margin-top: 14px; }
+#end .cta { margin-top: 60px; background: #fff; color: #4338ca; font: 800 46px 'Plus Jakarta Sans'; padding: 26px 50px; border-radius: 999px; }
+#end .cta span { font-family: 'Cairo'; }
+#end .h { font: 700 30px 'JetBrains Mono'; margin-top: 50px; opacity: 0.85; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <!-- ===== chaos ===== -->
+  <div class="layer" id="chaos">
+    <div id="sheet">
+      <div class="bar">▦ leads_FINAL_v3 (2).xlsx <small>Not saved</small></div>
+      <div class="cols"><div></div><div>Name</div><div>Phone</div><div>Status</div><div>Notes</div></div>
+      <div id="rows"></div>
+    </div>
+    <div id="unread">💬 9 unread</div>
+  </div>
+
+  <!-- ===== calm ===== -->
+  <div class="layer" id="calm">
+    <div id="dash">
+      <div class="top"><div class="logo">A</div><b>Anqah CRM</b><div class="search">🔍 Search leads…</div></div>
+      <div class="stats">
+        <div class="stat">New leads<b id="s1">0</b><small>▲ 18% this month</small></div>
+        <div class="stat">Deals won<b id="s2">0</b><small id="s2d">▲ 9%</small></div>
+        <div class="stat">Follow-ups today<b id="s3">0</b><small style="color:#ea580c">on schedule</small></div>
+      </div>
+      <div id="pipe"></div>
+    </div>
+  </div>
+
+  <div class="layer" id="wipe"></div>
+
+  <div class="cap dark" id="c1"><b>Tracking leads <em>like this?</em> 😵</b><span>تتابع عملاءك بهالطريقة؟</span></div>
+  <div class="cap dark" id="c2"><b>Leads get lost. <em>Sales slip away.</em></b><span>العملاء يضيعون… والمبيعات تروح</span></div>
+  <div class="cap light" id="c3"><b>One CRM. <em>Every lead</em> in its place.</b><span>نظام واحد… وكل عميل في مكانه</span></div>
+  <div class="cap light" id="c4"><b>Every follow-up, <em>on time</em> ✅</b><span>كل متابعة في وقتها</span></div>
+
+  <div class="layer" id="endbg"></div>
+  <div class="layer" id="end">
+    <img src="../../images/logo-mark-white.png" alt="">
+    <div class="k">ANQAH TECH · CUSTOM CRM</div>
+    <h2>A CRM built around <em>your</em> business.</h2>
+    <div class="ar">نظام CRM مبني حول أعمالك أنت</div>
+    <div class="cta">Comment “CRM” · <span>علّق CRM</span></div>
+    <div class="h">@anqahtech · anqah.com</div>
+  </div>
+</div>
+
+<script>
+const DURATION = 14.0;
+const $ = id => document.getElementById(id);
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const ease = x => 1 - Math.pow(1 - x, 3);
+const inOut = x => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const back = x => { const c = 1.7; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+const fade = (t, a, b, d = 0.3) => Math.min(prog(t, a, a + d), 1 - prog(t, b - d, b));
+const rnd = i => { const r = Math.sin(i * 12.9898) * 43758.5453; return r - Math.floor(r); };
+
+// ---------- chaos: messy spreadsheet rows (repeated so the scroll never runs out) ----------
+const DATA = [
+  ['Ahmed??', '050 xxx 12', 'call back', 'quote sent? <span class="err">CHECK</span>', ''],
+  ['Star Mart', '#REF!', '<span class="err">LOST?</span>', 'wanted POS + CRM', 'red'],
+  ['Desert Motors', '055 …', 'waiting', 'who spoke to them??', 'hl'],
+  ['Sara (café)', '', '???', 'follow up Tue (which Tue?)', ''],
+  ['Al Noor', '050 …', 'hot!!', 'send invoice', 'hl'],
+  ['?', '04 xxx', '#N/A', 'duplicate of row 3?', 'red'],
+  ['Green Valley', '056 …', 'meeting?', 'price too high??', ''],
+  ['Blue Bay', '', 'call', 'lost the number', 'red'],
+];
+const rowsEl = $('rows');
+for (let i = 0; i < 24; i++) {
+  const [a, b, c, d, cls] = DATA[i % DATA.length];
+  rowsEl.insertAdjacentHTML('beforeend', `<div class="row ${cls}"><div>${i + 2}</div><div>${a}</div><div class="${b === '#REF!' ? 'err' : ''}">${b}</div><div class="${/[#?]/.test(c) ? 'err' : ''}">${c}</div><div>${d}</div></div>`);
+}
+const STICKY = [
+  ['Call Ahmed!!', '#fff59d', 120, 760, -8, 0.7],
+  ['Quote for Star Mart??', '#ffcdd2', 620, 880, 7, 1.15],
+  ['Follow up Tue', '#b3e5fc', 180, 1120, 5, 1.6],
+  ['Who called at 3pm?', '#fff59d', 600, 1260, -6, 2.05],
+  ['SEND INVOICE', '#c8e6c9', 260, 1400, 9, 2.5],
+];
+STICKY.forEach(([txt, bg, x, y, rot], i) => $('chaos').insertAdjacentHTML('beforeend',
+  `<div class="sticky" id="st${i}" style="left:${x}px;top:${y}px;background:${bg}">${txt}</div>`));
+const NOTES = [
+  ['💬', 'Where is my quote?', 'Customer · 2 min ago', 1.0, ''],
+  ['💬', 'Any update??', 'Customer · just now', 2.0, ''],
+  ['😠', "I'll go with another company.", 'Lead · just now', 3.2, 'bad'],
+];
+NOTES.forEach(([ic, txt, sub, at, cls], i) => $('chaos').insertAdjacentHTML('beforeend',
+  `<div class="notif ${cls}" id="nt${i}" style="top:${650 + i * 118}px"><i style="${cls ? 'background:#ef4444' : ''}">${ic}</i><div>${txt}<small>${sub}</small></div></div>`));
+
+// ---------- calm: pipeline ----------
+const COLS = [['New', '#94a3b8'], ['Contacted', '#38bdf8'], ['Proposal', '#fb923c'], ['Won', '#22c55e']];
+const CW = 218, GAP = 13, CARD_Y = (slot) => 56 + slot * 110;
+const pipe = $('pipe');
+COLS.forEach(([name, c], i) => pipe.insertAdjacentHTML('beforeend',
+  `<div class="col" style="left:${i * (CW + GAP)}px;--d:${c}"><h4><i></i>${name}<span id="cnt${i}">0</span></h4></div>`));
+const CARDS = [ // [col, slot, title, sub]
+  [0, 1, 'Desert Motors', 'Website'], [0, 2, 'Sara Café', 'POS'],
+  [1, 0, 'Green Valley', 'Bell system'], [1, 1, 'Palm Villas', 'CCTV'],
+  [2, 0, 'Star Mart', 'CRM + POS'], [2, 1, 'Blue Bay Clinic', 'Mobile app'],
+  [3, 0, 'Gulf Foods', 'POS · 3 branches'],
+];
+CARDS.forEach(([c, s, t, sub]) => pipe.insertAdjacentHTML('beforeend',
+  `<div class="card" style="left:${c * (CW + GAP) + 14}px;top:${CARD_Y(s)}px;--d:${COLS[c][1]}">${t}<small>${sub}</small></div>`));
+pipe.insertAdjacentHTML('beforeend', `<div class="card" id="mover" style="--d:#4f46e5">Al Noor Café<small>POS + CRM · AED 18K</small></div>`);
+const BASE = [3, 2, 2, 1]; // column counts with the mover in "New"
+const toasts = [
+  ['⏰', 'Follow-up today · 4:00 pm', 'Star Mart · send updated quote', 'Call', '', 9.0],
+  ['💬', 'WhatsApp reply logged', 'Desert Motors · "Yes, let\'s meet"', 'Open', 'wa', 9.9],
+  ['📄', 'Quote #Q-208 sent', 'Palm Villas · AED 6,400', 'View', '', 10.7],
+];
+toasts.forEach(([ic, a, b, btn, cls, at], i) => $('dash').insertAdjacentHTML('beforeend',
+  `<div class="toast" id="to${i}" style="top:${600 + i * 126}px"><span style="font-size:32px">${ic}</span><div>${a}<small>${b}</small></div><span class="btn ${cls}">${btn}</span></div>`));
+const CONF = ['#4f46e5', '#22c55e', '#fb923c', '#f43f5e', '#38bdf8', '#eab308'];
+for (let i = 0; i < 36; i++) pipe.insertAdjacentHTML('beforeend', `<div class="conf" id="cf${i}" style="background:${CONF[i % 6]}"></div>`);
+
+const moverPos = t => { // [x, y, tilt]
+  const stops = [[0, 0, 6.5], [1, 2, 7.0], [2, 2, 7.5], [3, 1, 8.0]]; // [col, slot, arrival time]
+  let x = 14, y = CARD_Y(0), tilt = 0;
+  for (let k = 1; k < stops.length; k++) {
+    const [c0, s0] = stops[k - 1], [c1, s1, at] = stops[k];
+    const p = inOut(prog(t, at - 0.42, at));
+    if (t >= at - 0.42) {
+      x = (c0 + (c1 - c0) * p) * (CW + GAP) + 14;
+      y = CARD_Y(s0) + (CARD_Y(s1) - CARD_Y(s0)) * p - Math.sin(p * Math.PI) * 60;
+      tilt = Math.sin(p * Math.PI) * 6;
+    }
+  }
+  return [x, y, tilt];
+};
+
+window.renderAt = function (t) {
+  // ----- chaos -----
+  const chaosOn = t < 5.0;
+  $('chaos').style.display = chaosOn ? '' : 'none';
+  const shake = t < 4.6 ? (0.5 + 4 * prog(t, 0, 4.4)) : 0;
+  $('sheet').style.transform = `translate(${Math.sin(t * 43) * shake}px, ${Math.cos(t * 37) * shake}px) rotate(${Math.sin(t * 5) * 0.4}deg)`;
+  $('rows').style.transform = `translateY(${-(t * 160) % (8 * 51)}px)`;
+  STICKY.forEach((s, i) => {
+    const p = prog(t, s[5], s[5] + 0.22), el = $('st' + i);
+    el.style.opacity = p > 0 ? 1 : 0;
+    el.style.transform = `rotate(${s[4]}deg) scale(${p > 0 ? 1.6 - 0.6 * ease(p) : 1.6})`;
+  });
+  NOTES.forEach((n, i) => {
+    const p = ease(prog(t, n[3], n[3] + 0.35)), el = $('nt' + i);
+    el.style.opacity = p; el.style.transform = `translateX(${(1 - p) * 640}px)`;
+  });
+  const unread = Math.round(9 + 38 * prog(t, 0.4, 4.2));
+  $('unread').textContent = `💬 ${unread} unread`;
+  $('unread').style.transform = `scale(${1 + 0.08 * Math.abs(Math.sin(t * 9))})`;
+
+  // ----- wipe -----
+  const w1 = inOut(prog(t, 4.55, 4.9)), w2 = inOut(prog(t, 5.0, 5.35));
+  $('wipe').style.transform = `translateX(${(1 - w1) * 1080 - w2 * 1080}px)`;
+  $('wipe').style.display = t > 4.5 && t < 5.4 ? '' : 'none';
+
+  // ----- calm -----
+  $('calm').style.display = t >= 4.9 ? '' : 'none';
+  const dp = ease(prog(t, 5.0, 5.6));
+  $('dash').style.transform = `translateY(${(1 - dp) * 80}px)`; $('dash').style.opacity = dp;
+  const cnt = p => ease(prog(t, 5.3, 6.3));
+  $('s1').textContent = Math.round(128 * cnt());
+  const won = t >= 8.0;
+  $('s2').textContent = Math.round(41 * cnt()) + (won ? 1 : 0);
+  $('s2').style.color = won && t < 9.0 ? '#16a34a' : '';
+  $('s3').textContent = Math.round(16 * cnt());
+  const [mx, my, mt] = moverPos(t);
+  const m = $('mover');
+  m.style.left = mx + 'px'; m.style.top = my + 'px';
+  const lift = t > 6.0 && t < 8.1 ? 1.06 : 1;
+  m.style.transform = `rotate(${mt}deg) scale(${lift})`;
+  m.style.borderLeftColor = t >= 8.0 ? '#22c55e' : '#4f46e5';
+  const col = t >= 8.0 ? 3 : t >= 7.5 ? 2 : t >= 7.0 ? 1 : 0;
+  BASE.forEach((b, i) => $('cnt' + i).textContent = b - (i === 0 && col > 0 ? 1 : 0) + (i === col && col > 0 ? 1 : 0));
+  // confetti from the Won column
+  for (let i = 0; i < 36; i++) {
+    const el = $('cf' + i), dt = t - 8.0;
+    if (dt < 0 || dt > 1.6) { el.style.opacity = 0; continue; }
+    const a = rnd(i) * Math.PI - Math.PI, v = 380 + rnd(i + 50) * 420;
+    const x = 3 * (CW + GAP) + 110 + Math.cos(a) * v * dt;
+    const y = CARD_Y(1) + 40 + Math.sin(a) * v * dt + 900 * dt * dt;
+    el.style.opacity = 1 - prog(dt, 1.1, 1.6);
+    el.style.transform = `translate(${x}px, ${y}px) rotate(${dt * 720 * (rnd(i + 9) - 0.5)}deg)`;
+  }
+  toasts.forEach((tt, i) => {
+    const p = back(prog(t, tt[5], tt[5] + 0.4)), el = $('to' + i);
+    el.style.opacity = prog(t, tt[5], tt[5] + 0.2); el.style.transform = `translateY(${(1 - p) * 60}px) scale(${0.9 + 0.1 * p})`;
+  });
+
+  // ----- captions -----
+  [['c1', 0.15, 2.65], ['c2', 2.75, 4.6], ['c3', 5.3, 8.4], ['c4', 8.5, 11.5]].forEach(([id, a, b]) => {
+    const o = fade(t, a, b), el = $(id);
+    el.style.opacity = o; el.style.transform = `translateY(${(1 - ease(prog(t, a, a + 0.4))) * 30}px)`;
+  });
+
+  // ----- end card -----
+  const e = prog(t, 11.6, 12.0);
+  $('endbg').style.opacity = e; $('end').style.opacity = e;
+  [...$('end').children].forEach((c, i) => {
+    const p = ease(prog(t, 11.7 + i * 0.12, 12.1 + i * 0.12));
+    c.style.opacity = p; c.style.transform = `translateY(${(1 - p) * 40}px)`;
+  });
+  const cta = $('end').querySelector('.cta');
+  cta.style.transform += ` scale(${1 + 0.04 * Math.sin(Math.max(0, t - 12.6) * 6)})`;
+};
+
+window.renderAt(0);
+if (!window.__capture) {
+  const t0 = performance.now();
+  const loop = now => { window.renderAt(((now - t0) / 1000) % DURATION); requestAnimationFrame(loop); };
+  document.fonts.ready.then(() => requestAnimationFrame(loop));
+}
+</script>
+</body>
+</html>

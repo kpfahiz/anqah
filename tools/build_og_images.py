@@ -19,6 +19,8 @@ CARDS = [
      'Retail · Restaurants · Cafés — UAE · KSA · India', 'products/sello/sello-pos-device.webp'),
     ('og-sello-lite.jpg', 'OFFLINE MOBILE POS APP', ['SELLO Lite'],
      'Billing that works without internet', 'products/sello-lite/sello-lite-sell.webp'),
+    ('og-sello-retail.jpg', 'RETAIL POS · WINDOWS · TABLET · PHONE', ['SELLO Retail'],
+     'Barcode billing · GST & VAT · works offline', 'products/sello-retail/win-billing-device.webp'),
     ('og-automatic-bell.jpg', 'IOT · SCHOOL AUTOMATION', ['Automatic', 'School Bell'],
      'Scheduled bells, controlled from your phone', 'products/automatic-bell/bell-system-steel.webp'),
     ('og-water-monitoring.jpg', 'IOT · TANK MONITORING', ['Water Level', 'Monitoring'],

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<!-- Story templates (1080x1920, 9:16), bilingual. Instagram's UI covers the top ~250px and bottom ~340px, so content sits
+     between y=260 and y=1580. Three groups, all generated from the lists below:
+       story-share-*  backgrounds for sharing each feed post (post sticker goes in the middle, poll sticker at the bottom)
+       story-tpl-*    reusable templates (poll, Q&A, tip, install, review, before/after, demo offer)
+       story-hl-*     Highlight covers (Instagram shows the centre circle)
+     Rendered to tools/instagram/out/<id>.png by render_posts.mjs. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Anqah Tech Story templates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Inter:wght@500;700;800&family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@500;700&family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #333; display: flex; flex-wrap: wrap; gap: 40px; padding: 40px; }
+.post { position: relative; width: 1080px; height: 1920px; overflow: hidden; flex: none; background: var(--bg); color: var(--fg); font-family: 'Inter', sans-serif; }
+.post::before { content: ''; position: absolute; inset: 0; background: var(--tex, none); }
+.post > * { position: absolute; z-index: 2; }
+.brand { top: 270px; left: 80px; right: 80px; display: flex; align-items: center; gap: 14px; font: 700 28px 'Space Grotesk'; letter-spacing: 0.08em; }
+.brand img { height: 44px; }
+.brand .tag { margin-left: auto; font: 700 24px 'JetBrains Mono'; padding: 8px 16px; background: var(--accent); color: var(--ink, #000); letter-spacing: 0.06em; }
+.head { top: 360px; left: 80px; right: 80px; }
+.head h1 { font: 400 84px/1.02 'Archivo Black'; letter-spacing: -0.02em; }
+.head h1 em { font-style: normal; color: var(--accent); }
+.head .ar { font: 900 50px/1.4 'Cairo'; direction: rtl; text-align: right; margin-top: 12px; opacity: 0.9; }
+.hint { font: 700 24px 'JetBrains Mono'; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; }
+/* share frame: the shared post sticker sits in .slot, the poll sticker under .poll */
+.slot { left: 150px; right: 150px; top: 660px; height: 720px; border-radius: 36px; background: var(--slot, rgba(255,255,255,0.06)); }
+.poll { left: 80px; right: 80px; top: 1410px; text-align: center; }
+.poll b { display: block; font: 800 44px/1.25 'Inter'; }
+.poll span { display: block; font: 900 38px/1.4 'Cairo'; direction: rtl; opacity: 0.85; margin-top: 4px; }
+.poll i { display: block; font: 700 22px 'JetBrains Mono'; font-style: normal; color: var(--accent); margin-top: 10px; letter-spacing: 0.06em; }
+.tap { top: 600px; left: 0; right: 0; text-align: center; font: 700 24px 'JetBrains Mono'; letter-spacing: 0.1em; opacity: 0.75; }
+/* reusable templates */
+.box { left: 80px; right: 80px; border-radius: 32px; background: var(--slot, rgba(255,255,255,0.07)); border: 3px solid var(--line, rgba(255,255,255,0.15)); }
+.foot { left: 80px; right: 80px; top: 1530px; display: flex; justify-content: space-between; font: 700 24px 'JetBrains Mono'; opacity: 0.8; }
+.ar-line { direction: rtl; font-family: 'Cairo'; }
+/* highlight covers */
+.hl { inset: 0; display: grid; place-items: center; }
+.hl .ring { width: 560px; height: 560px; border-radius: 50%; border: 10px solid var(--accent); display: grid; place-items: center; text-align: center; background: var(--slot, rgba(255,255,255,0.04)); }
+.hl .ic { font-size: 210px; line-height: 1; }
+.hl .lb { font: 700 46px 'Space Grotesk'; letter-spacing: 0.1em; margin-top: 18px; }
+</style>
+</head>
+<body>
+<script>
+const W = '../../images/logo-mark-white.png', N = '../../images/logo-mark-navy.png';
+const TH = {  // theme vars matching each post's look
+  brand:  ['--bg:#07080a;--fg:#e9edf0;--accent:#b6ff3b;--tex:radial-gradient(circle,#2a3138 1.4px,transparent 2px) 0 0/36px 36px', W],
+  teal:   ['--bg:#0c2626;--fg:#eafffb;--accent:#2dd4bf;--tex:radial-gradient(800px 700px at 20% 80%,rgba(45,212,191,.22),transparent 60%)', W],
+  steel:  ['--bg:#101826;--fg:#eef2f8;--accent:#7fb3ff;--tex:radial-gradient(900px 800px at 85% 75%,rgba(127,179,255,.22),transparent 60%)', W],
+  blue:   ['--bg:#0a3a8c;--fg:#fff;--accent:#ffd23f;--ink:#0a3a8c;--tex:linear-gradient(rgba(255,255,255,.12) 2px,transparent 2px) 0 0/120px 120px,linear-gradient(90deg,rgba(255,255,255,.12) 2px,transparent 2px) 0 0/120px 120px', W],
+  ember:  ['--bg:#1b0d0a;--fg:#fff3ee;--accent:#ff6b3d;--tex:radial-gradient(900px 700px at 80% 20%,rgba(255,107,61,.25),transparent 60%)', W],
+  kraft:  ['--bg:#d4b07a;--fg:#2a1d0e;--accent:#2a1d0e;--ink:#d4b07a;--slot:rgba(0,0,0,.08);--line:rgba(0,0,0,.2);--tex:repeating-linear-gradient(90deg,rgba(0,0,0,.035) 0 3px,transparent 3px 9px)', N],
+  cream:  ['--bg:#f3efe6;--fg:#15171a;--accent:#ff5a36;--ink:#fff;--slot:rgba(0,0,0,.05);--line:rgba(0,0,0,.15)', N],
+  code:   ['--bg:#0d1117;--fg:#e6edf3;--accent:#3fb950;--tex:radial-gradient(800px 600px at 85% 15%,rgba(56,139,253,.2),transparent 60%)', W],
+  cctv:   ['--bg:#060606;--fg:#f2f2f2;--accent:#ff3b3b;--ink:#fff;--tex:repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 2px,transparent 2px 5px)', W],
+  ai:     ['--bg:#0b0618;--fg:#fff;--accent:#f0abfc;--slot:rgba(255,255,255,.1);--tex:radial-gradient(700px 600px at 15% 20%,#7c3aed,transparent 60%),radial-gradient(700px 700px at 95% 60%,#2563eb,transparent 60%),radial-gradient(800px 600px at 30% 100%,#db2777,transparent 60%)', W],
+  lime:   ['--bg:#b6ff3b;--fg:#0a0d05;--accent:#0a0d05;--ink:#b6ff3b;--slot:rgba(0,0,0,.08);--line:rgba(0,0,0,.2)', N],
+  hazard: ['--bg:#ffcc00;--fg:#111;--accent:#111;--ink:#ffcc00;--slot:rgba(0,0,0,.08);--line:rgba(0,0,0,.25);--tex:repeating-linear-gradient(-45deg,#111 0 34px,transparent 34px 68px) 0 0/100% 46px no-repeat', N],
+  crm:    ['--bg:#f5f6fb;--fg:#111827;--accent:#4f46e5;--ink:#fff;--slot:rgba(79,70,229,.07);--line:rgba(79,70,229,.2)', N],
+};
+
+// ---- 1. Share frames: [id, theme, tag, title, arabic, poll EN, poll AR] ----
+const SHARE = [
+  ['01-hello', 'brand', 'NEW POST', 'Hello, <em>Instagram</em> 👋', 'مرحبًا إنستغرام', 'What brings you here?', 'ما الذي أتى بك إلى هنا؟'],
+  ['02-sello', 'brand', 'NEW POST', 'One POS for your <em>whole shop</em>', 'نظام واحد لمتجرك بالكامل', 'How do you bill today?', 'كيف تصدر فواتيرك اليوم؟'],
+  ['03-sello-lite', 'teal', 'NEW POST', 'No internet? <em>Keep billing.</em>', 'لا إنترنت؟ واصل البيع', 'Has the internet ever stopped your sales?', 'هل أوقف انقطاع الإنترنت مبيعاتك؟'],
+  ['04-automatic-bell', 'steel', 'NEW POST', 'The bell rings <em>on time</em> 🔔', 'الجرس يرنّ في وقته', 'Is your school bell still manual?', 'هل جرس مدرستك ما زال يدويًا؟'],
+  ['05-water-monitoring', 'blue', 'NEW POST', 'Your water tank, <em>on your phone</em>', 'خزان المياه على جوالك', 'Has your tank ever run dry?', 'هل فرغ خزانك فجأة من قبل؟'],
+  ['06-services', 'brand', 'NEW POST', 'What we <em>do</em> 🛠️', 'ماذا نقدّم', 'Which service do you need?', 'أي خدمة تحتاج؟'],
+  ['07-carousel', 'ember', 'SWIPE IT', '5 signs your shop needs <em>a real POS</em>', '5 علامات أن متجرك يحتاج نظام كاشير', 'How many signs did you tick?', 'كم علامة تنطبق عليك؟'],
+  ['08-pos-hardware', 'kraft', 'NEW POST', 'The whole counter, <em>one supplier</em>', 'تجهيزات الكاشير من مورّد واحد', 'Opening a new shop soon?', 'هل ستفتح محلًا جديدًا قريبًا؟'],
+  ['09-contact', 'brand', 'LET\'S TALK', 'Free demo &amp; <em>quote</em> 🤝', 'عرض تجريبي وعرض سعر مجانًا', 'Want a free demo?', 'هل تريد عرضًا تجريبيًا مجانيًا؟'],
+  ['s1-web-design', 'cream', 'NEW POST', 'Websites that <em>win</em> customers', 'مواقع تكسب لك العملاء', 'Does your business have a website?', 'هل لعملك موقع إلكتروني؟'],
+  ['s2-web-development', 'code', 'NEW POST', 'We write the code. <em>You grow.</em>', 'نكتب الكود وأنت تنمو', 'Do you run your business on spreadsheets?', 'هل تدير عملك بالجداول؟'],
+  ['s3-cctv', 'cctv', '● LIVE', 'Eyes on your business <em>24/7</em>', 'عينك على أعمالك على مدار الساعة', 'Can you view your cameras on your phone?', 'هل تشاهد كاميراتك من جوالك؟'],
+  ['s4-ai', 'ai', '✦ NEW POST', 'Your smartest employee <em>never sleeps</em>', 'أذكى موظف لديك لا ينام', 'Would you let AI answer your customers?', 'هل تترك الذكاء الاصطناعي يرد على عملائك؟'],
+  ['s5-iot', 'blue', 'NEW POST', 'Connect anything. <em>Control everything.</em>', 'اربط أي شيء وتحكّم بكل شيء', 'Which would you automate first?', 'ماذا تؤتمت أولًا؟'],
+  ['s6-mobile-apps', 'lime', 'NEW POST', 'Your app. <em>In every pocket.</em>', 'تطبيقك في كل جيب', 'Does your business need its own app?', 'هل يحتاج عملك تطبيقًا خاصًا؟'],
+  ['s7-crm', 'crm', 'NEW POST', 'A CRM built around <em>your</em> business', 'نظام CRM مبني حول أعمالك', 'How do you track leads today?', 'كيف تتابع عملاءك المحتملين اليوم؟'],
+  ['s8-engineering', 'hazard', 'NEW POST', 'All engineering. <em>One team.</em>', 'كل الحلول الهندسية بفريق واحد', 'How many companies maintain your building?', 'كم شركة تصون مبناك؟'],
+];
+for (const [id, th, tag, title, ar, pEn, pAr] of SHARE) {
+  const [vars, logo] = TH[th];
+  document.body.insertAdjacentHTML('beforeend', `
+<section class="post" id="story-share-${id}" style="${vars}">
+  <div class="brand"><img src="${logo}" alt="">ANQAH TECH<span class="tag">${tag}</span></div>
+  <div class="head"><h1>${title}</h1><div class="ar">${ar}</div></div>
+  <div class="tap" style="top:${id === '07-carousel' ? 690 : 620}px">TAP THE POST ↓ · اضغط على المنشور</div>
+  <div class="slot" style="top:${id === '07-carousel' ? 740 : 680}px; height:${id === '07-carousel' ? 640 : 700}px"></div>
+  <div class="poll"><b>${pEn}</b><span>${pAr}</span><i>VOTE BELOW ↓ صوّت</i></div>
+</section>`);
+}
+
+// Once fonts are loaded, move the "tap" line and post slot under the title so long titles never overlap.
+document.fonts.ready.then(() => document.querySelectorAll('[id^="story-share-"]').forEach(s => {
+  const head = s.querySelector('.head'), tap = s.querySelector('.tap'), slot = s.querySelector('.slot');
+  const top = Math.max(620, head.offsetTop + head.offsetHeight + 34);
+  tap.style.top = top + 'px';
+  slot.style.top = top + 56 + 'px';
+  slot.style.height = 1380 - (top + 56) + 'px';
+}));
+
+// ---- 2. Reusable templates ----
+const T = (id, th, inner) => { const [vars, logo] = TH[th];
+  document.body.insertAdjacentHTML('beforeend', `<section class="post" id="story-tpl-${id}" style="${vars}">
+  <div class="brand"><img src="${logo}" alt="">ANQAH TECH<span class="tag">${id.toUpperCase().replace('-', ' ')}</span></div>${inner}</section>`); };
+
+T('poll', 'brand', `
+  <div class="head"><div class="hint">Quick poll · تصويت سريع</div><h1 style="margin-top:20px">This <em>or</em> that? 🤔</h1></div>
+  <div class="box" style="top:720px;height:640px;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;border:0">
+    <div style="background:#b6ff3b;color:#0a0d05;display:grid;place-items:center;font:400 90px 'Archivo Black'">A</div>
+    <div style="background:#14181c;display:grid;place-items:center;font:400 90px 'Archivo Black';color:#b6ff3b">B</div></div>
+  <div class="foot"><span>Add a poll sticker ↑</span><span class="ar-line">أضف ملصق التصويت</span></div>`);
+
+T('ask-us', 'ai', `
+  <div class="head"><div class="hint">✦ Q&amp;A</div><h1 style="margin-top:20px">Ask us <em>anything</em> about tech 💬</h1>
+    <div class="ar">اسألنا أي شيء عن التقنية</div></div>
+  <div class="box" style="top:900px;height:420px"></div>
+  <div class="foot" style="top:1360px;justify-content:center;gap:26px;opacity:.9"><span>POS · CCTV · Apps · AI · IoT</span></div>`);
+
+T('tech-tip', 'code', `
+  <div class="head"><div class="hint">// tech tip #__</div><h1 style="margin-top:20px">Tech tip <em>of the week</em> 💡</h1>
+    <div class="ar">نصيحة تقنية الأسبوع</div></div>
+  <div class="box" style="top:840px;height:600px;font:500 30px 'JetBrains Mono';color:#7d8590;padding:40px">
+    <div>1 &nbsp;// write your tip here</div><div style="margin-top:14px">2 &nbsp;// اكتب نصيحتك هنا</div></div>
+  <div class="foot"><span>@anqahtech</span><span>Save · احفظ</span></div>`);
+
+T('install-done', 'hazard', `
+  <div class="head" style="top:380px"><h1 style="font:400 116px/1.08 Anton;text-transform:uppercase">Installation<br><em style="background:#111;color:#ffcc00;padding:4px 16px 0;display:inline-block;margin-top:10px;white-space:nowrap">done ✅</em></h1>
+    <div class="ar">تم التركيب بنجاح</div></div>
+  <div class="box" style="top:800px;height:600px;background:#111;border:0;display:grid;place-items:center;color:#ffcc00;font:800 30px Inter">+ photo / صورة</div>
+  <div class="foot" style="top:1440px"><span>📍 add location</span><span>@anqahtech</span></div>`);
+
+T('client-review', 'cream', `
+  <div class="head"><div class="hint" style="color:#ff5a36">Client love</div><h1 style="margin-top:20px">What our clients <em>say</em></h1>
+    <div class="ar">ماذا يقول عملاؤنا</div></div>
+  <div class="box" style="top:840px;height:560px;background:#fff;border:0;box-shadow:0 30px 70px rgba(0,0,0,.12);padding:50px">
+    <div style="font:400 160px/0.8 'Archivo Black';color:#ff5a36">“</div>
+    <div style="font-size:54px;letter-spacing:6px;color:#f5a524;margin-top:10px">★★★★★</div>
+    <div style="font:500 28px Inter;color:#8a8f96;margin-top:200px">— client name, business · اسم العميل</div></div>
+  <div class="foot"><span>@anqahtech</span><span>anqah.com</span></div>`);
+
+T('before-after', 'cctv', `
+  <div class="head"><div class="hint">● Upgrade</div><h1 style="margin-top:20px">Before <em>/</em> after</h1><div class="ar">قبل / بعد</div></div>
+  <div class="box" style="top:720px;height:300px;border-color:#3a3a3a;display:flex;align-items:flex-start;padding:22px"><span style="font:700 26px 'JetBrains Mono';background:#333;padding:6px 14px">BEFORE · قبل</span></div>
+  <div class="box" style="top:1050px;height:300px;border-color:#ff3b3b;display:flex;align-items:flex-start;padding:22px"><span style="font:700 26px 'JetBrains Mono';background:#ff3b3b;padding:6px 14px">AFTER · بعد</span></div>
+  <div class="foot" style="top:1400px"><span>Add 2 photos ↑</span><span>@anqahtech</span></div>`);
+
+T('free-demo', 'lime', `
+  <div class="head" style="top:400px"><div class="hint">This week only · هذا الأسبوع</div>
+    <h1 style="font-size:130px;margin-top:20px;text-transform:uppercase">Free <em style="-webkit-text-stroke:4px #0a0d05;color:transparent">demo</em></h1>
+    <div class="ar" style="font-size:60px">عرض تجريبي مجاني</div></div>
+  <div class="box" style="top:880px;height:480px;background:#0a0d05;border:0;color:#b6ff3b;padding:50px;display:grid;gap:18px;align-content:center;font:800 40px Inter">
+    <div>🧾 SELLO POS</div><div>🔔 Automatic Bell</div><div>💧 Water Monitor</div><div>💻 Web · Apps · AI · CRM</div></div>
+  <div class="foot" style="top:1400px;font-size:30px;opacity:1"><span>DM “DEMO”</span><span>WhatsApp +971 50 576 2100</span></div>`);
+
+// ---- 3. Highlight covers ----
+const HL = [['sello', '🧾', 'SELLO'], ['bell', '🔔', 'BELL'], ['water', '💧', 'WATER'], ['services', '🛠️', 'SERVICES'],
+            ['installs', '📸', 'INSTALLS'], ['clients', '⭐', 'CLIENTS'], ['contact', '📲', 'CONTACT']];
+for (const [id, ic, lb] of HL) {
+  document.body.insertAdjacentHTML('beforeend', `<section class="post" id="story-hl-${id}" style="${TH.brand[0]}">
+  <div class="hl"><div class="ring"><div><div class="ic">${ic}</div><div class="lb">${lb}</div></div></div></div></section>`);
+}
+</script>
+</body>
+</html>

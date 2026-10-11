@@ -158,7 +158,7 @@ SERVICES = [
                 ('Training &amp; support', 'Staff training at go-live and ongoing support and AMC.'),
             ],
             'faq': [
-                ('Which POS software do you install?', 'Our own SELLO POS for shops and restaurants, and SELLO Lite, an offline POS app for Android phones and tablets.'),
+                ('Which POS software do you install?', 'Our own SELLO POS for shops and restaurants, SELLO Retail for supermarkets and retail stores on Windows, tablets and phones, and SELLO Lite, an offline POS app for Android.'),
                 ('Do you supply the POS machines too?', 'Yes. We supply complete POS systems &mdash; hardware and software from one supplier, installed and supported.'),
                 ('Does it work without internet?', 'Yes. SELLO runs on your own shop network, so billing, stock and reports keep working offline.'),
             ],
@@ -179,7 +179,7 @@ SERVICES = [
                 ('التدريب والدعم', 'تدريب الموظفين عند التشغيل ودعم مستمر وعقود صيانة.'),
             ],
             'faq': [
-                ('ما برنامج نقاط البيع الذي تثبّتونه؟', 'برنامجنا SELLO للمحلات والمطاعم، و SELLO Lite تطبيق كاشير يعمل دون إنترنت على هواتف وأجهزة أندرويد اللوحية.'),
+                ('ما برنامج نقاط البيع الذي تثبّتونه؟', 'برنامجنا SELLO للمحلات والمطاعم، و SELLO Retail للسوبرماركت ومحلات التجزئة على ويندوز والتابلت والجوال، و SELLO Lite تطبيق كاشير يعمل دون إنترنت على أندرويد.'),
                 ('هل توفّرون أجهزة الكاشير أيضًا؟', 'نعم. نوفّر أنظمة نقاط بيع متكاملة &mdash; الأجهزة والبرنامج من مورّد واحد مع التركيب والدعم.'),
                 ('هل يعمل دون إنترنت؟', 'نعم. يعمل SELLO على شبكة متجرك، فتستمر الفوترة والمخزون والتقارير دون اتصال.'),
             ],

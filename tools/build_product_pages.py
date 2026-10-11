@@ -9,6 +9,7 @@ from pathlib import Path
 from urllib.parse import quote
 
 from product_content_ar import AR, UI
+from product_sello_retail import SELLO_RETAIL, SELLO_RETAIL_AR
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = 'https://www.anqah.com'
@@ -169,6 +170,7 @@ PRODUCTS = [
             ('How does licensing work?', 'Every install starts with a 7-day free trial. After that, a one-time activation code tied to the device unlocks a 1, 2 or 5-year plan &mdash; no subscription.'),
         ],
     },
+    SELLO_RETAIL,
     {
         'slug': 'automatic-bell',
         'seo': {
@@ -297,6 +299,8 @@ PRODUCTS = [
     },
 ]
 
+
+AR['sello-retail'] = SELLO_RETAIL_AR
 
 # Reuse the exact WhatsApp icon from the home page
 WA_ICON = re.search(r'class="fab-wa".*?(<svg.*?</svg>)', (ROOT / 'index.html').read_text(encoding='utf-8'), re.S).group(1)
@@ -451,7 +455,7 @@ def tabs_section(p, n, lang, root):
         for i, (label, img, title, text, points) in enumerate(p['tabs']))
     return f'''
         <section class="section">
-            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{t['tabs_h'].format(name=p["name"])}</h2><p>{t['tabs_p'].format(name=p["name"])}</p></div></header>
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{p.get('tabs_title') or t['tabs_h'].format(name=p["name"])}</h2><p>{p.get('tabs_intro') or t['tabs_p'].format(name=p["name"])}</p></div></header>
             <div class="tabs reveal" data-tabs>
                 <div class="tab-list" role="tablist" aria-label="{t['tabs_label'].format(name=p["name"])}">{tabs}</div>
                 <div class="tab-panels">{panels}</div>
@@ -516,6 +520,25 @@ def hardware_section(p, n, lang, root):
 '''
 
 
+def platforms_section(p, n, lang, root):
+    """Real screens grouped by device: Windows PC, Android tablet, phone."""
+    t = UI[lang]
+    folder = f'{root}images/products/{p["slug"]}'
+    cols = ''
+    for label, kind, shots in p['platforms']:
+        figs = ''.join(
+            f'<figure class="plat-shot plat-{kind}"><a href="{folder}/{f}" data-lightbox="{p["slug"]}-screens" data-caption="{label} &mdash; {c}">'
+            f'<img src="{folder}/{f}" alt="{p["name"]} {label}: {c}" loading="lazy"></a><figcaption>{c}</figcaption></figure>'
+            for f, c in shots)
+        cols += f'<div class="plat-col plat-col-{kind} reveal"><span class="tag">{label}</span><div class="plat-shots">{figs}</div></div>'
+    return f'''
+        <section class="section">
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{t['plat_h']}</h2><p>{t['plat_p'].format(name=p["name"])}</p></div></header>
+            <div class="plat">{cols}</div>
+        </section>
+'''
+
+
 def page(base, lang):
     p = localize(base, lang)
     t = UI[lang]
@@ -526,6 +549,15 @@ def page(base, lang):
     switch_href = f'../../products/{p["slug"]}.html' if lang == 'ar' else f'../ar/products/{p["slug"]}.html'
     enquire = wa_link(unescape(t['wa_msg'].format(name=name)))
     status = f'<span class="pd-status">{p["status"]}</span>' if p['status'] else ''
+    if p.get('hero_img'):
+        hero_visual = (f'<figure class="pd-stage hero-frame hud pd-photo"><span class="corner tl">{p["slug"].upper()}</span>'
+                       f'<span class="corner tr">{p.get("hero_tag", "")}</span>'
+                       f'<img src="{root}images/products/{p["slug"]}/{p["hero_img"]}" alt="{name} on a POS terminal" width="1200" height="900"></figure>')
+    else:
+        hero_visual = (f'<figure class="pd-stage hero-frame hud"><span class="corner tl">{p["slug"].upper()}</span>'
+                       f'<span class="corner tr">3D // LIVE</span>'
+                       f'<canvas data-scene="{p["scene"]}" aria-label="{t["model"].format(name=name)}"></canvas>'
+                       f'<figcaption>{t["hover"]}</figcaption></figure>')
     brochure_file = p['brochure'][0].replace('.pdf', '-AR.pdf') if lang == 'ar' and p.get('brochure') else (p.get('brochure') or ('',))[0]
     brochure = (f'<a href="{root}downloads/brochures/{brochure_file}" download class="btn btn-line btn-dl">'
                 f'{t["brochure"]} <small>PDF &middot; {p["brochure"][1]}</small></a>') if p.get('brochure') else ''
@@ -546,7 +578,7 @@ def page(base, lang):
     counter = iter(range(1, 20))
     n = lambda: f'{next(counter):02d}'
     gallery = ''.join(
-        fn(p, n, lang, root) for key, fn in (('gallery', gallery_section), ('hardware', hardware_section), ('tabs', tabs_section), ('photos', photos_section)) if p.get(key))
+        fn(p, n, lang, root) for key, fn in (('gallery', gallery_section), ('platforms', platforms_section), ('hardware', hardware_section), ('tabs', tabs_section), ('photos', photos_section)) if p.get(key))
     seo = p['seo']
     title = unescape(seo['title'])
     desc = seo['description']
@@ -633,12 +665,7 @@ def page(base, lang):
                     <code><span class="prompt">$</span> <span id="typed" data-commands="{escape(p["terminal"])}"></span><span class="caret"></span></code>
                 </div>
             </div>
-            <figure class="pd-stage hero-frame hud">
-                <span class="corner tl">{p["slug"].upper()}</span>
-                <span class="corner tr">3D // LIVE</span>
-                <canvas data-scene="{p["scene"]}" aria-label="{t['model'].format(name=name)}"></canvas>
-                <figcaption>{t['hover']}</figcaption>
-            </figure>
+            {hero_visual}
         </section>
 
         <section class="facts" aria-label="{t['facts']}">{facts}</section>

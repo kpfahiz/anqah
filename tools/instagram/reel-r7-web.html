@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<!-- Reel R7 "Website glow-up: 2015 vs 2026" (1080x1920, 13 s). Deterministic: window.renderAt(t) draws the frame for
+     time t, so render_reel.mjs captures it frame by frame. Open in a browser to preview it playing.
+     The "2015" site is a made-up generic page (not any real company); the "2026" site is anqah.com, from screenshots in
+     img/ (anqah-desktop.jpg 1440 wide, anqah-mobile.jpg 390 wide @2x). -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Reel R7 Website glow-up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Inter:wght@400;500;600;700;800&family=Comic+Neue:wght@700&family=JetBrains+Mono:wght@700&family=Cairo:wght@600;700;900&family=Amiri:wght@700&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #f3efe6; }
+#stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: 'Inter', sans-serif; }
+.layer { position: absolute; inset: 0; }
+.cap { position: absolute; left: 60px; right: 60px; top: 270px; text-align: center; z-index: 20; }
+.cap b { display: block; font: 600 74px/1.05 'Fraunces', serif; letter-spacing: -0.02em; }
+.cap b em { color: #ff5a36; }
+.cap span { display: block; font: 900 48px/1.4 'Cairo'; direction: rtl; margin-top: 6px; }
+.cap.retro b, .cap.retro span { color: #fff; text-shadow: 3px 3px 0 #003b3b; }
+.cap.retro b em { color: #ffe14d; }
+.cap.modern b, .cap.modern span { color: #15171a; }
+
+/* ---------- 2015 ---------- */
+#old { background: #008080; }
+#oldwin { position: absolute; left: 60px; top: 560px; width: 960px; height: 820px; background: #c0c0c0; border: 4px solid; border-color: #fff #404040 #404040 #fff; }
+.tbar { height: 44px; background: linear-gradient(90deg, #000080, #1084d0); color: #fff; font: 700 20px 'Inter'; display: flex; align-items: center; padding: 0 12px; gap: 10px; }
+.tbar .x { margin-left: auto; display: flex; gap: 4px; }
+.tbar .x i { width: 30px; height: 28px; background: #c0c0c0; border: 2px solid; border-color: #fff #404040 #404040 #fff; color: #000; font: 700 16px 'Inter'; font-style: normal; display: grid; place-items: center; }
+.addr { height: 40px; margin: 6px 8px; background: #fff; border: 2px solid; border-color: #404040 #fff #fff #404040; font: 18px 'Times New Roman', serif; display: flex; align-items: center; padding: 0 8px; }
+#oldpage { position: absolute; left: 8px; right: 8px; top: 102px; bottom: 44px; overflow: hidden; background: #ffffcc; border: 2px solid; border-color: #404040 #fff #fff #404040; font-family: 'Times New Roman', serif; color: #000; padding: 14px; }
+.welcome { font: 700 54px 'Comic Neue', cursive; color: #ff00ff; text-align: center; text-shadow: 2px 2px 0 #00ffff; }
+.marq { margin-top: 8px; background: #000080; color: #ffff00; font: 700 24px 'Times New Roman'; white-space: nowrap; overflow: hidden; padding: 4px 0; }
+.marq span { display: inline-block; }
+.oldgrid { display: grid; grid-template-columns: 260px 1fr; gap: 12px; margin-top: 14px; }
+.oldnav { background: #ccccff; border: 3px ridge #8080ff; padding: 10px; font: 22px/1.7 'Times New Roman'; }
+.oldnav a { color: #0000ee; text-decoration: underline; display: block; }
+.broken { width: 100%; height: 190px; border: 2px dashed #808080; display: grid; place-items: center; color: #808080; font: 20px 'Times New Roman'; background: #eee; }
+.oldtxt { font: 21px/1.35 'Times New Roman'; margin-top: 10px; }
+.counter { margin-top: 12px; font: 700 20px 'Times New Roman'; }
+.counter b { font: 700 22px 'JetBrains Mono'; background: #000; color: #0f0; padding: 2px 8px; letter-spacing: 3px; }
+.uc { margin-top: 12px; font: 700 26px 'Comic Neue'; color: #ff0000; }
+.status { position: absolute; left: 8px; right: 8px; bottom: 6px; height: 30px; display: flex; align-items: center; gap: 10px; font: 17px 'Times New Roman'; }
+.status .bar { width: 260px; height: 18px; border: 2px solid; border-color: #404040 #fff #fff #404040; background: #fff; }
+.status .bar i { display: block; height: 100%; background: repeating-linear-gradient(90deg, #000080 0 14px, transparent 14px 18px); }
+#oldphone { position: absolute; left: 720px; top: 1040px; width: 270px; height: 520px; border-radius: 34px; background: #222; padding: 14px 10px 40px; z-index: 3; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+#oldphone .scr { width: 100%; height: 100%; background: #ffffcc; overflow: hidden; position: relative; }
+#oldphone .mini { position: absolute; left: 0; top: 0; width: 960px; transform: scale(0.26); transform-origin: 0 0; }
+#oldphone .pinch { position: absolute; left: 0; right: 0; bottom: 10px; text-align: center; font: 700 17px 'Inter'; color: #fff; background: rgba(0,0,0,0.65); padding: 6px; }
+.stamp { position: absolute; z-index: 6; padding: 12px 22px; border: 6px solid #e11d48; color: #e11d48; font: 800 40px 'Inter'; letter-spacing: 0.02em; background: rgba(255,255,255,0.88); border-radius: 10px; white-space: nowrap; }
+
+/* ---------- wipe ---------- */
+#wipe { background: linear-gradient(120deg, #ff5a36, #ffb199); z-index: 15; }
+#spark { position: absolute; z-index: 16; font-size: 220px; left: 50%; top: 50%; margin: -130px 0 0 -110px; }
+
+/* ---------- 2026 ---------- */
+#new { background: radial-gradient(800px 700px at 85% 70%, #ffd8c9, transparent 60%), #f3efe6; }
+#newwin { position: absolute; left: 60px; top: 560px; width: 960px; height: 700px; border-radius: 22px; background: #fff; overflow: hidden; box-shadow: 0 30px 70px rgba(30,20,10,0.22); }
+.nbar { position: relative; z-index: 2; height: 54px; background: #ebe7df; display: flex; align-items: center; gap: 10px; padding: 0 20px; }
+.nbar i { width: 15px; height: 15px; border-radius: 50%; background: #ff5f57; } .nbar i:nth-child(2) { background: #febc2e; } .nbar i:nth-child(3) { background: #28c840; }
+.nbar span { margin-left: 16px; flex: 1; background: #fff; border-radius: 9px; height: 32px; font: 500 18px 'Inter'; color: #6b7280; display: flex; align-items: center; padding: 0 14px; }
+.nbar span b { color: #16a34a; margin-right: 8px; }
+#newpage { position: absolute; left: 0; right: 0; top: 54px; }
+#newpage img { display: block; width: 960px; }
+#newphone { position: absolute; left: 700px; top: 880px; width: 300px; border: 12px solid #15171a; border-radius: 44px; overflow: hidden; background: #000; box-shadow: 0 30px 60px rgba(30,20,10,0.35); z-index: 4; }
+#newphone .pscr { height: 560px; overflow: hidden; background: #07080a; }
+#newphone img { display: block; width: 100%; }
+.badge { position: absolute; left: 60px; z-index: 5; padding: 16px 26px; border-radius: 999px; background: #15171a; color: #f3efe6; font: 700 32px 'Inter'; white-space: nowrap; box-shadow: 0 12px 30px rgba(30,20,10,0.25); }
+.badge.c { background: #ff5a36; color: #fff; }
+
+/* ---------- end ---------- */
+#end { background: radial-gradient(800px 800px at 90% 80%, #ffd8c9, transparent 60%), #f3efe6; z-index: 30; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 80px; color: #15171a; }
+#end img { height: 110px; }
+#end .k { font: 700 28px 'JetBrains Mono'; letter-spacing: 0.12em; margin-top: 36px; color: #5b5f66; }
+#end h2 { font: 600 112px/1 'Fraunces', serif; letter-spacing: -0.03em; margin-top: 20px; }
+#end h2 em { color: #ff5a36; }
+#end .ar { font: 700 66px/1.5 'Amiri', serif; direction: rtl; margin-top: 16px; }
+#end .free { margin-top: 46px; font: 700 34px 'Inter'; color: #ff5a36; }
+#end .free span { font-family: 'Cairo'; }
+#end .cta { margin-top: 22px; background: #15171a; color: #f3efe6; font: 700 40px 'Inter'; padding: 26px 46px; border-radius: 999px; }
+#end .cta span { font-family: 'Cairo'; }
+#end .h { font: 700 28px 'JetBrains Mono'; margin-top: 46px; color: #5b5f66; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <!-- 2015 -->
+  <div class="layer" id="old">
+    <div id="oldwin">
+      <div class="tbar">🌐 My Business Homepage - Internet Browser<span class="x"><i>_</i><i>□</i><i>×</i></span></div>
+      <div class="addr">http://www.mybusiness-homepage.com/index_new_FINAL.html</div>
+      <div id="oldpage">
+        <div class="welcome">✨ WELCOME TO OUR WEBSITE!!! ✨</div>
+        <div class="marq"><span id="marq">*** BEST PRICES IN TOWN *** CALL NOW *** SPECIAL OFFER *** BEST PRICES IN TOWN *** CALL NOW ***</span></div>
+        <div class="oldgrid">
+          <div class="oldnav"><a>Home</a><a>About Us</a><a>Products</a><a>Gallery</a><a>Guestbook</a><a>Contact</a><a>Links</a></div>
+          <div><div class="broken">❌ image_final2.jpg</div>
+            <div class="oldtxt">Welcome to our homepage. We are the best company. Please click the links on the left to learn more about our products and services. Best viewed in 800×600.</div>
+            <div class="counter">You are visitor <b id="visits">000127</b></div>
+            <div class="uc" id="uc">🚧 UNDER CONSTRUCTION 🚧</div></div>
+        </div>
+      </div>
+      <div class="status">Loading… <span class="bar"><i id="load"></i></span> <span id="pct">3%</span></div>
+    </div>
+    <div id="oldphone"><div class="scr"><div class="mini" id="mini"></div><div class="pinch">🤏 pinch to zoom…</div></div></div>
+    <div class="stamp" id="sp1" style="left:110px; top:760px">SLOW ⏳</div>
+    <div class="stamp" id="sp2" style="left:440px; top:980px">NOT MOBILE-FRIENDLY 📱</div>
+    <div class="stamp" id="sp3" style="left:120px; top:1230px">NOT ON GOOGLE 🔍</div>
+  </div>
+
+  <!-- 2026 -->
+  <div class="layer" id="new">
+    <div id="newwin">
+      <div class="nbar"><i></i><i></i><i></i><span><b>🔒</b>anqah.com</span></div>
+      <div id="newpage"><img src="img/anqah-desktop.jpg" alt=""></div>
+    </div>
+    <div id="newphone"><div class="pscr"><img id="mobimg" src="img/anqah-mobile.jpg" alt=""></div></div>
+    <div class="badge" id="bd1" style="top:1300px">⚡ Fast</div>
+    <div class="badge c" id="bd2" style="top:1390px">📱 Mobile-first</div>
+    <div class="badge" id="bd3" style="top:1480px">🔍 SEO-ready</div>
+    <div class="badge c" id="bd4" style="top:1300px; left:300px">🌐 Arabic &amp; English</div>
+  </div>
+
+  <div class="layer" id="wipe"></div>
+  <div id="spark">✨</div>
+
+  <div class="cap retro" id="c1"><b>Your website <em>in 2015…</em> 😬</b><span>موقعك في 2015… 😬</span></div>
+  <div class="cap modern" id="c2"><b>…and in <em>2026</em> ✨</b><span>…وفي 2026 ✨</span></div>
+  <div class="cap modern" id="c3"><b>Fast. Mobile. <em>Found on Google.</em></b><span>سريع، للجوال، ويظهر في Google</span></div>
+
+  <div class="layer" id="end">
+    <img src="../../images/logo-mark-navy.png" alt="">
+    <div class="k">ANQAH TECH · WEB DESIGN</div>
+    <h2>Websites that <em>win</em> customers.</h2>
+    <div class="ar">مواقع تكسب لك العملاء</div>
+    <div class="free">🎁 Free website review · <span>مراجعة مجانية لموقعك</span></div>
+    <div class="cta">Comment “WEB” · <span>علّق موقع</span></div>
+    <div class="h">@anqahtech · anqah.com</div>
+  </div>
+</div>
+
+<script>
+const DURATION = 13.0;
+const $ = id => document.getElementById(id);
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const ease = x => 1 - Math.pow(1 - x, 3);
+const inOut = x => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const back = x => { const c = 1.7; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+const fade = (t, a, b, d = 0.3) => Math.min(prog(t, a, a + d), 1 - prog(t, b - d, b));
+
+// the phone shows the same old page, squeezed to a quarter of its size
+$('mini').innerHTML = $('oldpage').innerHTML;
+$('mini').querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+
+const STAMPS = [['sp1', 1.3, -8], ['sp2', 2.0, 6], ['sp3', 2.7, -4]];
+const BADGES = [['bd1', 7.7], ['bd2', 8.1], ['bd3', 8.5], ['bd4', 8.9]];
+
+window.renderAt = function (t) {
+  // ----- 2015 -----
+  $('old').style.display = t < 4.4 ? '' : 'none';
+  $('marq').style.transform = `translateX(${-(t * 160) % 700}px)`;
+  $('visits').textContent = String(127 + Math.floor(t * 1.5)).padStart(6, '0');
+  $('uc').style.visibility = Math.floor(t * 3) % 2 ? 'hidden' : 'visible';
+  const load = Math.min(23, 3 + Math.floor(t * 6));
+  $('load').style.width = load + '%'; $('pct').textContent = load + '%';
+  STAMPS.forEach(([id, at, rot]) => {
+    const p = prog(t, at, at + 0.18), el = $(id);
+    el.style.opacity = p > 0 ? 1 : 0;
+    el.style.transform = `rotate(${rot}deg) scale(${p > 0 ? 2 - ease(p) : 2})`;
+  });
+  const shake = t > 1.3 && t < 3.4 ? Math.sin(t * 50) * 2 : 0;
+  $('oldwin').style.transform = `translateX(${shake}px)`;
+
+  // ----- glow-up wipe -----
+  const w1 = inOut(prog(t, 3.6, 4.0)), w2 = inOut(prog(t, 4.4, 4.8));
+  $('wipe').style.display = t > 3.55 && t < 4.85 ? '' : 'none';
+  $('wipe').style.clipPath = `circle(${w1 * 140}% at 50% 50%)`;
+  $('wipe').style.opacity = 1 - w2;
+  const sp = prog(t, 3.9, 4.6);
+  $('spark').style.opacity = sp > 0 && sp < 1 ? Math.sin(sp * Math.PI) : 0;
+  $('spark').style.transform = `scale(${0.4 + sp * 1.2}) rotate(${sp * 90}deg)`;
+
+  // ----- 2026 -----
+  $('new').style.display = t >= 4.3 ? '' : 'none';
+  const np = ease(prog(t, 4.4, 5.0));
+  $('newwin').style.transform = `translateY(${(1 - np) * 80}px) scale(${0.94 + 0.06 * np})`;
+  $('newwin').style.opacity = np;
+  $('newpage').style.transform = `translateY(${-inOut(prog(t, 5.2, 7.8)) * 1060}px)`;  // smooth scroll: hero -> products
+  const ph = back(prog(t, 6.6, 7.2));
+  $('newphone').style.opacity = prog(t, 6.6, 6.8);
+  $('newphone').style.transform = `translateY(${(1 - ph) * 160 + Math.sin(t * 2) * 8}px) rotate(${4 - ph * 2}deg)`;
+  $('mobimg').style.transform = `translateY(${-inOut(prog(t, 7.4, 10.4)) * 900}px)`;  // phone scrolls the mobile site
+  BADGES.forEach(([id, at]) => {
+    const p = back(prog(t, at, at + 0.4)), el = $(id);
+    el.style.opacity = prog(t, at, at + 0.15); el.style.transform = `scale(${0.6 + 0.4 * p})`;
+  });
+
+  // ----- captions -----
+  [['c1', 0.15, 3.6], ['c2', 4.5, 7.4], ['c3', 7.5, 10.8]].forEach(([id, a, b]) => {
+    const o = fade(t, a, b), el = $(id);
+    el.style.opacity = o; el.style.transform = `translateY(${(1 - ease(prog(t, a, a + 0.4))) * 30}px)`;
+  });
+
+  // ----- end card -----
+  const e = prog(t, 10.8, 11.2);
+  $('end').style.opacity = e;
+  [...$('end').children].forEach((c, i) => {
+    const p = ease(prog(t, 10.9 + i * 0.12, 11.3 + i * 0.12));
+    c.style.opacity = p; c.style.transform = `translateY(${(1 - p) * 40}px)`;
+  });
+  const cta = $('end').querySelector('.cta');
+  cta.style.transform += ` scale(${1 + 0.04 * Math.sin(Math.max(0, t - 11.8) * 6)})`;
+};
+
+window.renderAt(0);
+if (!window.__capture) {
+  const t0 = performance.now();
+  const loop = now => { window.renderAt(((now - t0) / 1000) % DURATION); requestAnimationFrame(loop); };
+  document.fonts.ready.then(() => requestAnimationFrame(loop));
+}
+</script>
+</body>
+</html>

@@ -107,6 +107,17 @@ ul.ticks li::before { content: ''; position: absolute; left: 0; top: 1.6mm; widt
 .callouts h3 { font-size: 10pt; }
 .callouts p { font-size: 8.6pt; line-height: 1.5; }
 .mt { margin-top: 7mm; }
+.tablets2 { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm 6mm; }
+.device-photo { border: 0.3mm solid var(--line); overflow: hidden; }
+.device-photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.tablets2 .device-photo img { aspect-ratio: 16 / 9; }
+.tablets2 figure, .phones4-sm figure { margin: 0; }
+.tablet { border-radius: 4mm; border: 2.2mm solid #1a1d21; background: #000; overflow: hidden; box-shadow: 0 2mm 6mm rgba(0,0,0,.25); aspect-ratio: 16 / 10; }
+.tablet img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.tablets2 figcaption { margin-top: 2.6mm; font-size: 8.4pt; color: var(--muted); line-height: 1.45; }
+.tablets2 figcaption b { display: block; font-family: var(--display); text-transform: uppercase; color: var(--ink); font-size: 10pt; }
+.phones4-sm { grid-template-columns: repeat(4, 29mm); justify-content: space-between; }
+.phones4-sm .phone { aspect-ratio: 432 / 848; }
 .ring-two { margin-top: auto; display: grid; grid-template-columns: 34mm 40mm 1fr; gap: 6mm; align-items: end; }
 .ring-two figure { margin: 0; }
 .ring-two img { display: block; width: 100%; height: 82mm; object-fit: cover; border: 0.3mm solid var(--line); }
@@ -163,7 +174,8 @@ def page(body, n, name, geo='tr', extra_cls=''):
 def cover(p, kicker, title_html, visual, logo=None):
     facts = ''.join(f'<div><b>{v}</b><span>{k}</span></div>' for v, k in p['facts'])
     logo_html = f'<img class="logo-tile" src="../../{logo}" alt="">' if logo else ''
-    cat = p['category'].upper() if LANG == 'en' else p['category']
+    # upper-case the words, not the HTML entities (&middot; must stay lower case)
+    cat = p['category'].upper().replace('&MIDDOT;', '&middot;').replace('&AMP;', '&amp;') if LANG == 'en' else p['category']
     return f'''
 <section class="page cover">
     <div class="brand"><img src="../../images/logo-mark-white.png" alt=""><span>Anqah Tech</span></div>
@@ -431,11 +443,115 @@ def bell():
     return html_doc(tr('Automatic Bell - Product Brochure', 'الجرس الآلي - كتيّب المنتج'), ''.join(pages))
 
 
+# ---------------------------------------------------------------- SELLO Retail
+def sello_retail():
+    p = prod('sello-retail')
+    tag = tr('SELLO Retail on Windows', 'SELLO Retail على ويندوز')
+
+    def row(img, title, text, points, flip=False):
+        ticks = ''.join(f'<li>{x}</li>' for x in points)
+        return (f'<div class="tour-row{" flip" if flip else ""}"><div class="device-photo"><img src="img/retail-{img}.jpg" alt=""></div>'
+                f'<div><span class="tag">{tag}</span><h3>{title}</h3><p>{text}</p><ul class="ticks">{ticks}</ul></div></div>')
+
+    win1 = (row('win-billing-pos', tr('Scan &amp; bill', 'امسح واحسب'),
+                tr('Scan a barcode or type a name; GST or VAT is worked out on every line.', 'امسح الباركود أو اكتب الاسم؛ تُحسب الضريبة على كل صنف.'),
+                tr(['F1 new bill &middot; F2 search &middot; F12 pay', 'Item and bill discounts by role', 'Hold, resume and returns'],
+                   ['F1 فاتورة جديدة &middot; F2 بحث &middot; F12 دفع', 'خصم الصنف والفاتورة حسب الدور', 'تعليق واستئناف ومرتجعات']))
+            + row('win-payment-pos', tr('Every way to pay', 'كل طرق الدفع'),
+                  tr('Cash, card, UPI, bank transfer, credit or split &mdash; with a reference number for cards and UPI.', 'نقد أو بطاقة أو UPI أو تحويل بنكي أو آجل أو دفع مجزّأ &mdash; مع رقم مرجعي للبطاقة و UPI.'),
+                  tr(['Split one bill across methods', 'Credit and installment sales', 'Bill prints or shares as PDF'],
+                     ['تقسيم الفاتورة على عدة طرق', 'بيع آجل وبالأقساط', 'طباعة الفاتورة أو مشاركتها PDF']), True)
+            + row('win-customer-display-device', tr('Customer display', 'شاشة العميل'),
+                  tr('A second screen shows the customer each item, the tax and the total &mdash; and a UPI QR code to pay.', 'شاشة ثانية تعرض للعميل كل صنف والضريبة والإجمالي &mdash; ورمز QR للدفع عبر UPI.'),
+                  tr(['Live as you scan', 'UPI QR for the exact amount', 'A thank-you screen after paying'],
+                     ['مباشرة أثناء المسح', 'رمز QR بالمبلغ الدقيق', 'شاشة شكر بعد الدفع'])))
+    win2 = (row('win-dashboard-pos', tr('Dashboard', 'لوحة التحكم'),
+                tr('Today&rsquo;s sales, money to collect, stock alerts, cash in hand and the 14-day sales trend.', 'مبيعات اليوم والمبالغ المستحقة وتنبيهات المخزون والنقد المتوفر واتجاه مبيعات 14 يومًا.'),
+                tr(['Top products this week', 'Payments split by method', 'Low and out-of-stock alerts'],
+                   ['أكثر المنتجات مبيعًا هذا الأسبوع', 'المدفوعات حسب الطريقة', 'تنبيهات المخزون المنخفض والنافد']))
+            + row('win-sales-summary-pos', tr('Reports', 'التقارير'),
+                  tr('Sales, cashier, item, category, tax, HSN, profit, stock, purchase, customer and shift reports.', 'تقارير المبيعات والكاشير والأصناف والفئات والضريبة و HSN والأرباح والمخزون والمشتريات والعملاء والورديات.'),
+                  tr(['Daily, weekly, monthly or any dates', 'Export to PDF, Excel or CSV', 'Filter by user, category and payment'],
+                     ['يومي أو أسبوعي أو شهري أو أي فترة', 'تصدير PDF و Excel و CSV', 'تصفية بالمستخدم والفئة والدفع']), True)
+            + row('win-settings-pos', tr('WhatsApp &amp; email', 'واتساب والبريد'),
+                  tr('Share bills with customers on WhatsApp and email reports to the owner.', 'شارك الفواتير مع العملاء عبر واتساب وأرسل التقارير إلى المالك بالبريد.'),
+                  tr(['Printers and customer display set-up', 'English, Arabic or Hindi', 'Backup and restore to a file'],
+                     ['إعداد الطابعات وشاشة العميل', 'العربية أو الإنجليزية أو الهندية', 'نسخ احتياطي واستعادة إلى ملف'])))
+    tabs = ''.join(f'<figure><div class="device-photo"><img src="img/retail-{f}.jpg" alt=""></div><figcaption><b>{t}</b>{c}</figcaption></figure>' for f, t, c in [
+        ('tab-home-tab', tr('Home', 'الرئيسية'), tr('Every module on a counter tablet.', 'كل الوحدات على جهاز لوحي عند الكاونتر.')),
+        ('tab-billing-tab', tr('Billing', 'الفوترة'), tr('Scan and bill with GST on the tablet.', 'امسح وافوتر مع الضريبة على الجهاز اللوحي.')),
+        ('tab-payment-tab', tr('Payment', 'الدفع'), tr('Cash, card, UPI or split by touch.', 'نقد أو بطاقة أو UPI أو مجزّأ باللمس.')),
+        ('tab-products-tab', tr('Products &amp; stock', 'المنتجات والمخزون'), tr('Barcodes, prices, stock and low-stock flags.', 'الباركود والأسعار والمخزون وتنبيه الانخفاض.'))])
+    phones = ''.join(f'<figure><div class="phone"><img src="img/retail-{f}.jpg" alt=""></div><figcaption><b>{t}</b>{c}</figcaption></figure>' for f, t, c in [
+        ('phone-scan', tr('Camera scan', 'المسح بالكاميرا'), tr('The phone camera reads barcodes.', 'كاميرا الجوال تقرأ الباركود.')),
+        ('phone-payment', tr('Payment', 'الدفع'), tr('Cash, card, UPI or split.', 'نقد أو بطاقة أو UPI أو مجزّأ.')),
+        ('phone-stock', tr('Stock', 'المخزون'), tr('Quantities and low-stock filters.', 'الكميات وتصفية المخزون المنخفض.')),
+        ('phone-dashboard', tr('Dashboard', 'لوحة التحكم'), tr('Sales and cash on the go.', 'المبيعات والنقد أينما كنت.'))])
+    sello = prod('sello')
+    # Retail hardware: every screen in these photos is SELLO Retail (not the restaurant SELLO).
+    hw_items = tr([('terminal', 'Dual-screen POS terminal', 'All-in-one touch terminal with a customer-facing display.'),
+                   ('printer', 'Receipt printer', 'Fast 58 / 80 mm thermal printing for bills and receipts.'),
+                   ('tablet', 'Tablet POS', 'Compact counter billing on a secure stand.'),
+                   ('customer-display', 'Customer display', 'Shows each item, the total and a UPI QR to the customer.'),
+                   ('drawer', 'Cash drawer', 'Opens automatically on cash sales and keeps takings secure.'),
+                   ('monitor', 'Touch-screen POS monitor', 'Large touch screen for busy counters and the back office.')],
+                  [('terminal', 'جهاز كاشير بشاشتين', 'جهاز لمس متكامل مع شاشة عرض للعميل.'),
+                   ('printer', 'طابعة الإيصالات', 'طباعة حرارية سريعة 58 / 80 مم للفواتير والإيصالات.'),
+                   ('tablet', 'كاشير على جهاز لوحي', 'فوترة مدمجة على الكاونتر على حامل آمن.'),
+                   ('customer-display', 'شاشة العميل', 'تعرض للعميل كل صنف والإجمالي ورمز QR للدفع.'),
+                   ('drawer', 'درج النقود', 'يُفتح تلقائيًا عند البيع النقدي ويحفظ النقود بأمان.'),
+                   ('monitor', 'شاشة كاشير تعمل باللمس', 'شاشة لمس كبيرة للكاونترات المزدحمة والمكتب الخلفي.')])
+    hw = ''.join(f'<figure><img src="img/retail-hw-{f}.jpg" alt=""><figcaption><b>{t}</b>{c}</figcaption></figure>' for f, t, c in hw_items)
+    incl = ''.join(f'<li>{i}</li>' for i in sello['hardware']['includes'])
+    devices = tr([('Thermal printers', '58 / 80 mm receipt printers over USB, Bluetooth or network, plus A4.'),
+                  ('Barcode scanners', 'USB or Bluetooth scanners &mdash; or the device camera.'),
+                  ('Customer display', 'A second monitor on Windows facing the customer.')],
+                 [('الطابعات الحرارية', 'طابعات إيصالات 58 / 80 مم عبر USB أو بلوتوث أو الشبكة، إضافة إلى A4.'),
+                  ('قارئات الباركود', 'قارئات USB أو بلوتوث &mdash; أو كاميرا الجهاز.'),
+                  ('شاشة العميل', 'شاشة ثانية على ويندوز مواجهة للعميل.')])
+    dev_html = ''.join(f'<div><h3>{a}</h3><p>{b}</p></div>' for a, b in devices)
+    pages = [
+        cover(p, tr('Retail POS &middot; Windows, tablet &amp; phone', 'كاشير التجزئة &middot; ويندوز وتابلت وجوال'),
+              tr('SELLO Retail<span>retail POS</span>', 'SELLO Retail<span>كاشير التجزئة</span>'),
+              '<div class="visual"><img src="img/retail-win-billing-device.jpg" alt=""></div>', logo='images/products/sello-retail-logo.png'),
+        overview(p, 2, tr('01 &middot; Overview', '01 &middot; نظرة عامة'),
+                 f'<figure class="figure-wide"><img src="img/retail-tab-billing-device.jpg" alt=""><figcaption class="cap"><b>{tr("On a tablet", "على جهاز لوحي")}</b>{tr("The same fast billing screen on an Android tablet at the counter.", "شاشة الفوترة السريعة نفسها على جهاز أندرويد لوحي عند الكاونتر.")}</figcaption></figure>'),
+        page(f'''
+        <div class="kicker">{tr('02 &middot; At the counter', '02 &middot; عند الكاونتر')}</div>
+        <h2>{tr('Billing <em>&amp; payment</em>', 'الفوترة <em>والدفع</em>')}</h2>
+        <p class="lead" style="margin-bottom:6mm">{tr('Real screens from SELLO Retail on a Windows counter PC.', 'شاشات حقيقية من SELLO Retail على حاسوب كاونتر بنظام ويندوز.')}</p>
+        <div class="tour">{win1}</div>''', 3, p['name']),
+        page(f'''
+        <div class="kicker">{tr('02 &middot; In the back office', '02 &middot; في المكتب')}</div>
+        <h2>{tr('Reports <em>&amp; control</em>', 'التقارير <em>والتحكم</em>')}</h2>
+        <div class="tour" style="margin-top:2mm">{win2}</div>''', 4, p['name'], geo='tl'),
+        page(f'''
+        <div class="kicker">{tr('03 &middot; Tablet &amp; phone', '03 &middot; التابلت والجوال')}</div>
+        <h2>{tr('Also on <em>tablet &amp; phone</em>', 'أيضًا على <em>التابلت والجوال</em>')}</h2>
+        <p class="lead" style="margin-bottom:5mm">{tr('One app on Android tablets and phones, with the same data and features.', 'تطبيق واحد على أجهزة أندرويد اللوحية والهواتف، بالبيانات والمزايا نفسها.')}</p>
+        <h3 class="sub2" style="margin-top:0">{tr('Tablet view', 'عرض التابلت')}</h3>
+        <div class="tablets2">{tabs}</div>
+        <h3 class="sub2">{tr('On the phone', 'على الجوال')}</h3>
+        <div class="phones4 phones4-sm">{phones}</div>''', 5, p['name']),
+        features_page(p, 6, tr('04 &middot; Capabilities', '04 &middot; الإمكانات')),
+        page(f'''
+        <div class="kicker">{tr('05 &middot; The devices', '05 &middot; الأجهزة')}</div>
+        <h2>{tr('POS <em>hardware</em>', 'أجهزة <em>نقاط البيع</em>')}</h2>
+        <p class="lead" style="margin-bottom:5mm">{tr('We supply the POS hardware, install SELLO Retail, set up your products and taxes, and train your staff.', 'نوفّر أجهزة نقاط البيع، ونثبّت SELLO Retail، ونُعدّ منتجاتك وضرائبك، وندرّب موظفيك.')}</p>
+        <div class="hwgrid">{hw}</div>
+        <h3 class="sub2">{tr('Works with', 'يعمل مع')}</h3>
+        <div class="callouts">{dev_html}</div>
+        <div class="incl mt-s"><span class="kicker">{tr('Every POS package includes', 'تشمل كل باقة نقاط بيع')}</span><ul>{incl.replace('SELLO software', 'SELLO Retail').replace('برنامج SELLO', 'برنامج SELLO Retail')}</ul></div>''', 7, p['name'], geo='tl'),
+        closing(p, 8),
+    ]
+    return html_doc(tr('SELLO Retail - Product Brochure', 'SELLO Retail - كتيّب المنتج'), ''.join(pages))
+
+
 def main():
     global LANG
     for LANG in ('en', 'ar'):
         suffix = '-ar' if LANG == 'ar' else ''
-        for name, fn in (('sello', sello), ('sello-lite', sello_lite), ('automatic-bell', bell)):
+        for name, fn in (('sello', sello), ('sello-lite', sello_lite), ('sello-retail', sello_retail), ('automatic-bell', bell)):
             (HERE / f'{name}{suffix}.html').write_text(fn(), encoding='utf-8')
             print('wrote', f'tools/brochures/{name}{suffix}.html')
 
