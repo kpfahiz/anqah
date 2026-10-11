@@ -691,7 +691,7 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: var(-
 .foot-ig { display: inline-flex; align-items: center; gap: 6px; }
 
 /* ---------- Product hero photo + per-device screens ---------- */
-.pd-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+.pd-photo > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
 .plat { display: grid; gap: 34px; }
 .plat-col { display: flex; flex-direction: column; gap: 14px; }
 .plat-shots { display: grid; gap: 16px; grid-template-columns: repeat(4, 1fr); }
@@ -707,4 +707,28 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: var(-
 @media (max-width: 900px) { .plat-shots { grid-template-columns: 1fr 1fr; } .plat-col-phone .plat-shots { grid-template-columns: repeat(2, minmax(0, 170px)); } }
 
 .stage-photo { position: relative; overflow: hidden; }
-.stage-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.stage-photo > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+
+/* ---------- SELLO Retail live checkout (3D scene: initRetail in three-scenes.js; toasts toggled by the scene) ---------- */
+.rc { position: absolute; inset: 0; z-index: 2; overflow: hidden; container-type: size;
+    background: radial-gradient(circle at 30% 20%, rgba(182, 255, 59, 0.08), transparent 50%),
+                radial-gradient(circle at 80% 90%, rgba(15, 118, 110, 0.25), transparent 55%), #080a0c; }
+.rc > * { font-size: clamp(8px, min(2.15cqw, 3.5cqh), 14px); } /* cq units here resolve against .rc itself */
+.rc-bg { position: absolute; inset: 0; background: radial-gradient(circle, rgba(255, 255, 255, 0.06) 1px, transparent 1.6px) 0 0 / 16px 16px; }
+.rc canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.rc-toast { position: absolute; left: 2.5cqw; width: 46cqw; display: flex; gap: .6em; align-items: center; padding: .55em .7em; border-radius: .7em;
+    background: rgba(18, 21, 25, .94); border: 1px solid #2a3138; color: #e9edf0; box-shadow: 0 1em 2.4em rgba(0, 0, 0, .65); z-index: 6;
+    opacity: 0; transform: translateY(.8em) scale(.96); transition: opacity .35s, transform .35s; pointer-events: none; }
+.rc-wa { bottom: calc(4cqh + 3.6em); } .rc-mail { bottom: 4cqh; }
+.rc.wa .rc-wa, .rc.mail .rc-mail { opacity: 1; transform: none; }
+.rc-toast b { display: block; font: 700 .62em/1.2 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; margin-bottom: .2em; }
+.rc-toast span:last-child { font-size: .7em; line-height: 1.3; }
+.rc-ico { flex: none; width: 2.2em; height: 2.2em; border-radius: 50%; display: grid; place-items: center; }
+.rc-ico svg { width: 1.2em; height: 1.2em; }
+.rc-wa .rc-ico { background: #25d366; color: #fff; } .rc-wa b { color: #25d366; }
+.rc-mail .rc-ico { background: var(--blue); color: #fff; } .rc-mail b { color: var(--blue); }
+.rc-os { position: absolute; left: 3cqw; top: 4cqh; display: flex; gap: .45em; z-index: 5; pointer-events: none; }
+.rc-os span { font: 600 .62em/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent);
+    border: 1px solid rgba(182, 255, 59, .35); padding: .45em .6em; background: rgba(7, 8, 10, .7); }
+@container (max-aspect-ratio: 5/4) { .rc-toast { width: 62cqw; } }

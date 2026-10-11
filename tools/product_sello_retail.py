@@ -18,6 +18,7 @@ SELLO_RETAIL = {
     'logo': 'images/products/sello-retail-logo.png',
     'scene': None,
     'hero_img': 'win-billing-device.webp',
+    'hero_showcase': True,
     'hero_tag': 'WINDOWS // ANDROID // iOS',
     # Real POS photos with real SELLO Retail screens: (screen, title, caption, url)
     'gallery': [

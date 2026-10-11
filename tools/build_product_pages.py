@@ -549,7 +549,11 @@ def page(base, lang):
     switch_href = f'../../products/{p["slug"]}.html' if lang == 'ar' else f'../ar/products/{p["slug"]}.html'
     enquire = wa_link(unescape(t['wa_msg'].format(name=name)))
     status = f'<span class="pd-status">{p["status"]}</span>' if p['status'] else ''
-    if p.get('hero_img'):
+    if p.get('hero_showcase'):
+        from retail_showcase import showcase
+        # no corner labels: the showcase carries its own Windows / Android / iOS pills
+        hero_visual = f'<figure class="pd-stage hero-frame hud pd-photo">{showcase(root, lang)}</figure>'
+    elif p.get('hero_img'):
         hero_visual = (f'<figure class="pd-stage hero-frame hud pd-photo"><span class="corner tl">{p["slug"].upper()}</span>'
                        f'<span class="corner tr">{p.get("hero_tag", "")}</span>'
                        f'<img src="{root}images/products/{p["slug"]}/{p["hero_img"]}" alt="{name} on a POS terminal" width="1200" height="900"></figure>')

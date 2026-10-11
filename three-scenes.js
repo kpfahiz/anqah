@@ -1088,6 +1088,383 @@ function initWater(canvas) {
 }
 
 /* ------------------------------------------------------------------ */
+/* PRODUCT: SELLO Retail — supermarket checkout. Groceries ride the    */
+/* conveyor, a gooseneck barcode scanner reads each one, the live bill */
+/* builds on the POS screen, UPI payment, then the bill goes out on    */
+/* WhatsApp and the owner's summary by email (HTML toasts on the .rc). */
+/* Items and texts come from data-retail (tools/retail_showcase.py).   */
+/* ------------------------------------------------------------------ */
+function barcodeBars(ctx, x, y, w, h, seed) {
+    let s = seed * 9301 + 49297;
+    const rnd = () => ((s = (s * 9301 + 49297) % 233280) / 233280);
+    ctx.fillStyle = '#111';
+    for (let cx = x; cx < x + w;) {
+        const bw = 1 + Math.floor(rnd() * 3);
+        if (rnd() < 0.62) ctx.fillRect(cx, y, bw, h);
+        cx += bw + 1 + Math.floor(rnd() * 2);
+    }
+}
+
+function drawRetailScreen(ctx, w, h, st, T, items, rtl) {
+    const money = v => '₹' + v.toFixed(2);
+    const box = (x, y, bw, bh) => [rtl ? w - x - bw : x, y, bw, bh];
+    const tx = x => (rtl ? w - x : x);
+    const al = a => (rtl ? (a === 'left' ? 'right' : 'left') : a);
+    const FONT = rtl ? "'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif" : "'IBM Plex Sans', system-ui, sans-serif";
+    const text = (s, x, y, size, weight, colour, align = 'left') => {
+        ctx.font = `${weight} ${size}px ${FONT}`; ctx.fillStyle = colour; ctx.textAlign = al(align); ctx.fillText(s, tx(x), y);
+    };
+    const panel = (x, y, bw, bh, r, fill, stroke) => {
+        roundRect(ctx, ...box(x, y, bw, bh), r);
+        if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+        if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 2; ctx.stroke(); }
+    };
+    ctx.direction = rtl ? 'rtl' : 'ltr';
+    ctx.textBaseline = 'middle';
+    ctx.fillStyle = '#eef1f0'; ctx.fillRect(0, 0, w, h);
+    // header
+    ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, 58);
+    ctx.fillStyle = '#dfe5e3'; ctx.fillRect(0, 58, w, 2);
+    text((rtl ? '→ ' : '← ') + T.billing, 24, 30, 26, 600, '#1d2826');
+    text('SELLO Retail · ' + T.counter, w - 24, 30, 22, 600, '#0f766e', 'right');
+    const cw = ctx.measureText('SELLO Retail · ' + T.counter).width;
+    ctx.fillStyle = '#22c55e'; ctx.beginPath(); ctx.arc(tx(w - 24 - cw - 16), 30, 7, 0, Math.PI * 2); ctx.fill();
+    // search / scan field
+    panel(16, 72, w - 32, 50, 10, '#ffffff', st.typed ? '#0f766e' : '#cfd8d5');
+    text(st.typed || T.search, 34, 98, st.typed ? 24 : 20, st.typed ? 700 : 400, st.typed ? '#13201e' : '#8a9793');
+    // bill rows (left)
+    for (let i = 0; i < st.rows; i++) {
+        const it = items[i], y = 136 + i * 86;
+        panel(16, y, 600, 78, 10, i === st.flash ? '#c6efe3' : '#e1e8e6');
+        text(String(i + 1), 34, y + 39, 18, 500, '#7b8985');
+        text(it.name, 62, y + 27, 24, 600, '#1d2826');
+        text(`${it.qty} ${T.pcs} × ${money(it.price)}`, 62, y + 56, 18, 400, '#66746f');
+        text(money(it.qty * it.price), 596, y + 39, 24, 700, '#1d2826', 'right');
+    }
+    // summary (right)
+    const R = 636, RW = w - R - 16;
+    ctx.fillStyle = '#d5dedb'; ctx.fillRect(...box(R - 10, 136, 2, h - 152));
+    panel(R, 136, RW, 46, 10, '#ffffff', '#cfd8d5');
+    text(T.customer, R + 16, 159, 19, 400, '#4b5a56');
+    ctx.globalAlpha = st.totals ? 1 : 0.28;
+    [[T.subtotal, 557.5], [T.cgst, 12.52], [T.sgst, 12.52], [T.round, 0.5]].forEach(([k, v], i) => {
+        text(k, R + 4, 206 + i * 28, 18, 400, '#5d6b67');
+        text(money(v), R + RW - 4, 206 + i * 28, 18, 400, '#5d6b67', 'right');
+    });
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = '#d5dedb'; ctx.fillRect(...box(R, 316, RW, 2));
+    text(T.total, R + 4, 350, 22, 600, '#1d2826');
+    text(money(st.total), R + RW - 4, 350, 40, 800, '#0f766e', 'right');
+    panel(R, 384, RW, 56, 10, st.paying ? '#0b5d56' : '#0f766e');
+    text(T.pay, R + RW / 2, 412, 22, 700, '#ffffff', 'center');
+    if (st.paying) {
+        [T.cash, T.card, T.upi].forEach((k, i) => {
+            const cw = (RW - 16) / 3, on = i === 2 && st.upi;
+            panel(R + i * (cw + 8), 454, cw, 46, 8, on ? '#0f766e' : '#ffffff', on ? '#0f766e' : '#c8d4d0');
+            text(k, R + i * (cw + 8) + cw / 2, 477, 19, 600, on ? '#ffffff' : '#3d4a46', 'center');
+        });
+    }
+    if (st.stamp) {
+        ctx.save();
+        ctx.translate(316, 330); ctx.rotate(-0.21); ctx.scale(st.stamp, st.stamp);
+        ctx.font = `800 64px ${FONT}`; ctx.textAlign = 'center';
+        const label = '✓ ' + T.paid, tw = ctx.measureText(label).width + 48;
+        roundRect(ctx, -tw / 2, -46, tw, 92, 14);
+        ctx.fillStyle = 'rgba(238,241,240,0.92)'; ctx.fill();
+        ctx.lineWidth = 7; ctx.strokeStyle = '#0f9d58'; ctx.stroke();
+        ctx.fillStyle = '#0f9d58'; ctx.fillText(label, 0, 4);
+        ctx.restore();
+    }
+}
+
+function initRetail(canvas) {
+    const box = canvas.closest('.rc');
+    let data = { items: [], text: {} };
+    try { data = JSON.parse(box?.dataset.retail || '{}'); } catch (e) { /* keep defaults */ }
+    const items = data.items || [], T = data.text || {};
+    const rtl = document.documentElement.dir === 'rtl';
+    const card = canvas.closest('.product, .pd-stage') || canvas;
+    const stage = createStage(canvas, { fov: 30, z: 7.3, hoverTarget: card, minAspect: 1.6 });
+    const { scene, camera } = stage;
+    camera.position.set(0, 2.05, 7.0);
+    camera.lookAt(0, 0.14, 0);
+    addLights(scene);
+    const warm = new THREE.SpotLight('#fff1d6', 26, 14, 0.7, 0.6);
+    warm.position.set(-1, 5, 3);
+    scene.add(warm);
+
+    const root = new THREE.Group();
+    root.position.x = 0.35;
+    scene.add(root);
+    const std = (color, o = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.5, metalness: 0.1, ...o });
+    const dark = std('#1b1f25', { metalness: 0.5, roughness: 0.4 });
+    const steel = std('#9aa3ad', { metalness: 0.9, roughness: 0.25 });
+    const TOP = -0.855;
+
+    // checkout counter with a lime edge light
+    const counter = new THREE.Mesh(new THREE.BoxGeometry(6.6, 0.36, 2.7), std('#14171c', { roughness: 0.6 }));
+    counter.position.set(-0.3, TOP - 0.18, 0.25);
+    root.add(counter);
+    const edge = new THREE.Mesh(new THREE.BoxGeometry(6.6, 0.025, 0.025), new THREE.MeshBasicMaterial({ color: '#b6ff3b' }));
+    edge.position.set(-0.3, TOP - 0.01, 1.6);
+    root.add(edge);
+
+    // conveyor belt (scrolling ribs), rails and end roller
+    const beltTex = canvasTexture(64, 16, (ctx, w, h) => {
+        ctx.fillStyle = '#1f242b'; ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = '#2f353e'; ctx.fillRect(0, 0, 10, h);
+    });
+    beltTex.wrapS = THREE.RepeatWrapping;
+    beltTex.repeat.set(36, 1);
+    const belt = new THREE.Mesh(new THREE.PlaneGeometry(3.5, 0.82), new THREE.MeshStandardMaterial({ map: beltTex, roughness: 0.8 }));
+    belt.rotation.x = -Math.PI / 2;
+    belt.position.set(-1.45, TOP + 0.012, 0.6);
+    root.add(belt);
+    [0.17, 1.03].forEach(z => {
+        const rail = new THREE.Mesh(new THREE.BoxGeometry(3.5, 0.07, 0.05), steel);
+        rail.position.set(-1.45, TOP + 0.035, z);
+        root.add(rail);
+    });
+    const roller = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.86, 20), steel);
+    roller.rotation.x = Math.PI / 2;
+    roller.position.set(0.3, TOP + 0.02, 0.6);
+    root.add(roller);
+
+    // POS terminal: slim white all-in-one on a pole, live SELLO Retail bill on screen
+    const pos = new THREE.Group();
+    pos.position.set(-0.45, 0, -0.8);
+    root.add(pos);
+    const foot = new THREE.Mesh(new THREE.CylinderGeometry(0.42, 0.46, 0.05, 40), std('#e6eaee', { metalness: 0.3, roughness: 0.35 }));
+    foot.position.y = TOP + 0.025;
+    pos.add(foot);
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.07, 1.05, 24), std('#cfd5db', { metalness: 0.7, roughness: 0.3 }));
+    pole.position.y = TOP + 0.55;
+    pos.add(pole);
+    const head = new THREE.Group();
+    head.position.set(0, 0.72, 0.02);
+    head.rotation.x = -0.16;
+    pos.add(head);
+    const SW = 2.9, SH = 1.63;
+    const housing = new THREE.Mesh((() => {
+        const g = new THREE.ExtrudeGeometry(roundedRectShape(SW + 0.14, SH + 0.16, 0.07), { depth: 0.07, bevelEnabled: true, bevelThickness: 0.015, bevelSize: 0.015, bevelSegments: 3, curveSegments: 10 });
+        g.center(); return g;
+    })(), std('#eef1f4', { metalness: 0.25, roughness: 0.3 }));
+    head.add(housing);
+    const bezel = new THREE.Mesh(new THREE.PlaneGeometry(SW + 0.06, SH + 0.06), new THREE.MeshBasicMaterial({ color: '#0d0f12' }));
+    bezel.position.set(0, 0.01, 0.052);
+    head.add(bezel);
+    const state = { key: '' };
+    const screenTex = canvasTexture(1024, 576, (ctx, w, h) => drawRetailScreen(ctx, w, h, { rows: 0, flash: -1, typed: '', total: 0 }, T, items, rtl));
+    screenTex.anisotropy = 8;
+    const screen = new THREE.Mesh(new THREE.PlaneGeometry(SW, SH), new THREE.MeshBasicMaterial({ map: screenTex, toneMapped: false }));
+    screen.position.set(0, 0.01, 0.055);
+    head.add(screen);
+    const sheen = new THREE.Mesh(new THREE.PlaneGeometry(SW, SH), new THREE.MeshBasicMaterial({
+        map: canvasTexture(256, 144, (ctx, w, h) => {
+            const g = ctx.createLinearGradient(0, 0, w, h);
+            g.addColorStop(0, 'rgba(255,255,255,0.16)'); g.addColorStop(0.4, 'rgba(255,255,255,0.02)'); g.addColorStop(0.55, 'rgba(255,255,255,0)');
+            ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+        }), transparent: true, depthWrite: false,
+    }));
+    sheen.position.set(0, 0.01, 0.058);
+    head.add(sheen);
+
+    // handheld barcode scanner on a gooseneck stand (white grip, dark head) aimed at the end of the belt
+    const scanP = new THREE.Vector3(0.0, TOP, 0.6);        // where a product stops to be scanned
+    const sc = new THREE.Group();
+    root.add(sc);
+    const base = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.38, 0.07, 40), dark);
+    base.scale.z = 0.72;
+    base.position.set(1.0, TOP + 0.035, 0.72);
+    sc.add(base);
+    const H = new THREE.Vector3(0.42, 0.02, 0.66);          // centre of the scan head
+    const target = new THREE.Vector3(0.02, TOP + 0.36, 0.62);
+    const aim = target.clone().sub(H).normalize();
+    const neckCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(1.0, TOP + 0.06, 0.72), new THREE.Vector3(1.02, TOP + 0.45, 0.7),
+        new THREE.Vector3(0.9, -0.12, 0.68), new THREE.Vector3(0.7, -0.07, 0.66),
+    ]);
+    sc.add(new THREE.Mesh(new THREE.TubeGeometry(neckCurve, 40, 0.032, 10), dark));
+    const scHead = new THREE.Mesh(new THREE.CylinderGeometry(0.105, 0.15, 0.26, 32), dark);
+    scHead.position.copy(H);
+    scHead.quaternion.setFromUnitVectors(new THREE.Vector3(0, -1, 0), aim);
+    sc.add(scHead);
+    const windowMat = new THREE.MeshBasicMaterial({ color: '#2a0a0a' });
+    const win = new THREE.Mesh(new THREE.CircleGeometry(0.135, 32), windowMat);
+    win.position.copy(H).addScaledVector(aim, 0.132);
+    win.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), aim);
+    sc.add(win);
+    const gripDir = new THREE.Vector3(0.62, 0.16, 0).normalize();
+    const grip = new THREE.Mesh(new THREE.CapsuleGeometry(0.095, 0.42, 8, 20), std('#eceae4', { roughness: 0.38 }));
+    grip.position.copy(H).addScaledVector(gripDir, 0.34).add(new THREE.Vector3(0, 0.03, 0));
+    grip.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), gripDir);
+    sc.add(grip);
+    const tail = new THREE.Mesh(new THREE.SphereGeometry(0.1, 20, 16), dark);
+    tail.position.copy(H).addScaledVector(gripDir, 0.64).add(new THREE.Vector3(0, 0.03, 0));
+    sc.add(tail);
+    const trigger = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.12, 0.08), dark);
+    trigger.position.copy(H).addScaledVector(gripDir, 0.2).add(new THREE.Vector3(0, -0.1, 0));
+    trigger.rotation.z = 0.3;
+    sc.add(trigger);
+    const led = new THREE.Mesh(new THREE.SphereGeometry(0.018, 10, 10), new THREE.MeshBasicMaterial({ color: '#2a3a1a' }));
+    led.position.copy(grip.position).add(new THREE.Vector3(0, 0.1, 0.03));
+    sc.add(led);
+    // laser fan + scan line
+    const laserMat = new THREE.MeshBasicMaterial({ color: '#ff2a2a', transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide });
+    const fanLen = target.distanceTo(win.position);
+    const fan = new THREE.Mesh(new THREE.ConeGeometry(0.26, fanLen, 32, 1, true), laserMat);
+    fan.geometry.rotateZ(Math.PI);                            // tip at +y
+    fan.geometry.translate(0, -fanLen / 2, 0);                 // tip at the origin, opening along -y
+    fan.position.copy(win.position);
+    fan.quaternion.setFromUnitVectors(new THREE.Vector3(0, -1, 0), aim);
+    sc.add(fan);
+    const lineMat = new THREE.MeshBasicMaterial({ color: '#ff3030', transparent: true, opacity: 0, toneMapped: false });
+    const scanLine = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.012, 0.012), lineMat);
+    scanLine.position.copy(target).add(new THREE.Vector3(0, -0.02, 0.06));
+    sc.add(scanLine);
+
+    // paper shopping bag (open top) the scanned items drop into
+    const bagP = new THREE.Vector3(2.15, TOP, 0.55);
+    const kraft = std('#c9a27a', { roughness: 0.85, side: THREE.DoubleSide });
+    const bag = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.78, 0.55), [kraft, kraft, new THREE.MeshBasicMaterial({ visible: false }), kraft, kraft, kraft]);
+    bag.position.copy(bagP).add(new THREE.Vector3(0, 0.39, 0));
+    root.add(bag);
+    [-0.276, 0.276].forEach(z => {
+        const handle = new THREE.Mesh(new THREE.TorusGeometry(0.17, 0.016, 8, 24, Math.PI), kraft);
+        handle.position.copy(bagP).add(new THREE.Vector3(0, 0.78, z));
+        root.add(handle);
+    });
+
+    // the groceries (origin at the bottom centre of each)
+    const label = (it, w, h, seed) => canvasTexture(w, h, (ctx) => {
+        ctx.fillStyle = '#fbfaf6'; ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = it.colour; ctx.fillRect(0, 0, w, h * 0.22);
+        ctx.fillStyle = '#1b1f24'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.direction = rtl ? 'rtl' : 'ltr';
+        ctx.font = `700 ${Math.round(h * 0.1)}px ${rtl ? "'IBM Plex Sans Arabic', sans-serif" : "'IBM Plex Sans', sans-serif"}`;
+        ctx.fillText(it.name, w / 2, h * 0.42, w * 0.92);
+        ctx.fillStyle = '#fff'; ctx.fillRect(w * 0.15, h * 0.58, w * 0.7, h * 0.3);
+        barcodeBars(ctx, w * 0.18, h * 0.6, w * 0.64, h * 0.2, seed);
+        ctx.fillStyle = '#111'; ctx.font = `500 ${Math.round(h * 0.055)}px monospace`; ctx.direction = 'ltr';
+        ctx.fillText(it.code, w / 2, h * 0.845);
+    });
+    const boxProduct = (it, w, h, d, seed) => {
+        const g = new THREE.Group();
+        const side = std(it.colour, { roughness: 0.6 });
+        const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), [side, side, side, side, new THREE.MeshStandardMaterial({ map: label(it, 256, 320, seed), roughness: 0.55 }), side]);
+        m.position.y = h / 2;
+        g.add(m);
+        return g;
+    };
+    const bottle = (it, seed) => {
+        const g = new THREE.Group();
+        const body = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.46, 32), std('#e8b923', { transparent: true, opacity: 0.88, roughness: 0.15 }));
+        body.position.y = 0.23; g.add(body);
+        const shoulder = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.12, 0.1, 32), body.material);
+        shoulder.position.y = 0.51; g.add(shoulder);
+        const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.07, 24), std('#d62828'));
+        cap.position.y = 0.595; g.add(cap);
+        const band = new THREE.Mesh(new THREE.CylinderGeometry(0.123, 0.123, 0.24, 32, 1, true, -1.25, 2.5),
+            new THREE.MeshStandardMaterial({ map: label(it, 300, 240, seed), roughness: 0.5 }));
+        band.position.y = 0.22; g.add(band);
+        return g;
+    };
+    const tomatoes = (it, seed) => {
+        const g = new THREE.Group();
+        const tray = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.06, 0.34), std('#f2f2ee'));
+        tray.position.y = 0.03; g.add(tray);
+        const red = std('#d7261e', { roughness: 0.3 }), green = std('#2f7d32');
+        [[-0.13, -0.07], [0.0, -0.08], [0.13, -0.07], [-0.07, 0.07], [0.08, 0.07]].forEach(([x, z]) => {
+            const tm = new THREE.Mesh(new THREE.SphereGeometry(0.1, 20, 16), red);
+            tm.scale.y = 0.85; tm.position.set(x, 0.14, z); g.add(tm);
+            const st = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.04, 6), green);
+            st.position.set(x, 0.23, z); g.add(st);
+        });
+        const tag = new THREE.Mesh(new THREE.PlaneGeometry(0.26, 0.2), new THREE.MeshStandardMaterial({ map: label(it, 260, 200, seed) }));
+        tag.position.set(0, 0.17, 0.2); tag.rotation.x = -0.35; g.add(tag);
+        return g;
+    };
+    const makers = { bag: (it, s) => boxProduct(it, 0.46, 0.6, 0.2, s), bottle, tray: tomatoes, box: (it, s) => boxProduct(it, 0.3, 0.42, 0.18, s) };
+    const products = items.map((it, i) => {
+        const g = (makers[it.kind] || makers.box)(it, i + 7);
+        g.visible = false;
+        root.add(g);
+        return g;
+    });
+    const amounts = items.map(it => it.qty * it.price);
+    const sum = amounts.reduce((a, b) => a + b, 0);
+    const rounded = Math.round(sum);
+    const bagSlots = [[-0.18, -0.08], [0.2, 0.06], [0.05, -0.1], [-0.12, 0.1]];
+
+    // timeline (seconds)
+    const START = (i) => 0.6 + i * 2.4, MOVE = 1.2, BEEP = 0.45, FLY = 0.75;
+    const last = START(items.length - 1) + MOVE + BEEP + FLY;
+    const TOT = last + 0.3, PAY = TOT + 0.9, UPI = PAY + 0.6, PAID = UPI + 0.8, WA = PAID + 0.9, MAIL = WA + 1.5, LOOP = MAIL + 3.6;
+    let clockT = 0;
+
+    stage.update = (t, dt) => {
+        clockT += dt;
+        const tl = reducedMotion ? WA + 0.1 : clockT % LOOP;
+        const h = stage.h;
+        root.rotation.y = lerp(Math.sin(t * 0.35) * 0.1 * (reducedMotion ? 0 : 1), stage.mouse.x * 0.4, h);
+        root.rotation.x = lerp(0, -stage.mouse.y * 0.06, h);
+
+        let moving = false, beeping = -1, typed = '', flash = -1, rows = 0, total = 0;
+        products.forEach((g, i) => {
+            const s = tl - START(i);
+            if (s < 0) { g.visible = false; return; }
+            g.visible = true;
+            g.rotation.set(0, 0, 0);
+            if (s < MOVE) {
+                moving = true;
+                g.position.set(lerp(-3.05, scanP.x, 1 - Math.pow(1 - s / MOVE, 3)), scanP.y, scanP.z);
+                g.scale.setScalar(1);
+            } else if (s < MOVE + BEEP) {
+                beeping = i;
+                g.position.copy(scanP);
+                g.scale.setScalar(1);
+            } else {
+                const k = ease(clamp01((s - MOVE - BEEP) / FLY));
+                const [bx, bz] = bagSlots[i % bagSlots.length];
+                const end = new THREE.Vector3(bagP.x + bx, bagP.y + 0.04, bagP.z + bz);
+                g.position.lerpVectors(scanP, end, k);
+                g.position.y += Math.sin(Math.PI * k) * 0.95;
+                g.rotation.z = -k * 0.5;
+                g.scale.setScalar(lerp(1, 0.8, k));
+            }
+            if (s >= MOVE && s < MOVE + BEEP + 0.35) typed = items[i].code;
+            const rowAt = MOVE + 0.2;
+            if (s >= rowAt) { rows = i + 1; total += amounts[i] * ease(clamp01((s - rowAt) / 0.5)); }
+            if (s >= rowAt && s < rowAt + 0.8) flash = i;
+        });
+        if (moving && !reducedMotion) beltTex.offset.x -= dt * 0.9 * 36 / 3.5;
+        if (tl >= TOT) total = sum + (rounded - sum) * ease(clamp01((tl - TOT) / 0.6));
+
+        const beam = beeping >= 0 ? 0.55 + 0.25 * Math.sin(t * 60) : 0;
+        laserMat.opacity = beam * 0.5;
+        lineMat.opacity = beam ? 1 : 0;
+        windowMat.color.set(beeping >= 0 ? '#ff4040' : '#2a0a0a');
+        led.material.color.set(beeping >= 0 ? '#22c55e' : '#2a3a1a');
+
+        const st = {
+            rows, flash, typed, total: Math.round(total * 100) / 100,
+            totals: tl >= TOT, paying: tl >= PAY, upi: tl >= UPI,
+            stamp: tl >= PAID ? Math.round((1 + 0.8 * (1 - ease(clamp01((tl - PAID) / 0.3)))) * 50) / 50 : 0,
+        };
+        const key = JSON.stringify(st);
+        if (key !== state.key) {
+            state.key = key;
+            drawRetailScreen(screenTex.userData.ctx, 1024, 576, st, T, items, rtl);
+            screenTex.needsUpdate = true;
+        }
+        if (box) {
+            box.classList.toggle('wa', tl >= WA);
+            box.classList.toggle('mail', tl >= MAIL);
+        }
+    };
+}
+
+/* ------------------------------------------------------------------ */
 /* Boot + shared render loop                                           */
 /* ------------------------------------------------------------------ */
 function boot() {
@@ -1099,6 +1476,7 @@ function boot() {
             else if (s === 'selloLite') initLitePhone(c);
             else if (s === 'bell') initBell(c);
             else if (s === 'water') initWater(c);
+            else if (s === 'selloRetail') initRetail(c);
         });
     } catch (err) {
         console.warn('3D scenes unavailable:', err);
