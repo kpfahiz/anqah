@@ -1,14 +1,16 @@
 """SELLO Retail product data (English + Arabic). Imported by build_product_pages.py.
-Every feature here exists in the SELLO Retail app (D:/work/SELLO Retail, offline edition, phases 1-12).
-Not claimed: the remote/cloud edition (not built yet) or ZATCA certification (the app supports ZATCA e-invoicing).
+Every feature here exists in the SELLO Retail app (D:/work/SELLO Retail, version 1.0.21, 2026-11-13): the POS, SELLO Back
+Office (docs/WAN_SETUP.md) and SELLO Head Office (docs/HEAD_OFFICE_SETUP.md, online edition).
+Not claimed: the Head Office phone app (not built yet) or ZATCA certification (the app supports ZATCA e-invoicing).
 """
 
 SELLO_RETAIL = {
     'slug': 'sello-retail',
     'seo': {
         'title': 'SELLO Retail POS for Retail Shops &amp; Supermarkets | Windows, Android &amp; iOS | UAE, KSA, India',
-        'description': 'SELLO Retail: offline POS and inventory for retail shops and supermarkets on Windows, Android and iOS. Barcode &amp; QR labels, bulk product import, WhatsApp bills, scheduled email reports, GST &amp; VAT.',
-        'keywords': 'retail POS software, supermarket POS UAE, retail shop billing software, barcode label printing software, QR code labels, bulk product import, WhatsApp bill software, iPad POS app, iOS POS app, grocery billing software India, retail billing software Saudi Arabia, barcode billing software, GST billing software, VAT POS UAE, POS for Windows, Android POS app, inventory software, SELLO Retail',
+        'description': 'SELLO Retail: offline POS and inventory for retail shops and supermarkets on Windows, Android and iOS &mdash; with Back Office for multi-counter shops, Head Office for many shops, CRM, WhatsApp bills and GST &amp; VAT.',
+        'keywords': 'retail POS software, supermarket POS UAE, retail shop billing software, barcode label printing software, QR code labels, bulk product import, WhatsApp bill software, iPad POS app, iOS POS app, grocery billing software India, retail billing software Saudi Arabia, barcode billing software, GST billing software, VAT POS UAE, POS for Windows, Android POS app, inventory software, multi-store POS, multi-branch POS software, '
+                    'head office POS software, back office POS, POS with CRM, quotation and invoice software, payroll software for shops, SELLO Retail',
         'og': 'og-sello-retail.jpg', 'app': ('BusinessApplication', 'Windows, Android, iOS'),
     },
     'name': 'SELLO Retail',
@@ -72,9 +74,9 @@ SELLO_RETAIL = {
          'Sales, cashier, payment mode, item, category, tax, HSN and profit reports.',
          ['Export to PDF, Excel or CSV', 'Share on WhatsApp or email', 'Filter by date, user and payment']),
     ],
-    'terminal': 'sello-retail --edition=offline|sello-retail bill --scan 8901234567890|sello-retail report sales --export=pdf',
+    'terminal': 'sello-retail bill --scan 8901234567890|sello-backoffice sync --counters=all|sello-headoffice report sales --shops=all',
     'statement': 'A fast POS and inventory app for retail shops and supermarkets &mdash; on Windows, Android and iOS, '
-                 'working fully offline, with GST and VAT built in.',
+                 'working fully offline, with GST and VAT built in. Grow from one counter to many shops with SELLO Back Office and Head Office.',
     'facts': [('3', 'Platforms: Windows, Android, iOS'), ('100%', 'Offline billing'), ('3', 'Languages: English, Arabic, Hindi'),
               ('GST &middot; VAT', 'India, UAE &amp; Saudi tax')],
     'problem': 'Busy shops need billing that is fast at the counter, stock that stays accurate, and credit customers who '
@@ -98,25 +100,67 @@ SELLO_RETAIL = {
         ('Scheduled email reports', 'A daily summary emailed to the owner at a time you choose, plus every shift report &mdash; automatically.'),
         ('Tax for 3 countries', 'India GST (CGST, SGST, IGST), UAE VAT and Saudi VAT, with support for ZATCA e-invoicing.'),
         ('Roles &amp; security', 'Owner, manager, cashier and stock-keeper roles, PIN lock, auto-lock and a full audit log.'),
+        ('SELLO Back Office', 'One PC runs every counter in the shop: see each counter, change products, prices, users and bill design, and share one stock across counters.'),
+        ('SELLO Head Office', 'The owner sees every shop over the internet &mdash; sales, reports, profit, salaries and the audit log, all shops added up or one by one.'),
+        ('CRM &amp; sales documents', 'Leads, follow-ups and reminders, quotations, A4 tax invoices, delivery notes, recurring invoices, credit notes, receipts and payment vouchers.'),
+        ('Invoice designer', 'Design your quotations and invoices &mdash; logo, fields, terms, bank details and signatures &mdash; with a live preview.'),
+        ('Salaries &amp; payroll', 'In SELLO Back Office: employees, attendance, advances, monthly or daily wages, and payslips you can send on WhatsApp.'),
+        ('Agent commission', 'Give a sales agent a commission on a bill (an amount or a %), and track what is owed and paid &mdash; it counts as a cost in profit.'),
     ],
+    # "From one counter to many shops": diagram + setups (build_product_pages.network_section)
+    'network': {
+        'title': 'From one counter to many shops',
+        'intro': 'Start with one counter. Add SELLO Back Office when the shop has several counters, and SELLO Head Office when you open '
+                 'more shops &mdash; every counter keeps billing on its own, even when the network is down.',
+        'aria': 'Diagram: the POS counters in each shop connect to that shop&rsquo;s SELLO Back Office over the shop network; '
+                'each Back Office sends its data over the internet, through SELLO&rsquo;s cloud, to the owner&rsquo;s SELLO Head Office.',
+        'shop': 'Shop {n}', 'pos': 'POS {n}', 'pc': 'Windows', 'tab': 'Android tablet',
+        'lan': 'Shop network', 'lan_sub': 'changes every ~20 s',
+        'bo': 'SELLO Back Office', 'bo_sub': 'one PC in the shop',
+        'wan': 'Internet', 'wan_sub': 'SELLO cloud &middot; no VPN',
+        'ho': 'SELLO Head Office', 'ho_sub': 'owner&rsquo;s PC &mdash; anywhere',
+        'tiers_h': 'Which setup do you need?',
+        'tiers': [
+            ('One counter', 'SELLO Retail',
+             ['Billing, stock, customers and reports on one PC, tablet or phone', 'Works 100% offline']),
+            ('One shop, several counters', 'SELLO Retail + SELLO Back Office',
+             ['Every counter&rsquo;s dashboard, bills, stock, shifts and audit log on one PC',
+              'Change products, prices, users, roles and bill design for one or all counters',
+              'Stores: the counters of a shop share one product list and one stock',
+              'Salaries and payroll, profit and expenses, automatic email reports']),
+            ('Several shops', '+ SELLO Head Office',
+             ['All shops added up, or one shop or counter at a time',
+              'Sales today, shops online, reports, profit and salaries',
+              'The audit log of every counter in every shop',
+              'Look-only users for senior accountants',
+              'Over the internet &mdash; no VPN or network settings']),
+        ],
+        'note': '<b>Offline edition:</b> SELLO Retail and Back Office on the shop network. <b>Online edition:</b> adds Head Office over the '
+                'internet. If the connection drops, nothing stops &mdash; changes wait at the shop and go up later, in order.',
+    },
     'steps': [
         'Install SELLO Retail on the counter PC, tablet or phone &mdash; each starts with a 7-day free trial.',
         'Set up the shop: country and tax, products (or import them from Excel), printers and users.',
         'Bill at the counter: scan, take payment and print or share the bill, with the customer display showing the total.',
         'Close each shift with its report, follow up credit and installments, and check the dashboard and reports.',
     ],
-    'use_cases': ['Retail shops and supermarkets', 'Grocery and general stores', 'Electronics, mobile and appliance shops selling on installments',
+    'use_cases': ['Retail shops and supermarkets', 'Supermarket and retail chains with several branches', 'Grocery and general stores', 'Electronics, mobile and appliance shops selling on installments',
                   'Hardware, stationery and gift shops', 'Shops in India, the UAE and Saudi Arabia, each with its own tax'],
-    'benefits': ['Billing never waits for the internet', 'One app on Windows, Android and iOS',
+    'benefits': ['Billing never waits for the internet', 'One app on Windows, Android and iOS', 'Every counter and every shop in one view',
                  'Credit and installment customers always up to date', 'Your data stays encrypted on your own device'],
     'tech': 'Flutter app for Windows, Android and iOS with an encrypted SQLite database (SQLCipher) on the device. Money is '
             'stored in the smallest currency unit and tax is rounded per line by country. Prints to 58 / 80 mm thermal '
             'printers over USB, Bluetooth or network, and A4. Supplier-bill scanning reads text on the device without '
-            'internet. Licensed by offline activation codes: 7-day trial, then 1, 2, 3 or 5-year plans.',
-    'privacy': 'Shop, sales and customer data is stored encrypted on your own device &mdash; not on a third-party cloud. '
+            'internet. SELLO Back Office (Windows) pairs each counter with a one-time code over the shop network; SELLO Head Office '
+            '(Windows) pairs each Back Office and syncs over the internet. Licensed by activation codes: 7-day trial, then 1, 2, 3 or 5-year plans.',
+    'privacy': 'Shop, sales and customer data is stored encrypted on your own device, and on your Back Office PC with a separate key '
+               'for each counter. With Head Office, changes pass through SELLO&rsquo;s cloud only until your Head Office has collected them. '
                'Backup and restore to a file is built in.',
     'faq': [
-        ('Does SELLO Retail need the internet?', 'No. Billing, stock, customers and reports all work offline on the device.'),
+        ('Does SELLO Retail need the internet?', 'No. Billing, stock, customers and reports all work offline on the device. Only SELLO Head Office, for owners with several shops, uses the internet.'),
+        ('Can I run several counters and several shops?', 'Yes. The counters in a shop connect to SELLO Back Office on one PC over the shop network, and SELLO Head Office shows the owner every shop over the internet.'),
+        ('What if the network or internet goes down?', 'Billing never stops. Each counter keeps working and sends its changes later, in order.'),
+        ('Does it have CRM, quotations and invoices?', 'Yes. Leads, follow-ups, quotations, A4 tax invoices, delivery notes, recurring invoices, credit notes, receipts and payment vouchers &mdash; in your own invoice design.'),
         ('Which devices does it run on?', 'Windows PCs, Android tablets and phones, and iPad / iPhone (iOS).'),
         ('Can bills be sent to customers on WhatsApp?', 'Yes. Turn on auto-send and every bill goes to the customer&rsquo;s WhatsApp as a PDF after the sale &mdash; or send any bill with one tap.'),
         ('Can the owner get reports by email?', 'Yes. Schedule a daily summary at the time you choose; shift reports are emailed automatically too.'),
@@ -132,8 +176,9 @@ SELLO_RETAIL = {
 SELLO_RETAIL_AR = {
     'seo': {
         'title': 'برنامج SELLO Retail لنقاط البيع لمحلات التجزئة والسوبرماركت | ويندوز وأندرويد و iOS',
-        'description': 'SELLO Retail: برنامج كاشير ومخزون يعمل دون إنترنت لمحلات التجزئة والسوبرماركت على ويندوز وأندرويد و iOS. ملصقات باركود و QR، واستيراد المنتجات بالجملة، وفواتير واتساب، وتقارير بريد مجدولة.',
-        'keywords': 'برنامج كاشير للسوبرماركت, برنامج كاشير لمحلات التجزئة, طباعة ملصقات الباركود, استيراد المنتجات من اكسل, إرسال الفاتورة واتساب, تطبيق كاشير للآيباد, برنامج نقاط بيع للمحلات, برنامج كاشير بالباركود, برنامج كاشير ويندوز, تطبيق كاشير أندرويد, برنامج مخزون ومبيعات, برنامج فواتير ضريبية, SELLO Retail',
+        'description': 'SELLO Retail: برنامج كاشير ومخزون يعمل دون إنترنت لمحلات التجزئة والسوبرماركت على ويندوز وأندرويد و iOS &mdash; مع المكتب الخلفي للمحل متعدد الكاونترات، والمكتب الرئيسي لعدة فروع، وإدارة العملاء، وفواتير واتساب.',
+        'keywords': 'برنامج كاشير للسوبرماركت, برنامج كاشير لمحلات التجزئة, طباعة ملصقات الباركود, استيراد المنتجات من اكسل, إرسال الفاتورة واتساب, تطبيق كاشير للآيباد, برنامج نقاط بيع للمحلات, برنامج كاشير بالباركود, برنامج كاشير ويندوز, تطبيق كاشير أندرويد, برنامج مخزون ومبيعات, برنامج فواتير ضريبية, برنامج كاشير متعدد الفروع, '
+                    'برنامج نقاط بيع للفروع, برنامج عروض أسعار وفواتير, برنامج رواتب للمحلات, SELLO Retail',
     },
     'category': 'كاشير التجزئة &middot; ويندوز وأندرويد و iOS',
     'hero_tag': 'WINDOWS // ANDROID // iOS',
@@ -181,7 +226,7 @@ SELLO_RETAIL_AR = {
          ['تصدير PDF و Excel و CSV', 'مشاركة عبر واتساب أو البريد', 'تصفية بالتاريخ والمستخدم والدفع']),
     ],
     'statement': 'برنامج كاشير ومخزون سريع لمحلات التجزئة والسوبرماركت &mdash; على ويندوز وأندرويد و iOS، '
-                 'يعمل دون إنترنت بالكامل، مع ضريبة السلع والخدمات وضريبة القيمة المضافة.',
+                 'يعمل دون إنترنت بالكامل، مع ضريبة السلع والخدمات وضريبة القيمة المضافة. وينمو معك من كاونتر واحد إلى عدة فروع مع المكتب الخلفي والمكتب الرئيسي.',
     'facts': [('3', 'منصات: ويندوز وأندرويد و iOS'), ('100%', 'فوترة دون إنترنت'), ('3', 'لغات: العربية والإنجليزية والهندية'),
               ('GST &middot; VAT', 'ضرائب الهند والإمارات والسعودية')],
     'problem': 'تحتاج المحلات المزدحمة إلى فوترة سريعة على الكاونتر ومخزون دقيق وعملاء آجلين سهل متابعتهم &mdash; دون رسوم سحابية '
@@ -205,23 +250,64 @@ SELLO_RETAIL_AR = {
         ('تقارير مجدولة بالبريد', 'ملخص يومي يُرسل إلى المالك بالبريد في الوقت الذي تختاره، مع كل تقرير وردية &mdash; تلقائيًا.'),
         ('ضرائب 3 دول', 'ضريبة السلع والخدمات في الهند (CGST و SGST و IGST) وضريبة القيمة المضافة في الإمارات والسعودية، مع دعم الفوترة الإلكترونية (فاتورة).'),
         ('الأدوار والأمان', 'أدوار المالك والمدير والكاشير وأمين المخزن، وقفل برمز PIN، وقفل تلقائي، وسجل تدقيق كامل.'),
+        ('SELLO Back Office (المكتب الخلفي)', 'حاسوب واحد يدير كل كاونترات المحل: اعرض كل كاونتر، وعدّل المنتجات والأسعار والمستخدمين وتصميم الفاتورة، وشارك مخزونًا واحدًا بين الكاونترات.'),
+        ('SELLO Head Office (المكتب الرئيسي)', 'يرى المالك كل الفروع عبر الإنترنت &mdash; المبيعات والتقارير والأرباح والرواتب وسجل التدقيق، لكل الفروع معًا أو لكل فرع على حدة.'),
+        ('إدارة العملاء والمستندات', 'العملاء المحتملون والمتابعات والتذكيرات، وعروض الأسعار، والفواتير الضريبية A4، وسندات التسليم، والفواتير المتكررة، والإشعارات الدائنة، وسندات القبض والصرف.'),
+        ('مصمم الفواتير', 'صمّم عروض الأسعار والفواتير &mdash; الشعار والحقول والشروط وبيانات البنك والتوقيعات &mdash; مع معاينة مباشرة.'),
+        ('الرواتب', 'في المكتب الخلفي: الموظفون والحضور والسُّلف والأجور الشهرية أو اليومية، وقسائم رواتب ترسلها عبر واتساب.'),
+        ('عمولة المندوبين', 'امنح المندوب عمولة على الفاتورة (مبلغًا أو نسبة)، وتابع المستحق والمدفوع &mdash; وتُحسب تكلفةً في الأرباح.'),
     ],
+    'network': {
+        'title': 'من كاونتر واحد إلى عدة فروع',
+        'intro': 'ابدأ بكاونتر واحد. أضف المكتب الخلفي SELLO Back Office عندما يصبح في المحل عدة كاونترات، والمكتب الرئيسي SELLO Head Office '
+                 'عندما تفتح فروعًا أخرى &mdash; ويواصل كل كاونتر الفوترة وحده حتى عند انقطاع الشبكة.',
+        'aria': 'مخطط: تتصل كاونترات كل محل بالمكتب الخلفي للمحل عبر شبكة المحل، ويرسل كل مكتب خلفي بياناته عبر الإنترنت، من خلال سحابة SELLO، '
+                'إلى المكتب الرئيسي لدى المالك.',
+        'shop': 'المحل {n}', 'pos': 'كاشير {n}', 'pc': 'ويندوز', 'tab': 'جهاز أندرويد لوحي',
+        'lan': 'شبكة المحل', 'lan_sub': 'التغييرات كل ~20 ثانية',
+        'bo': 'SELLO Back Office', 'bo_sub': 'حاسوب واحد في المحل',
+        'wan': 'الإنترنت', 'wan_sub': 'سحابة SELLO &middot; دون VPN',
+        'ho': 'SELLO Head Office', 'ho_sub': 'حاسوب المالك &mdash; في أي مكان',
+        'tiers_h': 'ما الإعداد الذي تحتاجه؟',
+        'tiers': [
+            ('كاونتر واحد', 'SELLO Retail',
+             ['الفوترة والمخزون والعملاء والتقارير على حاسوب أو جهاز لوحي أو جوال', 'يعمل دون إنترنت 100%']),
+            ('محل واحد بعدة كاونترات', 'SELLO Retail + SELLO Back Office',
+             ['لوحة كل كاونتر وفواتيره ومخزونه ووردياته وسجل تدقيقه على حاسوب واحد',
+              'تعديل المنتجات والأسعار والمستخدمين والأدوار وتصميم الفاتورة لكاونتر واحد أو للجميع',
+              'المخازن: تشترك كاونترات المحل في قائمة منتجات واحدة ومخزون واحد',
+              'الرواتب، والأرباح والمصروفات، وتقارير بريد تلقائية']),
+            ('عدة فروع', '+ SELLO Head Office',
+             ['كل الفروع مجمّعة، أو فرع أو كاونتر واحد في كل مرة',
+              'مبيعات اليوم والفروع المتصلة والتقارير والأرباح والرواتب',
+              'سجل تدقيق كل كاونتر في كل فرع',
+              'مستخدمون للاطلاع فقط لكبار المحاسبين',
+              'عبر الإنترنت &mdash; دون VPN أو إعدادات شبكة']),
+        ],
+        'note': '<b>النسخة دون إنترنت:</b> SELLO Retail والمكتب الخلفي على شبكة المحل. <b>النسخة المتصلة:</b> تضيف المكتب الرئيسي عبر الإنترنت. '
+                'وإذا انقطع الاتصال لا يتوقف شيء &mdash; تنتظر التغييرات في المحل وتُرسل لاحقًا بالترتيب.',
+    },
     'steps': [
         'ثبّت SELLO Retail على حاسوب الكاونتر أو الجهاز اللوحي أو الجوال &mdash; يبدأ كل جهاز بتجربة مجانية 7 أيام.',
         'أعِدّ المتجر: الدولة والضريبة والمنتجات (أو استوردها من Excel) والطابعات والمستخدمين.',
         'افوتر على الكاونتر: امسح واستلم الدفع واطبع الفاتورة أو شاركها، مع عرض الإجمالي على شاشة العميل.',
         'أغلق كل وردية بتقريرها، وتابع الآجل والأقساط، وراجع لوحة التحكم والتقارير.',
     ],
-    'use_cases': ['محلات التجزئة والسوبرماركت', 'البقالات والمحلات العامة', 'محلات الإلكترونيات والجوالات والأجهزة التي تبيع بالأقساط',
+    'use_cases': ['محلات التجزئة والسوبرماركت', 'سلاسل السوبرماركت والتجزئة متعددة الفروع', 'البقالات والمحلات العامة', 'محلات الإلكترونيات والجوالات والأجهزة التي تبيع بالأقساط',
                   'محلات العدد والقرطاسية والهدايا', 'المحلات في الهند والإمارات والسعودية، لكلٍّ ضريبته'],
-    'benefits': ['الفوترة لا تنتظر الإنترنت أبدًا', 'تطبيق واحد على ويندوز وأندرويد و iOS',
+    'benefits': ['الفوترة لا تنتظر الإنترنت أبدًا', 'تطبيق واحد على ويندوز وأندرويد و iOS', 'كل كاونتر وكل فرع في شاشة واحدة',
                  'عملاء الآجل والأقساط محدَّثون دائمًا', 'بياناتك مشفّرة على جهازك'],
     'tech': 'تطبيق Flutter لأنظمة ويندوز وأندرويد و iOS بقاعدة بيانات SQLite مشفّرة (SQLCipher) على الجهاز. تُحفظ المبالغ بأصغر وحدة '
             'للعملة وتُقرّب الضريبة لكل صنف حسب الدولة. يطبع على طابعات حرارية 58 / 80 مم عبر USB أو بلوتوث أو الشبكة، وعلى A4. '
-            'ويقرأ مسح فواتير الموردين النص على الجهاز دون إنترنت. الترخيص برموز تفعيل دون إنترنت: تجربة 7 أيام ثم خطط لسنة أو 2 أو 3 أو 5 سنوات.',
-    'privacy': 'تُحفظ بيانات المتجر والمبيعات والعملاء مشفّرة على جهازك &mdash; لا على سحابة طرف ثالث. والنسخ الاحتياطي والاستعادة إلى ملف مدمجان.',
+            'ويقرأ مسح فواتير الموردين النص على الجهاز دون إنترنت. يقترن كل كاونتر بالمكتب الخلفي (ويندوز) برمز لمرة واحدة عبر شبكة المحل، '
+            'ويقترن كل مكتب خلفي بالمكتب الرئيسي (ويندوز) ويتزامن عبر الإنترنت. الترخيص برموز تفعيل: تجربة 7 أيام ثم خطط لسنة أو 2 أو 3 أو 5 سنوات.',
+    'privacy': 'تُحفظ بيانات المتجر والمبيعات والعملاء مشفّرة على جهازك، وعلى حاسوب المكتب الخلفي بمفتاح منفصل لكل كاونتر. ومع المكتب الرئيسي '
+               'تمر التغييرات عبر سحابة SELLO فقط إلى أن يستلمها مكتبك الرئيسي. والنسخ الاحتياطي والاستعادة إلى ملف مدمجان.',
     'faq': [
-        ('هل يحتاج SELLO Retail إلى الإنترنت؟', 'لا. تعمل الفوترة والمخزون والعملاء والتقارير دون إنترنت على الجهاز.'),
+        ('هل يحتاج SELLO Retail إلى الإنترنت؟', 'لا. تعمل الفوترة والمخزون والعملاء والتقارير دون إنترنت على الجهاز. ولا يستخدم الإنترنت إلا المكتب الرئيسي لأصحاب الفروع المتعددة.'),
+        ('هل يمكنني تشغيل عدة كاونترات وعدة فروع؟', 'نعم. تتصل كاونترات المحل بالمكتب الخلفي على حاسوب واحد عبر شبكة المحل، ويعرض المكتب الرئيسي للمالك كل الفروع عبر الإنترنت.'),
+        ('ماذا لو انقطعت الشبكة أو الإنترنت؟', 'لا تتوقف الفوترة أبدًا. يواصل كل كاونتر العمل ويرسل تغييراته لاحقًا بالترتيب.'),
+        ('هل يوجد إدارة عملاء وعروض أسعار وفواتير؟', 'نعم. العملاء المحتملون والمتابعات وعروض الأسعار والفواتير الضريبية A4 وسندات التسليم والفواتير المتكررة والإشعارات الدائنة وسندات القبض والصرف &mdash; بتصميم فاتورتك الخاص.'),
         ('على أي أجهزة يعمل؟', 'حواسيب ويندوز وأجهزة أندرويد اللوحية والهواتف، والآيباد والآيفون (iOS).'),
         ('هل يمكن إرسال الفواتير للعملاء عبر واتساب؟', 'نعم. فعّل الإرسال التلقائي لتصل كل فاتورة إلى واتساب العميل بصيغة PDF بعد البيع &mdash; أو أرسل أي فاتورة بلمسة.'),
         ('هل يستلم المالك التقارير بالبريد؟', 'نعم. جدولة ملخص يومي في الوقت الذي تختاره، وتُرسل تقارير الورديات تلقائيًا أيضًا.'),

@@ -270,6 +270,50 @@ ul.ticks li::before { content: ''; position: absolute; left: 0; top: 1.6mm; widt
 .ring-two .phone img { border: 0; }
 .mt-s { margin-top: 4mm; }
 .sub2 { font-size: 13pt; margin: 7mm 0 3.5mm; }
+/* multi-counter / multi-shop diagram (SELLO Retail) */
+.mnet { display: grid; grid-template-columns: minmax(0, 1fr) 27mm 36mm; align-items: stretch; background: var(--ink); color: #e9edf0; padding: 4mm 5mm; }
+.mnet-shops { display: grid; grid-auto-rows: 1fr; gap: 3mm; }
+.mnet-shop { position: relative; display: grid; grid-template-columns: auto minmax(14mm, 1fr) auto; align-items: stretch;
+    padding: 5.5mm 0 2.2mm; padding-inline-start: 3mm; border: 0.3mm dashed #4a545e; border-radius: 2.5mm; }
+.mnet-tag { position: absolute; top: 1.8mm; inset-inline-start: 3mm; font-family: var(--mono); font-size: 6.4pt; letter-spacing: .1em; text-transform: uppercase; color: #aab3bc; }
+.mnet-counters { display: flex; flex-direction: column; gap: 1.2mm; justify-content: center; }
+.mnet-node { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6mm; text-align: center;
+    border: 0.3mm solid #3a434c; border-radius: 1.8mm; background: #12161a; padding: 2mm 2.4mm; }
+.mnet-node svg { width: 6mm; height: 6mm; color: var(--lime); }
+.mnet-node b { font-family: var(--display); font-size: 8pt; line-height: 1.15; color: #fff; }
+.mnet-node small { font-size: 6.4pt; line-height: 1.25; color: #aab3bc; }
+.mnet-counters .mnet-node { flex-direction: row; gap: 1.6mm; padding: 0.9mm 2.2mm; text-align: start; }
+.mnet-counters .mnet-node svg { width: 4.4mm; height: 4.4mm; flex: none; }
+.mnet-counters .mnet-node b { font-size: 7.4pt; }
+.mnet-counters .mnet-node span { display: flex; flex-direction: column; }
+.mnet-bo { align-self: center; margin-inline-end: 4mm; border-color: #4d8dff; }
+.mnet-bo svg { color: #4d8dff; }
+.mnet-bo::after { content: ''; position: absolute; top: 50%; inset-inline-start: 100%; width: 4.4mm; border-top: 0.4mm solid #4a545e; }
+.mnet-ho { align-self: center; border-color: var(--lime); background: rgba(182, 255, 59, .08); padding: 3.5mm 2.5mm; }
+.mnet-ho svg { width: 8mm; height: 8mm; }
+.mnet-ho b { font-size: 9pt; }
+.mnet-link { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5.5mm; padding: 0 1.2mm; text-align: center; }
+.mnet-link b { font-family: var(--mono); font-size: 6.4pt; letter-spacing: .06em; text-transform: uppercase; color: #fff; line-height: 1.2; }
+.mnet-link small { font-size: 6.2pt; color: #aab3bc; line-height: 1.25; }
+.mnet-line { position: absolute; top: 50%; inset-inline: 0; border-top: 0.5mm dashed var(--lime); }
+.mnet-lan .mnet-line { border-color: #4d8dff; inset-inline-start: 2.4mm; }
+.mnet-lan::before { content: ''; position: absolute; inset-inline-start: 0; width: 2.4mm;
+    top: calc((100% - (var(--n) - 1) * 1.2mm) / var(--n) / 2); bottom: calc((100% - (var(--n) - 1) * 1.2mm) / var(--n) / 2);
+    border: 0.4mm solid #4a545e; border-inline-start: 0; border-start-end-radius: 1.5mm; border-end-end-radius: 1.5mm; }
+.mnet-bracket { position: absolute; inset-inline-start: 0; width: 3.4mm; top: calc((100% - 3mm) / 4); bottom: calc((100% - 3mm) / 4);
+    border: 0.4mm solid #4a545e; border-inline-start: 0; border-start-end-radius: 2mm; border-end-end-radius: 2mm; }
+.mnet-wan .mnet-line { inset-inline-start: 3.4mm; }
+.tiers3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3.5mm; }
+.tiers3 > div { border: 0.3mm solid var(--line); border-top: 1.2mm solid var(--navy); padding: 4mm; }
+.tiers3 > div:nth-child(2) { border-top-color: #4d8dff; }
+.tiers3 > div:nth-child(3) { border-top-color: var(--lime); }
+.tiers3 .step { font-family: var(--mono); font-size: 7.5pt; font-weight: 700; color: var(--lime-dk); }
+.tiers3 h3 { font-size: 10.5pt; margin-top: 1mm; }
+.tiers3 .apps { font-family: var(--mono); font-size: 7.2pt; color: var(--navy); margin: 1mm 0 2.5mm; }
+.tiers3 ul.ticks { gap: 1.4mm; }
+.tiers3 ul.ticks li { font-size: 8.3pt; line-height: 1.4; }
+.ed-note { margin-top: 4mm; background: var(--soft); border-inline-start: 1mm solid var(--lime); padding: 3mm 4mm; font-size: 8.8pt; color: var(--text); }
+.ed-note b { color: var(--ink); }
 
 /* ---------- Arabic / RTL ---------- */
 :root { --display: 'Noto Kufi Arabic', 'Chakra Petch', sans-serif; --body: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif; }
@@ -307,7 +351,9 @@ ul.ticks li::before { left: auto; right: 0; }
 .cap b { margin-right: 0; margin-left: 1.5mm; }
 .cta-strip .contacts { text-align: left; }
 .tour-row .tag, .fgrid div::before, .phones3 figcaption b, .phones4 figcaption b, .hwgrid figcaption b, .cap b,
-.net .node b, .chips span, .cover .facts span { text-transform: none; letter-spacing: 0; }
+.net .node b, .chips span, .cover .facts span, .mnet-tag, .mnet-link b { text-transform: none; letter-spacing: 0; }
+.mnet-tag, .mnet-link b, .tiers3 .apps { font-family: var(--body); }
+.tiers3 .apps { direction: ltr; text-align: right; }
 .tour-row .tag, .chips span, .net .link { font-family: var(--body); }
 .cover .facts b { font-family: 'Chakra Petch', var(--display); direction: ltr; unicode-bidi: isolate; text-align: right; }
 .flow li::before { font-family: 'Chakra Petch', sans-serif; }

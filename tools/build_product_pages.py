@@ -539,6 +539,51 @@ def platforms_section(p, n, lang, root):
 '''
 
 
+NET_ICONS = {
+    'pc': '<path d="M3 4h18v11H3z"/><path d="M8 20h8M12 15v5"/>',
+    'tab': '<rect x="5" y="2.5" width="14" height="19" rx="2"/><path d="M11 18.5h2"/>',
+    'bo': '<path d="M2.5 5h12v9h-12z"/><path d="M6 18h5M8.5 14v4"/><rect x="17" y="4" width="4.5" height="15" rx="1"/><path d="M18.5 7h1.5M18.5 10h1.5"/>',
+    'ho': '<path d="M3 21V9l7-5v17"/><path d="M10 21h11V11l-6-3"/><path d="M13.5 13h4M13.5 17h4M6 11h1M6 15h1"/>',
+}
+
+
+def net_icon(kind):
+    return (f'<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" '
+            f'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">{NET_ICONS[kind]}</svg>')
+
+
+def network_section(p, n, lang, root):
+    """Diagram of the multi-counter / multi-shop setup (POS -> Back Office -> Head Office) plus the three setups."""
+    d = p['network']
+
+    def node(kind, title, sub, cls=''):
+        return f'<div class="net-node net-{cls or kind}">{net_icon(kind)}<b>{title}</b><small>{sub}</small></div>'
+
+    def shop(num, counters):
+        nodes = ''.join(node(k, d['pos'].format(n=i), d[k]) for i, k in enumerate(counters, 1))
+        return (f'<div class="net-shop" style="--n:{len(counters)}"><span class="net-shop-tag">{d["shop"].format(n=num)}</span>'
+                f'<div class="net-counters">{nodes}</div>'
+                f'<div class="net-link net-lan"><i class="net-flow"></i><b>{d["lan"]}</b><small>{d["lan_sub"]}</small></div>'
+                f'{node("bo", d["bo"], d["bo_sub"])}</div>')
+    tiers = ''.join(
+        f'<div class="net-tier hud reveal"><span class="net-step">{i:02d}</span><h3>{title}</h3><p class="net-apps">{apps}</p>'
+        f'<ul class="pd-list">{"".join(f"<li>{x}</li>" for x in points)}</ul></div>'
+        for i, (title, apps, points) in enumerate(d['tiers'], 1))
+    return f'''
+        <section class="section" id="multi-shop">
+            <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{d['title']}</h2><p>{d['intro']}</p></div></header>
+            <figure class="net reveal" role="img" aria-label="{d['aria']}">
+                <div class="net-shops">{shop(1, ['pc', 'pc', 'tab'])}{shop(2, ['pc', 'tab'])}</div>
+                <div class="net-link net-wan"><span class="net-bracket"></span><i class="net-flow"></i><b>{d['wan']}</b><small>{d['wan_sub']}</small></div>
+                {node('ho', d['ho'], d['ho_sub'])}
+            </figure>
+            <h3 class="net-tiers-h reveal">{d['tiers_h']}</h3>
+            <div class="net-tiers">{tiers}</div>
+            <p class="net-note reveal">{d['note']}</p>
+        </section>
+'''
+
+
 def page(base, lang):
     p = localize(base, lang)
     t = UI[lang]
@@ -686,7 +731,7 @@ def page(base, lang):
             <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{t['features']}</h2></div></header>
             <ol class="svc-list">{feats}</ol>
         </section>
-
+{network_section(p, n, lang, root) if p.get('network') else ''}
         <section class="section">
             <header class="sec-head reveal"><span class="num">// {n()}</span><div><h2>{t['how']}</h2></div></header>
             <ol class="process pd-steps reveal">{steps}</ol>

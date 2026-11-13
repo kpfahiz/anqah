@@ -270,6 +270,50 @@ ul.ticks li::before { content: ''; position: absolute; left: 0; top: 1.6mm; widt
 .ring-two .phone img { border: 0; }
 .mt-s { margin-top: 4mm; }
 .sub2 { font-size: 13pt; margin: 7mm 0 3.5mm; }
+/* multi-counter / multi-shop diagram (SELLO Retail) */
+.mnet { display: grid; grid-template-columns: minmax(0, 1fr) 27mm 36mm; align-items: stretch; background: var(--ink); color: #e9edf0; padding: 4mm 5mm; }
+.mnet-shops { display: grid; grid-auto-rows: 1fr; gap: 3mm; }
+.mnet-shop { position: relative; display: grid; grid-template-columns: auto minmax(14mm, 1fr) auto; align-items: stretch;
+    padding: 5.5mm 0 2.2mm; padding-inline-start: 3mm; border: 0.3mm dashed #4a545e; border-radius: 2.5mm; }
+.mnet-tag { position: absolute; top: 1.8mm; inset-inline-start: 3mm; font-family: var(--mono); font-size: 6.4pt; letter-spacing: .1em; text-transform: uppercase; color: #aab3bc; }
+.mnet-counters { display: flex; flex-direction: column; gap: 1.2mm; justify-content: center; }
+.mnet-node { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6mm; text-align: center;
+    border: 0.3mm solid #3a434c; border-radius: 1.8mm; background: #12161a; padding: 2mm 2.4mm; }
+.mnet-node svg { width: 6mm; height: 6mm; color: var(--lime); }
+.mnet-node b { font-family: var(--display); font-size: 8pt; line-height: 1.15; color: #fff; }
+.mnet-node small { font-size: 6.4pt; line-height: 1.25; color: #aab3bc; }
+.mnet-counters .mnet-node { flex-direction: row; gap: 1.6mm; padding: 0.9mm 2.2mm; text-align: start; }
+.mnet-counters .mnet-node svg { width: 4.4mm; height: 4.4mm; flex: none; }
+.mnet-counters .mnet-node b { font-size: 7.4pt; }
+.mnet-counters .mnet-node span { display: flex; flex-direction: column; }
+.mnet-bo { align-self: center; margin-inline-end: 4mm; border-color: #4d8dff; }
+.mnet-bo svg { color: #4d8dff; }
+.mnet-bo::after { content: ''; position: absolute; top: 50%; inset-inline-start: 100%; width: 4.4mm; border-top: 0.4mm solid #4a545e; }
+.mnet-ho { align-self: center; border-color: var(--lime); background: rgba(182, 255, 59, .08); padding: 3.5mm 2.5mm; }
+.mnet-ho svg { width: 8mm; height: 8mm; }
+.mnet-ho b { font-size: 9pt; }
+.mnet-link { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5.5mm; padding: 0 1.2mm; text-align: center; }
+.mnet-link b { font-family: var(--mono); font-size: 6.4pt; letter-spacing: .06em; text-transform: uppercase; color: #fff; line-height: 1.2; }
+.mnet-link small { font-size: 6.2pt; color: #aab3bc; line-height: 1.25; }
+.mnet-line { position: absolute; top: 50%; inset-inline: 0; border-top: 0.5mm dashed var(--lime); }
+.mnet-lan .mnet-line { border-color: #4d8dff; inset-inline-start: 2.4mm; }
+.mnet-lan::before { content: ''; position: absolute; inset-inline-start: 0; width: 2.4mm;
+    top: calc((100% - (var(--n) - 1) * 1.2mm) / var(--n) / 2); bottom: calc((100% - (var(--n) - 1) * 1.2mm) / var(--n) / 2);
+    border: 0.4mm solid #4a545e; border-inline-start: 0; border-start-end-radius: 1.5mm; border-end-end-radius: 1.5mm; }
+.mnet-bracket { position: absolute; inset-inline-start: 0; width: 3.4mm; top: calc((100% - 3mm) / 4); bottom: calc((100% - 3mm) / 4);
+    border: 0.4mm solid #4a545e; border-inline-start: 0; border-start-end-radius: 2mm; border-end-end-radius: 2mm; }
+.mnet-wan .mnet-line { inset-inline-start: 3.4mm; }
+.tiers3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3.5mm; }
+.tiers3 > div { border: 0.3mm solid var(--line); border-top: 1.2mm solid var(--navy); padding: 4mm; }
+.tiers3 > div:nth-child(2) { border-top-color: #4d8dff; }
+.tiers3 > div:nth-child(3) { border-top-color: var(--lime); }
+.tiers3 .step { font-family: var(--mono); font-size: 7.5pt; font-weight: 700; color: var(--lime-dk); }
+.tiers3 h3 { font-size: 10.5pt; margin-top: 1mm; }
+.tiers3 .apps { font-family: var(--mono); font-size: 7.2pt; color: var(--navy); margin: 1mm 0 2.5mm; }
+.tiers3 ul.ticks { gap: 1.4mm; }
+.tiers3 ul.ticks li { font-size: 8.3pt; line-height: 1.4; }
+.ed-note { margin-top: 4mm; background: var(--soft); border-inline-start: 1mm solid var(--lime); padding: 3mm 4mm; font-size: 8.8pt; color: var(--text); }
+.ed-note b { color: var(--ink); }
 
 /* ---------- Arabic / RTL ---------- */
 :root { --display: 'Noto Kufi Arabic', 'Chakra Petch', sans-serif; --body: 'IBM Plex Sans Arabic', 'IBM Plex Sans', sans-serif; }
@@ -307,7 +351,9 @@ ul.ticks li::before { left: auto; right: 0; }
 .cap b { margin-right: 0; margin-left: 1.5mm; }
 .cta-strip .contacts { text-align: left; }
 .tour-row .tag, .fgrid div::before, .phones3 figcaption b, .phones4 figcaption b, .hwgrid figcaption b, .cap b,
-.net .node b, .chips span, .cover .facts span { text-transform: none; letter-spacing: 0; }
+.net .node b, .chips span, .cover .facts span, .mnet-tag, .mnet-link b { text-transform: none; letter-spacing: 0; }
+.mnet-tag, .mnet-link b, .tiers3 .apps { font-family: var(--body); }
+.tiers3 .apps { direction: ltr; text-align: right; }
 .tour-row .tag, .chips span, .net .link { font-family: var(--body); }
 .cover .facts b { font-family: 'Chakra Petch', var(--display); direction: ltr; unicode-bidi: isolate; text-align: right; }
 .flow li::before { font-family: 'Chakra Petch', sans-serif; }
@@ -321,7 +367,7 @@ ul.ticks li::before { left: auto; right: 0; }
     <div class="title">
         <div class="kicker">كاشير التجزئة &middot; ويندوز وأندرويد و iOS</div>
         <h1>SELLO Retail<span>كاشير التجزئة</span></h1>
-        <p>برنامج كاشير ومخزون سريع لمحلات التجزئة والسوبرماركت &mdash; على ويندوز وأندرويد و iOS، يعمل دون إنترنت بالكامل، مع ضريبة السلع والخدمات وضريبة القيمة المضافة.</p>
+        <p>برنامج كاشير ومخزون سريع لمحلات التجزئة والسوبرماركت &mdash; على ويندوز وأندرويد و iOS، يعمل دون إنترنت بالكامل، مع ضريبة السلع والخدمات وضريبة القيمة المضافة. وينمو معك من كاونتر واحد إلى عدة فروع مع المكتب الخلفي والمكتب الرئيسي.</p>
     </div>
     <div class="visual"><img src="img/retail-win-billing-device.jpg" alt=""></div>
     <div class="facts"><div><b>3</b><span>منصات: ويندوز وأندرويد و iOS</span></div><div><b>100%</b><span>فوترة دون إنترنت</span></div><div><b>3</b><span>لغات: العربية والإنجليزية والهندية</span></div><div><b>GST &middot; VAT</b><span>ضرائب الهند والإمارات والسعودية</span></div></div>
@@ -337,8 +383,8 @@ ul.ticks li::before { left: auto; right: 0; }
             <div class="panel lime"><h3>الحل مع SELLO Retail</h3><p>يعمل SELLO Retail على حاسوب الكاونتر أو جهاز لوحي أو جوال، بقاعدة بيانات مشفّرة على الجهاز. تعمل الفوترة والمخزون والمشتريات والعملاء والأقساط والدفاتر والورديات والتقارير دون إنترنت، بالعربية أو الإنجليزية أو الهندية، مع ضريبة الهند أو الإمارات أو السعودية.</p></div>
         </div>
         <div class="two mt">
-            <div><h3 class="sub2" style="margin-top:0">مصمم من أجل</h3><ul class="ticks"><li>محلات التجزئة والسوبرماركت</li><li>البقالات والمحلات العامة</li><li>محلات الإلكترونيات والجوالات والأجهزة التي تبيع بالأقساط</li><li>محلات العدد والقرطاسية والهدايا</li><li>المحلات في الهند والإمارات والسعودية، لكلٍّ ضريبته</li></ul></div>
-            <div><h3 class="sub2" style="margin-top:0">ما الذي تحصل عليه</h3><ul class="ticks"><li>الفوترة لا تنتظر الإنترنت أبدًا</li><li>تطبيق واحد على ويندوز وأندرويد و iOS</li><li>عملاء الآجل والأقساط محدَّثون دائمًا</li><li>بياناتك مشفّرة على جهازك</li></ul></div>
+            <div><h3 class="sub2" style="margin-top:0">مصمم من أجل</h3><ul class="ticks"><li>محلات التجزئة والسوبرماركت</li><li>سلاسل السوبرماركت والتجزئة متعددة الفروع</li><li>البقالات والمحلات العامة</li><li>محلات الإلكترونيات والجوالات والأجهزة التي تبيع بالأقساط</li><li>محلات العدد والقرطاسية والهدايا</li><li>المحلات في الهند والإمارات والسعودية، لكلٍّ ضريبته</li></ul></div>
+            <div><h3 class="sub2" style="margin-top:0">ما الذي تحصل عليه</h3><ul class="ticks"><li>الفوترة لا تنتظر الإنترنت أبدًا</li><li>تطبيق واحد على ويندوز وأندرويد و iOS</li><li>كل كاونتر وكل فرع في شاشة واحدة</li><li>عملاء الآجل والأقساط محدَّثون دائمًا</li><li>بياناتك مشفّرة على جهازك</li></ul></div>
         </div>
         <figure class="figure-wide"><img src="img/retail-tab-billing-device.jpg" alt=""><figcaption class="cap"><b>على جهاز لوحي</b>شاشة الفوترة السريعة نفسها على جهاز أندرويد لوحي عند الكاونتر.</figcaption></figure>
     </div>
@@ -381,9 +427,8 @@ ul.ticks li::before { left: auto; right: 0; }
     <div class="inner tight">
         <div class="kicker">04 &middot; الإمكانات</div>
         <h2>أهم <em>المزايا</em></h2>
-        <div class="fgrid compact"><div data-n="01"><h3>امسح واحسب</h3><p>البحث بالباركود أو الاسم، وخصم الصنف والفاتورة، والتعليق والاستئناف، والمرتجعات والاستبدال، واختصارات F1 / F2 / F12.</p></div><div data-n="02"><h3>كل طرق الدفع</h3><p>نقد مع الباقي، بطاقة، UPI برمز QR، تحويل بنكي، آجل، أقساط ودفع مجزّأ.</p></div><div data-n="03"><h3>الفواتير عبر واتساب تلقائيًا</h3><p>بعد كل عملية بيع تُرسل الفاتورة إلى واتساب العميل بصيغة PDF &mdash; أو شاركها بلمسة واحدة.</p></div><div data-n="04"><h3>شاشة العميل</h3><p>شاشة ثانية تعرض كل صنف والضريبة والإجمالي أثناء المسح، مع رمز QR للدفع.</p></div><div data-n="05"><h3>المنتجات والمخزون</h3><p>الباركود والأصناف المتعددة والدفعات وتواريخ الانتهاء وتنبيهات المخزون وتعديل المخزون مع السبب.</p></div><div data-n="06"><h3>إضافة المنتجات بالجملة</h3><p>أضف مئات المنتجات دفعة واحدة من Excel أو CSV، وعدّل الأسعار وسعر التجزئة ورمز HSN وحد إعادة الطلب جماعيًا.</p></div><div data-n="07"><h3>ملصقات الباركود و QR</h3><p>إنشاء باركود للمنتجات التي ليس لها باركود وطباعة ملصقات الباركود أو رمز QR.</p></div><div data-n="08"><h3>المشتريات والموردون</h3><p>إدخال المخزون من الموردين &mdash; ومسح فاتورة المورد الورقية لتعبئة المشتريات.</p></div><div data-n="09"><h3>العملاء والأقساط</h3><p>حدود ائتمان وخطط أقساط بتواريخ استحقاق ودفعات وإيصالات قابلة للطباعة.</p></div><div data-n="10"><h3>الدفاتر والمصروفات</h3><p>دفاتر العملاء والموردين ودفتر النقدية ودفتر البنك والمصروفات وحسابات بنكية متعددة.</p></div><div data-n="11"><h3>الورديات</h3><p>نقد افتتاحي وتقرير وردية تلقائي يقارن النقد المتوقع بالمعدود عند الإغلاق.</p></div><div data-n="12"><h3>التقارير ولوحة التحكم</h3><p>تقارير المبيعات والكاشير والأصناف والفئات والضريبة و HSN والأرباح والمخزون &mdash; PDF و Excel و CSV.</p></div><div data-n="13"><h3>تقارير مجدولة بالبريد</h3><p>ملخص يومي يُرسل إلى المالك بالبريد في الوقت الذي تختاره، مع كل تقرير وردية &mdash; تلقائيًا.</p></div><div data-n="14"><h3>ضرائب 3 دول</h3><p>ضريبة السلع والخدمات في الهند (CGST و SGST و IGST) وضريبة القيمة المضافة في الإمارات والسعودية، مع دعم الفوترة الإلكترونية (فاتورة).</p></div><div data-n="15"><h3>الأدوار والأمان</h3><p>أدوار المالك والمدير والكاشير وأمين المخزن، وقفل برمز PIN، وقفل تلقائي، وسجل تدقيق كامل.</p></div></div>
-        <h3 class="sub2">كيف يعمل</h3>
-        <ol class="flow"><li>ثبّت SELLO Retail على حاسوب الكاونتر أو الجهاز اللوحي أو الجوال &mdash; يبدأ كل جهاز بتجربة مجانية 7 أيام.</li><li>أعِدّ المتجر: الدولة والضريبة والمنتجات (أو استوردها من Excel) والطابعات والمستخدمين.</li><li>افوتر على الكاونتر: امسح واستلم الدفع واطبع الفاتورة أو شاركها، مع عرض الإجمالي على شاشة العميل.</li><li>أغلق كل وردية بتقريرها، وتابع الآجل والأقساط، وراجع لوحة التحكم والتقارير.</li></ol>
+        <div class="fgrid compact"><div data-n="01"><h3>امسح واحسب</h3><p>البحث بالباركود أو الاسم، وخصم الصنف والفاتورة، والتعليق والاستئناف، والمرتجعات والاستبدال، واختصارات F1 / F2 / F12.</p></div><div data-n="02"><h3>كل طرق الدفع</h3><p>نقد مع الباقي، بطاقة، UPI برمز QR، تحويل بنكي، آجل، أقساط ودفع مجزّأ.</p></div><div data-n="03"><h3>الفواتير عبر واتساب تلقائيًا</h3><p>بعد كل عملية بيع تُرسل الفاتورة إلى واتساب العميل بصيغة PDF &mdash; أو شاركها بلمسة واحدة.</p></div><div data-n="04"><h3>شاشة العميل</h3><p>شاشة ثانية تعرض كل صنف والضريبة والإجمالي أثناء المسح، مع رمز QR للدفع.</p></div><div data-n="05"><h3>المنتجات والمخزون</h3><p>الباركود والأصناف المتعددة والدفعات وتواريخ الانتهاء وتنبيهات المخزون وتعديل المخزون مع السبب.</p></div><div data-n="06"><h3>إضافة المنتجات بالجملة</h3><p>أضف مئات المنتجات دفعة واحدة من Excel أو CSV، وعدّل الأسعار وسعر التجزئة ورمز HSN وحد إعادة الطلب جماعيًا.</p></div><div data-n="07"><h3>ملصقات الباركود و QR</h3><p>إنشاء باركود للمنتجات التي ليس لها باركود وطباعة ملصقات الباركود أو رمز QR.</p></div><div data-n="08"><h3>المشتريات والموردون</h3><p>إدخال المخزون من الموردين &mdash; ومسح فاتورة المورد الورقية لتعبئة المشتريات.</p></div><div data-n="09"><h3>العملاء والأقساط</h3><p>حدود ائتمان وخطط أقساط بتواريخ استحقاق ودفعات وإيصالات قابلة للطباعة.</p></div><div data-n="10"><h3>الدفاتر والمصروفات</h3><p>دفاتر العملاء والموردين ودفتر النقدية ودفتر البنك والمصروفات وحسابات بنكية متعددة.</p></div><div data-n="11"><h3>الورديات</h3><p>نقد افتتاحي وتقرير وردية تلقائي يقارن النقد المتوقع بالمعدود عند الإغلاق.</p></div><div data-n="12"><h3>التقارير ولوحة التحكم</h3><p>تقارير المبيعات والكاشير والأصناف والفئات والضريبة و HSN والأرباح والمخزون &mdash; PDF و Excel و CSV.</p></div><div data-n="13"><h3>تقارير مجدولة بالبريد</h3><p>ملخص يومي يُرسل إلى المالك بالبريد في الوقت الذي تختاره، مع كل تقرير وردية &mdash; تلقائيًا.</p></div><div data-n="14"><h3>ضرائب 3 دول</h3><p>ضريبة السلع والخدمات في الهند (CGST و SGST و IGST) وضريبة القيمة المضافة في الإمارات والسعودية، مع دعم الفوترة الإلكترونية (فاتورة).</p></div><div data-n="15"><h3>الأدوار والأمان</h3><p>أدوار المالك والمدير والكاشير وأمين المخزن، وقفل برمز PIN، وقفل تلقائي، وسجل تدقيق كامل.</p></div><div data-n="16"><h3>SELLO Back Office (المكتب الخلفي)</h3><p>حاسوب واحد يدير كل كاونترات المحل: اعرض كل كاونتر، وعدّل المنتجات والأسعار والمستخدمين وتصميم الفاتورة، وشارك مخزونًا واحدًا بين الكاونترات.</p></div><div data-n="17"><h3>SELLO Head Office (المكتب الرئيسي)</h3><p>يرى المالك كل الفروع عبر الإنترنت &mdash; المبيعات والتقارير والأرباح والرواتب وسجل التدقيق، لكل الفروع معًا أو لكل فرع على حدة.</p></div><div data-n="18"><h3>إدارة العملاء والمستندات</h3><p>العملاء المحتملون والمتابعات والتذكيرات، وعروض الأسعار، والفواتير الضريبية A4، وسندات التسليم، والفواتير المتكررة، والإشعارات الدائنة، وسندات القبض والصرف.</p></div><div data-n="19"><h3>مصمم الفواتير</h3><p>صمّم عروض الأسعار والفواتير &mdash; الشعار والحقول والشروط وبيانات البنك والتوقيعات &mdash; مع معاينة مباشرة.</p></div><div data-n="20"><h3>الرواتب</h3><p>في المكتب الخلفي: الموظفون والحضور والسُّلف والأجور الشهرية أو اليومية، وقسائم رواتب ترسلها عبر واتساب.</p></div><div data-n="21"><h3>عمولة المندوبين</h3><p>امنح المندوب عمولة على الفاتورة (مبلغًا أو نسبة)، وتابع المستحق والمدفوع &mdash; وتُحسب تكلفةً في الأرباح.</p></div></div>
+        
         
     </div>
     <div class="foot"><span><b>ANQAH TECH</b> &middot; SELLO Retail &middot; كتيّب المنتج</span><span>06</span></div>
@@ -391,31 +436,48 @@ ul.ticks li::before { left: auto; right: 0; }
 <section class="page ">
     <div class="geo tr-navy"></div><div class="geo tr-lime"></div>
     <div class="inner tight">
-        <div class="kicker" style="margin-right:26mm">05 &middot; الأجهزة</div>
-        <h2 style="margin-right:26mm">أجهزة <em>نقاط البيع</em></h2>
+        <div class="kicker" style="margin-right:26mm">05 &middot; انمُ مع SELLO Retail</div>
+        <h2 style="margin-right:26mm">انمُ إلى <em>عدة فروع</em></h2>
+        <p class="lead" style="margin-bottom:5mm">ابدأ بكاونتر واحد. أضف المكتب الخلفي SELLO Back Office عندما يصبح في المحل عدة كاونترات، والمكتب الرئيسي SELLO Head Office عندما تفتح فروعًا أخرى &mdash; ويواصل كل كاونتر الفوترة وحده حتى عند انقطاع الشبكة.</p>
+        <div class="mnet">
+            <div class="mnet-shops"><div class="mnet-shop" style="--n:3"><span class="mnet-tag">المحل 1</span><div class="mnet-counters"><div class="mnet-node"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18v11H3z"/><path d="M8 20h8M12 15v5"/></svg><span><b>كاشير 1</b><small>ويندوز</small></span></div><div class="mnet-node"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18v11H3z"/><path d="M8 20h8M12 15v5"/></svg><span><b>كاشير 2</b><small>ويندوز</small></span></div><div class="mnet-node"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2"/><path d="M11 18.5h2"/></svg><span><b>كاشير 3</b><small>جهاز أندرويد لوحي</small></span></div></div><div class="mnet-link mnet-lan"><i class="mnet-line"></i><b>شبكة المحل</b><small>التغييرات كل ~20 ثانية</small></div><div class="mnet-node mnet-bo"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 5h12v9h-12z"/><path d="M6 18h5M8.5 14v4"/><rect x="17" y="4" width="4.5" height="15" rx="1"/><path d="M18.5 7h1.5M18.5 10h1.5"/></svg><b>SELLO Back Office</b><small>حاسوب واحد في المحل</small></div></div><div class="mnet-shop" style="--n:2"><span class="mnet-tag">المحل 2</span><div class="mnet-counters"><div class="mnet-node"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18v11H3z"/><path d="M8 20h8M12 15v5"/></svg><span><b>كاشير 1</b><small>ويندوز</small></span></div><div class="mnet-node"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2"/><path d="M11 18.5h2"/></svg><span><b>كاشير 2</b><small>جهاز أندرويد لوحي</small></span></div></div><div class="mnet-link mnet-lan"><i class="mnet-line"></i><b>شبكة المحل</b><small>التغييرات كل ~20 ثانية</small></div><div class="mnet-node mnet-bo"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 5h12v9h-12z"/><path d="M6 18h5M8.5 14v4"/><rect x="17" y="4" width="4.5" height="15" rx="1"/><path d="M18.5 7h1.5M18.5 10h1.5"/></svg><b>SELLO Back Office</b><small>حاسوب واحد في المحل</small></div></div></div>
+            <div class="mnet-link mnet-wan"><span class="mnet-bracket"></span><i class="mnet-line"></i><b>الإنترنت</b><small>سحابة SELLO &middot; دون VPN</small></div>
+            <div class="mnet-node mnet-ho"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21V9l7-5v17"/><path d="M10 21h11V11l-6-3"/><path d="M13.5 13h4M13.5 17h4M6 11h1M6 15h1"/></svg><b>SELLO Head Office</b><small>حاسوب المالك &mdash; في أي مكان</small></div>
+        </div>
+        <h3 class="sub2">ما الإعداد الذي تحتاجه؟</h3>
+        <div class="tiers3"><div><span class="step">01</span><h3>كاونتر واحد</h3><p class="apps">SELLO Retail</p><ul class="ticks"><li>الفوترة والمخزون والعملاء والتقارير على حاسوب أو جهاز لوحي أو جوال</li><li>يعمل دون إنترنت 100%</li></ul></div><div><span class="step">02</span><h3>محل واحد بعدة كاونترات</h3><p class="apps">SELLO Retail + SELLO Back Office</p><ul class="ticks"><li>لوحة كل كاونتر وفواتيره ومخزونه ووردياته وسجل تدقيقه على حاسوب واحد</li><li>تعديل المنتجات والأسعار والمستخدمين والأدوار وتصميم الفاتورة لكاونتر واحد أو للجميع</li><li>المخازن: تشترك كاونترات المحل في قائمة منتجات واحدة ومخزون واحد</li><li>الرواتب، والأرباح والمصروفات، وتقارير بريد تلقائية</li></ul></div><div><span class="step">03</span><h3>عدة فروع</h3><p class="apps">+ SELLO Head Office</p><ul class="ticks"><li>كل الفروع مجمّعة، أو فرع أو كاونتر واحد في كل مرة</li><li>مبيعات اليوم والفروع المتصلة والتقارير والأرباح والرواتب</li><li>سجل تدقيق كل كاونتر في كل فرع</li><li>مستخدمون للاطلاع فقط لكبار المحاسبين</li><li>عبر الإنترنت &mdash; دون VPN أو إعدادات شبكة</li></ul></div></div>
+        <p class="ed-note"><b>النسخة دون إنترنت:</b> SELLO Retail والمكتب الخلفي على شبكة المحل. <b>النسخة المتصلة:</b> تضيف المكتب الرئيسي عبر الإنترنت. وإذا انقطع الاتصال لا يتوقف شيء &mdash; تنتظر التغييرات في المحل وتُرسل لاحقًا بالترتيب.</p>
+    </div>
+    <div class="foot"><span><b>ANQAH TECH</b> &middot; SELLO Retail &middot; كتيّب المنتج</span><span>07</span></div>
+</section>
+<section class="page ">
+    <div class="geo tl-navy"></div><div class="geo tl-lime"></div>
+    <div class="inner tight">
+        <div class="kicker">06 &middot; الأجهزة</div>
+        <h2>أجهزة <em>نقاط البيع</em></h2>
         <p class="lead" style="margin-bottom:5mm">نوفّر أجهزة نقاط البيع، ونثبّت SELLO Retail، ونُعدّ منتجاتك وضرائبك، وندرّب موظفيك.</p>
         <div class="hwgrid"><figure><img src="img/retail-hw-terminal.jpg" alt=""><figcaption><b>جهاز كاشير بشاشتين</b>جهاز لمس متكامل مع شاشة عرض للعميل.</figcaption></figure><figure><img src="img/retail-hw-printer.jpg" alt=""><figcaption><b>طابعة الإيصالات</b>طباعة حرارية سريعة 58 / 80 مم للفواتير والإيصالات.</figcaption></figure><figure><img src="img/retail-hw-tablet.jpg" alt=""><figcaption><b>كاشير على جهاز لوحي</b>فوترة مدمجة على الكاونتر على حامل آمن.</figcaption></figure><figure><img src="img/retail-hw-customer-display.jpg" alt=""><figcaption><b>شاشة العميل</b>تعرض للعميل كل صنف والإجمالي ورمز QR للدفع.</figcaption></figure><figure><img src="img/retail-hw-drawer.jpg" alt=""><figcaption><b>درج النقود</b>يُفتح تلقائيًا عند البيع النقدي ويحفظ النقود بأمان.</figcaption></figure><figure><img src="img/retail-hw-monitor.jpg" alt=""><figcaption><b>شاشة كاشير تعمل باللمس</b>شاشة لمس كبيرة للكاونترات المزدحمة والمكتب الخلفي.</figcaption></figure></div>
         <h3 class="sub2">يعمل مع</h3>
         <div class="callouts"><div><h3>الطابعات الحرارية</h3><p>طابعات إيصالات 58 / 80 مم عبر USB أو بلوتوث أو الشبكة، إضافة إلى A4.</p></div><div><h3>قارئات الباركود</h3><p>قارئات USB أو بلوتوث &mdash; أو كاميرا الجهاز.</p></div><div><h3>شاشة العميل</h3><p>شاشة ثانية على ويندوز مواجهة للعميل.</p></div></div>
         <div class="incl mt-s"><span class="kicker">تشمل كل باقة نقاط بيع</span><ul><li>أجهزة نقاط البيع</li><li>برنامج SELLO Retail</li><li>التركيب والإعداد</li><li>إعداد المنتجات والضريبة</li><li>تدريب الموظفين</li><li>الدعم وعقود الصيانة</li></ul></div>
     </div>
-    <div class="foot"><span><b>ANQAH TECH</b> &middot; SELLO Retail &middot; كتيّب المنتج</span><span>07</span></div>
+    <div class="foot"><span><b>ANQAH TECH</b> &middot; SELLO Retail &middot; كتيّب المنتج</span><span>08</span></div>
 </section>
 <section class="page ">
     <div class="geo tl-navy"></div><div class="geo tl-lime"></div><div class="geo bl-navy"></div><div class="geo bl-lime"></div>
     <div class="inner tight">
         <div class="kicker">التفاصيل التقنية</div>
         <h2>من <em>الداخل</em></h2>
-        <div class="techbox"><span class="kicker">التقنية</span><p>تطبيق Flutter لأنظمة ويندوز وأندرويد و iOS بقاعدة بيانات SQLite مشفّرة (SQLCipher) على الجهاز. تُحفظ المبالغ بأصغر وحدة للعملة وتُقرّب الضريبة لكل صنف حسب الدولة. يطبع على طابعات حرارية 58 / 80 مم عبر USB أو بلوتوث أو الشبكة، وعلى A4. ويقرأ مسح فواتير الموردين النص على الجهاز دون إنترنت. الترخيص برموز تفعيل دون إنترنت: تجربة 7 أيام ثم خطط لسنة أو 2 أو 3 أو 5 سنوات.</p></div>
-        <div class="panel lime mt-s"><h3>بياناتك</h3><p>تُحفظ بيانات المتجر والمبيعات والعملاء مشفّرة على جهازك &mdash; لا على سحابة طرف ثالث. والنسخ الاحتياطي والاستعادة إلى ملف مدمجان.</p></div>
+        <div class="techbox"><span class="kicker">التقنية</span><p>تطبيق Flutter لأنظمة ويندوز وأندرويد و iOS بقاعدة بيانات SQLite مشفّرة (SQLCipher) على الجهاز. تُحفظ المبالغ بأصغر وحدة للعملة وتُقرّب الضريبة لكل صنف حسب الدولة. يطبع على طابعات حرارية 58 / 80 مم عبر USB أو بلوتوث أو الشبكة، وعلى A4. ويقرأ مسح فواتير الموردين النص على الجهاز دون إنترنت. يقترن كل كاونتر بالمكتب الخلفي (ويندوز) برمز لمرة واحدة عبر شبكة المحل، ويقترن كل مكتب خلفي بالمكتب الرئيسي (ويندوز) ويتزامن عبر الإنترنت. الترخيص برموز تفعيل: تجربة 7 أيام ثم خطط لسنة أو 2 أو 3 أو 5 سنوات.</p></div>
+        <div class="panel lime mt-s"><h3>بياناتك</h3><p>تُحفظ بيانات المتجر والمبيعات والعملاء مشفّرة على جهازك، وعلى حاسوب المكتب الخلفي بمفتاح منفصل لكل كاونتر. ومع المكتب الرئيسي تمر التغييرات عبر سحابة SELLO فقط إلى أن يستلمها مكتبك الرئيسي. والنسخ الاحتياطي والاستعادة إلى ملف مدمجان.</p></div>
         <h3 class="sub2">الأسئلة الشائعة</h3>
-        <div class="faq-list"><div><h3>هل يحتاج SELLO Retail إلى الإنترنت؟</h3><p>لا. تعمل الفوترة والمخزون والعملاء والتقارير دون إنترنت على الجهاز.</p></div><div><h3>على أي أجهزة يعمل؟</h3><p>حواسيب ويندوز وأجهزة أندرويد اللوحية والهواتف، والآيباد والآيفون (iOS).</p></div><div><h3>هل يمكن إرسال الفواتير للعملاء عبر واتساب؟</h3><p>نعم. فعّل الإرسال التلقائي لتصل كل فاتورة إلى واتساب العميل بصيغة PDF بعد البيع &mdash; أو أرسل أي فاتورة بلمسة.</p></div><div><h3>هل يستلم المالك التقارير بالبريد؟</h3><p>نعم. جدولة ملخص يومي في الوقت الذي تختاره، وتُرسل تقارير الورديات تلقائيًا أيضًا.</p></div><div><h3>هل يمكنني طباعة ملصقات الباركود و QR؟</h3><p>نعم. أنشئ باركود للمنتجات التي ليس لها باركود واطبع ملصقات الباركود أو رمز QR.</p></div></div>
+        <div class="faq-list"><div><h3>هل يحتاج SELLO Retail إلى الإنترنت؟</h3><p>لا. تعمل الفوترة والمخزون والعملاء والتقارير دون إنترنت على الجهاز. ولا يستخدم الإنترنت إلا المكتب الرئيسي لأصحاب الفروع المتعددة.</p></div><div><h3>هل يمكنني تشغيل عدة كاونترات وعدة فروع؟</h3><p>نعم. تتصل كاونترات المحل بالمكتب الخلفي على حاسوب واحد عبر شبكة المحل، ويعرض المكتب الرئيسي للمالك كل الفروع عبر الإنترنت.</p></div><div><h3>ماذا لو انقطعت الشبكة أو الإنترنت؟</h3><p>لا تتوقف الفوترة أبدًا. يواصل كل كاونتر العمل ويرسل تغييراته لاحقًا بالترتيب.</p></div><div><h3>هل يوجد إدارة عملاء وعروض أسعار وفواتير؟</h3><p>نعم. العملاء المحتملون والمتابعات وعروض الأسعار والفواتير الضريبية A4 وسندات التسليم والفواتير المتكررة والإشعارات الدائنة وسندات القبض والصرف &mdash; بتصميم فاتورتك الخاص.</p></div></div>
         <div class="cta-strip">
             <div><h3>احصل على SELLO Retail لعملك</h3><p>تواصل معنا لعرض توضيحي والأسعار والتركيب &mdash; نردّ خلال 24 ساعة.</p></div>
             <div class="contacts"><b>الهاتف</b> <span class="ltr">+971 50 239 3703</span><br><b>واتساب</b> <span class="ltr">+971 50 576 2100</span><br><b>البريد</b> <span class="ltr">anqahgroups@gmail.com</span><br><b>الموقع</b> <span class="ltr">www.anqah.com</span></div>
         </div>
     </div>
-    <div class="foot"><span><b>ANQAH TECH</b> &middot; SELLO Retail &middot; كتيّب المنتج</span><span>08</span></div>
+    <div class="foot"><span><b>ANQAH TECH</b> &middot; SELLO Retail &middot; كتيّب المنتج</span><span>09</span></div>
 </section>
 </body>
 </html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<!-- Anqah Tech business card. Trim size 90 x 55 mm, with a 3 mm bleed on every side (page = 96 x 61 mm).
+     Keep text 4 mm inside the trim (7 mm from the page edge). Page 1 = front, page 2 = back.
+     Print-ready PDF + 300 dpi PNGs: node tools/business-card/render_card.mjs <path-to-node_modules-with-playwright-core> -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Anqah Tech business card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&family=Noto+Kufi+Arabic:wght@600;700&display=swap" rel="stylesheet">
+<style>
+@page { size: 96mm 61mm; margin: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #07080a; }
+body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.side { position: relative; width: 96mm; height: 61mm; overflow: hidden; page-break-after: always; break-after: page;
+  background: radial-gradient(circle, #252b31 0.28mm, transparent 0.34mm) 0 0 / 3.2mm 3.2mm, #07080a; color: #e9edf0; font-family: 'IBM Plex Sans', sans-serif; }
+.side:last-child { page-break-after: auto; break-after: auto; }
+/* HUD corner brackets, 6 mm inside the page edge (3 mm inside the trim) */
+.side::after { content: ''; position: absolute; inset: 6mm; --c: #b6ff3b; --l: 3.2mm; --w: 0.45mm; pointer-events: none;
+  background:
+    linear-gradient(var(--c),var(--c)) top left / var(--l) var(--w) no-repeat, linear-gradient(var(--c),var(--c)) top left / var(--w) var(--l) no-repeat,
+    linear-gradient(var(--c),var(--c)) top right / var(--l) var(--w) no-repeat, linear-gradient(var(--c),var(--c)) top right / var(--w) var(--l) no-repeat,
+    linear-gradient(var(--c),var(--c)) bottom left / var(--l) var(--w) no-repeat, linear-gradient(var(--c),var(--c)) bottom left / var(--w) var(--l) no-repeat,
+    linear-gradient(var(--c),var(--c)) bottom right / var(--l) var(--w) no-repeat, linear-gradient(var(--c),var(--c)) bottom right / var(--w) var(--l) no-repeat; }
+
+/* ---------- front ---------- */
+.front { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.front .glow { position: absolute; width: 60mm; height: 60mm; border-radius: 50%; left: 18mm; top: 0; background: radial-gradient(circle, rgba(182,255,59,0.14), transparent 65%); }
+.front img { position: relative; width: 19mm; }
+.front h1 { position: relative; font: 700 6.4mm/1 'Chakra Petch'; letter-spacing: 0.12em; margin-top: 2.4mm; }
+.front .tag { position: relative; font: 700 2.15mm 'JetBrains Mono'; color: #b6ff3b; letter-spacing: 0.16em; margin-top: 2.2mm; }
+.front .ar { position: relative; font: 600 2.4mm/1.6 'Noto Kufi Arabic'; direction: rtl; color: #aeb6be; margin-top: 0.8mm; }
+.front .loc { position: absolute; left: 0; right: 0; bottom: 8.6mm; font: 500 1.75mm 'JetBrains Mono'; color: #7f8892; letter-spacing: 0.14em; }
+
+/* ---------- back ---------- */
+.back { padding: 8.2mm 8.2mm 8mm 9mm; display: flex; gap: 4mm; }
+.contacts { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 1.55mm; }
+.brand { display: flex; align-items: center; gap: 1.8mm; margin-bottom: 1.4mm; }
+.brand img { width: 7mm; }
+.brand b { font: 700 3.3mm 'Chakra Petch'; letter-spacing: 0.1em; }
+.line { display: flex; align-items: center; gap: 2mm; font: 500 2.35mm/1 'IBM Plex Sans'; white-space: nowrap; }
+.line svg { flex: none; width: 2.9mm; height: 2.9mm; stroke: #b6ff3b; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.line small { font: 500 1.7mm 'JetBrains Mono'; color: #7f8892; letter-spacing: 0.06em; margin-left: 0.6mm; }
+.qrbox { flex: none; width: 24mm; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.qr { width: 21mm; height: 21mm; background: #fff; padding: 1.4mm; border-radius: 1mm; }
+.qr svg { display: block; width: 100%; height: 100%; }
+.qrbox p { font: 700 1.75mm 'JetBrains Mono'; color: #b6ff3b; letter-spacing: 0.12em; margin-top: 1.6mm; }
+.qrbox .ar { font: 600 1.9mm/1.5 'Noto Kufi Arabic'; color: #aeb6be; direction: rtl; }
+</style>
+</head>
+<body>
+
+<section class="side front">
+  <div class="glow"></div>
+  <img src="../../images/logo-mark-white.png" alt="Anqah Tech logo">
+  <h1>ANQAH TECH</h1>
+  <div class="tag">POS · IoT · IT SOLUTIONS</div>
+  <div class="ar">حلول نقاط البيع وإنترنت الأشياء وتقنية المعلومات</div>
+  <div class="loc">UAE · SAUDI ARABIA · INDIA</div>
+</section>
+
+<section class="side back">
+  <div class="contacts">
+    <div class="brand"><img src="../../images/logo-mark-white.png" alt=""><b>ANQAH TECH</b></div>
+    <div class="line"><svg viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2"/></svg>+971 50 239 3703<small>UAE</small></div>
+    <div class="line"><svg viewBox="0 0 24 24"><path d="M3 21l1.6-4.6A8.5 8.5 0 1 1 8 19.6z"/><path d="M9 9.5c.5 2.5 2.5 4.5 5 5l1.2-1.2 2 1-.6 1.8c-4 .2-8.5-4.3-8.3-8.3L10 7.2l1 2z"/></svg>+971 50 576 2100<small>WHATSAPP</small></div>
+    <div class="line"><svg viewBox="0 0 24 24"><path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2"/></svg>+91 95670 40754<small>INDIA</small></div>
+    <div class="line"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>anqahgroups@gmail.com</div>
+    <div class="line"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>www.anqah.com</div>
+    <div class="line"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/></svg>@anqahtech</div>
+    <div class="line"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>Abu Dhabi, UAE</div>
+  </div>
+  <div class="qrbox">
+    <div class="qr"><svg aria-label="QR code: www.anqah.com" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h25v25H0z"/><path stroke="#07080a" d="M0 0.5h7m1 0h3m3 0h1m1 0h1m1 0h7M0 1.5h1m5 0h1m2 0h1m1 0h1m1 0h2m3 0h1m5 0h1M0 2.5h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h4m1 0h1m1 0h3m1 0h1M0 3.5h1m1 0h3m1 0h1m3 0h2m1 0h3m2 0h1m1 0h3m1 0h1M0 4.5h1m1 0h3m1 0h1m2 0h1m2 0h3m3 0h1m1 0h3m1 0h1M0 5.5h1m5 0h1m1 0h2m3 0h1m2 0h1m1 0h1m5 0h1M0 6.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M9 7.5h1m1 0h2m1 0h1M0 8.5h1m1 0h1m3 0h2m1 0h3m3 0h2m2 0h1m2 0h1m1 0h1M4 9.5h1m2 0h1m1 0h1m1 0h3m1 0h5m1 0h1m1 0h2M0 10.5h7m1 0h1m3 0h1m2 0h1m2 0h1m2 0h2m1 0h1M1 11.5h1m2 0h2m2 0h2m1 0h2m1 0h1m2 0h3m1 0h1M2 12.5h2m2 0h1m1 0h3m4 0h1m2 0h1m5 0h1M4 13.5h2m1 0h1m2 0h1m2 0h1m1 0h5m3 0h2M0 14.5h2m4 0h1m1 0h1m2 0h1m1 0h1m1 0h2m1 0h1m2 0h2m1 0h1M3 15.5h3m1 0h1m1 0h2m3 0h8M0 16.5h3m2 0h2m1 0h2m1 0h2m1 0h1m1 0h5m2 0h1M8 17.5h2m2 0h2m2 0h1m3 0h1m3 0h1M0 18.5h7m1 0h3m1 0h1m3 0h1m1 0h1m1 0h1m3 0h1M0 19.5h1m5 0h1m4 0h2m1 0h3m3 0h1m3 0h1M0 20.5h1m1 0h3m1 0h1m2 0h2m2 0h8m3 0h1M0 21.5h1m1 0h3m1 0h1m2 0h2m2 0h1m1 0h1m4 0h1m1 0h2M0 22.5h1m1 0h3m1 0h1m1 0h1m2 0h1m3 0h3m1 0h3m1 0h2M0 23.5h1m5 0h1m2 0h1m3 0h1m2 0h5M0 24.5h7m1 0h6m2 0h2m3 0h1m2 0h1"/></svg></div>
+    <p>SCAN TO VISIT</p>
+    <div class="ar">امسح لزيارة موقعنا</div>
+  </div>
+</section>
+
+</body>
+</html>

@@ -8,7 +8,7 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent))
-from build_product_pages import PRODUCTS, localize  # noqa: E402
+from build_product_pages import PRODUCTS, localize, net_icon  # noqa: E402
 sys.path.insert(0, str(HERE.parent / 'profile'))
 from build_profile_ar import RTL_CSS  # noqa: E402
 
@@ -133,6 +133,50 @@ ul.ticks li::before { content: ''; position: absolute; left: 0; top: 1.6mm; widt
 .ring-two .phone img { border: 0; }
 .mt-s { margin-top: 4mm; }
 .sub2 { font-size: 13pt; margin: 7mm 0 3.5mm; }
+/* multi-counter / multi-shop diagram (SELLO Retail) */
+.mnet { display: grid; grid-template-columns: minmax(0, 1fr) 27mm 36mm; align-items: stretch; background: var(--ink); color: #e9edf0; padding: 4mm 5mm; }
+.mnet-shops { display: grid; grid-auto-rows: 1fr; gap: 3mm; }
+.mnet-shop { position: relative; display: grid; grid-template-columns: auto minmax(14mm, 1fr) auto; align-items: stretch;
+    padding: 5.5mm 0 2.2mm; padding-inline-start: 3mm; border: 0.3mm dashed #4a545e; border-radius: 2.5mm; }
+.mnet-tag { position: absolute; top: 1.8mm; inset-inline-start: 3mm; font-family: var(--mono); font-size: 6.4pt; letter-spacing: .1em; text-transform: uppercase; color: #aab3bc; }
+.mnet-counters { display: flex; flex-direction: column; gap: 1.2mm; justify-content: center; }
+.mnet-node { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6mm; text-align: center;
+    border: 0.3mm solid #3a434c; border-radius: 1.8mm; background: #12161a; padding: 2mm 2.4mm; }
+.mnet-node svg { width: 6mm; height: 6mm; color: var(--lime); }
+.mnet-node b { font-family: var(--display); font-size: 8pt; line-height: 1.15; color: #fff; }
+.mnet-node small { font-size: 6.4pt; line-height: 1.25; color: #aab3bc; }
+.mnet-counters .mnet-node { flex-direction: row; gap: 1.6mm; padding: 0.9mm 2.2mm; text-align: start; }
+.mnet-counters .mnet-node svg { width: 4.4mm; height: 4.4mm; flex: none; }
+.mnet-counters .mnet-node b { font-size: 7.4pt; }
+.mnet-counters .mnet-node span { display: flex; flex-direction: column; }
+.mnet-bo { align-self: center; margin-inline-end: 4mm; border-color: #4d8dff; }
+.mnet-bo svg { color: #4d8dff; }
+.mnet-bo::after { content: ''; position: absolute; top: 50%; inset-inline-start: 100%; width: 4.4mm; border-top: 0.4mm solid #4a545e; }
+.mnet-ho { align-self: center; border-color: var(--lime); background: rgba(182, 255, 59, .08); padding: 3.5mm 2.5mm; }
+.mnet-ho svg { width: 8mm; height: 8mm; }
+.mnet-ho b { font-size: 9pt; }
+.mnet-link { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5.5mm; padding: 0 1.2mm; text-align: center; }
+.mnet-link b { font-family: var(--mono); font-size: 6.4pt; letter-spacing: .06em; text-transform: uppercase; color: #fff; line-height: 1.2; }
+.mnet-link small { font-size: 6.2pt; color: #aab3bc; line-height: 1.25; }
+.mnet-line { position: absolute; top: 50%; inset-inline: 0; border-top: 0.5mm dashed var(--lime); }
+.mnet-lan .mnet-line { border-color: #4d8dff; inset-inline-start: 2.4mm; }
+.mnet-lan::before { content: ''; position: absolute; inset-inline-start: 0; width: 2.4mm;
+    top: calc((100% - (var(--n) - 1) * 1.2mm) / var(--n) / 2); bottom: calc((100% - (var(--n) - 1) * 1.2mm) / var(--n) / 2);
+    border: 0.4mm solid #4a545e; border-inline-start: 0; border-start-end-radius: 1.5mm; border-end-end-radius: 1.5mm; }
+.mnet-bracket { position: absolute; inset-inline-start: 0; width: 3.4mm; top: calc((100% - 3mm) / 4); bottom: calc((100% - 3mm) / 4);
+    border: 0.4mm solid #4a545e; border-inline-start: 0; border-start-end-radius: 2mm; border-end-end-radius: 2mm; }
+.mnet-wan .mnet-line { inset-inline-start: 3.4mm; }
+.tiers3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3.5mm; }
+.tiers3 > div { border: 0.3mm solid var(--line); border-top: 1.2mm solid var(--navy); padding: 4mm; }
+.tiers3 > div:nth-child(2) { border-top-color: #4d8dff; }
+.tiers3 > div:nth-child(3) { border-top-color: var(--lime); }
+.tiers3 .step { font-family: var(--mono); font-size: 7.5pt; font-weight: 700; color: var(--lime-dk); }
+.tiers3 h3 { font-size: 10.5pt; margin-top: 1mm; }
+.tiers3 .apps { font-family: var(--mono); font-size: 7.2pt; color: var(--navy); margin: 1mm 0 2.5mm; }
+.tiers3 ul.ticks { gap: 1.4mm; }
+.tiers3 ul.ticks li { font-size: 8.3pt; line-height: 1.4; }
+.ed-note { margin-top: 4mm; background: var(--soft); border-inline-start: 1mm solid var(--lime); padding: 3mm 4mm; font-size: 8.8pt; color: var(--text); }
+.ed-note b { color: var(--ink); }
 '''
 
 
@@ -217,16 +261,48 @@ def overview(p, n, kicker, image_html):
         {image_html}''', n, p['name'])
 
 
-def features_page(p, n, kicker, cols='', extra=''):
+def features_page(p, n, kicker, cols='', extra='', steps=True):
     feats = ''.join(f'<div data-n="{i:02d}"><h3>{t}</h3><p>{d}</p></div>' for i, (t, d) in enumerate(p['features'], 1))
-    steps = ''.join(f'<li>{s}</li>' for s in p['steps'])
+    flow = (f'''<h3 class="sub2">{tr('How it works', 'كيف يعمل')}</h3>
+        <ol class="flow">{''.join(f'<li>{s}</li>' for s in p['steps'])}</ol>''') if steps else ''
     return page(f'''
         <div class="kicker">{kicker}</div>
         <h2>{tr('Key <em>features</em>', 'أهم <em>المزايا</em>')}</h2>
         <div class="fgrid {cols}">{feats}</div>
-        <h3 class="sub2">{tr('How it works', 'كيف يعمل')}</h3>
-        <ol class="flow">{steps}</ol>
+        {flow}
         {extra}''', n, p['name'], geo='trbl')
+
+
+def multishop_page(p, n, kicker):
+    """SELLO Retail: POS counters -> Back Office -> Head Office diagram, the three setups and the editions note."""
+    d = p['network']
+
+    def node(kind, title, sub, cls):
+        return f'<div class="mnet-node {cls}">{net_icon(kind)}<b>{title}</b><small>{sub}</small></div>'
+
+    def counter(i, kind):
+        return f'<div class="mnet-node">{net_icon(kind)}<span><b>{d["pos"].format(n=i)}</b><small>{d[kind]}</small></span></div>'
+
+    def shop(num, kinds):
+        return (f'<div class="mnet-shop" style="--n:{len(kinds)}"><span class="mnet-tag">{d["shop"].format(n=num)}</span>'
+                f'<div class="mnet-counters">{"".join(counter(i, k) for i, k in enumerate(kinds, 1))}</div>'
+                f'<div class="mnet-link mnet-lan"><i class="mnet-line"></i><b>{d["lan"]}</b><small>{d["lan_sub"]}</small></div>'
+                f'{node("bo", d["bo"], d["bo_sub"], "mnet-bo")}</div>')
+    tiers = ''.join(f'<div><span class="step">{i:02d}</span><h3>{t}</h3><p class="apps">{a}</p>'
+                    f'<ul class="ticks">{"".join(f"<li>{x}</li>" for x in pts)}</ul></div>'
+                    for i, (t, a, pts) in enumerate(d['tiers'], 1))
+    return page(f'''
+        <div class="kicker">{kicker}</div>
+        <h2>{tr('Grow to <em>many shops</em>', 'انمُ إلى <em>عدة فروع</em>')}</h2>
+        <p class="lead" style="margin-bottom:5mm">{d['intro']}</p>
+        <div class="mnet">
+            <div class="mnet-shops">{shop(1, ['pc', 'pc', 'tab'])}{shop(2, ['pc', 'tab'])}</div>
+            <div class="mnet-link mnet-wan"><span class="mnet-bracket"></span><i class="mnet-line"></i><b>{d['wan']}</b><small>{d['wan_sub']}</small></div>
+            {node('ho', d['ho'], d['ho_sub'], 'mnet-ho')}
+        </div>
+        <h3 class="sub2">{d['tiers_h']}</h3>
+        <div class="tiers3">{tiers}</div>
+        <p class="ed-note">{d['note']}</p>''', n, p['name'], geo='tl')
 
 
 def closing(p, n, faq_max=None):
@@ -256,7 +332,9 @@ ul.ticks li::before { left: auto; right: 0; }
 .cap b { margin-right: 0; margin-left: 1.5mm; }
 .cta-strip .contacts { text-align: left; }
 .tour-row .tag, .fgrid div::before, .phones3 figcaption b, .phones4 figcaption b, .hwgrid figcaption b, .cap b,
-.net .node b, .chips span, .cover .facts span { text-transform: none; letter-spacing: 0; }
+.net .node b, .chips span, .cover .facts span, .mnet-tag, .mnet-link b { text-transform: none; letter-spacing: 0; }
+.mnet-tag, .mnet-link b, .tiers3 .apps { font-family: var(--body); }
+.tiers3 .apps { direction: ltr; text-align: right; }
 .tour-row .tag, .chips span, .net .link { font-family: var(--body); }
 .cover .facts b { font-family: 'Chakra Petch', var(--display); direction: ltr; unicode-bidi: isolate; text-align: right; }
 .flow li::before { font-family: 'Chakra Petch', sans-serif; }
@@ -541,16 +619,17 @@ def sello_retail():
         <div class="tablets2">{tabs}</div>
         <h3 class="sub2">{tr('On the phone', 'على الجوال')}</h3>
         <div class="phones4 phones4-sm">{phones}</div>''', 5, p['name']),
-        features_page(p, 6, tr('04 &middot; Capabilities', '04 &middot; الإمكانات'), cols='compact'),
+        features_page(p, 6, tr('04 &middot; Capabilities', '04 &middot; الإمكانات'), cols='compact', steps=False),
+        multishop_page(p, 7, tr('05 &middot; Grow with SELLO Retail', '05 &middot; انمُ مع SELLO Retail')),
         page(f'''
-        <div class="kicker">{tr('05 &middot; The devices', '05 &middot; الأجهزة')}</div>
+        <div class="kicker">{tr('06 &middot; The devices', '06 &middot; الأجهزة')}</div>
         <h2>{tr('POS <em>hardware</em>', 'أجهزة <em>نقاط البيع</em>')}</h2>
         <p class="lead" style="margin-bottom:5mm">{tr('We supply the POS hardware, install SELLO Retail, set up your products and taxes, and train your staff.', 'نوفّر أجهزة نقاط البيع، ونثبّت SELLO Retail، ونُعدّ منتجاتك وضرائبك، وندرّب موظفيك.')}</p>
         <div class="hwgrid">{hw}</div>
         <h3 class="sub2">{tr('Works with', 'يعمل مع')}</h3>
         <div class="callouts">{dev_html}</div>
-        <div class="incl mt-s"><span class="kicker">{tr('Every POS package includes', 'تشمل كل باقة نقاط بيع')}</span><ul>{incl.replace('SELLO software', 'SELLO Retail').replace('برنامج SELLO', 'برنامج SELLO Retail')}</ul></div>''', 7, p['name'], geo='tl'),
-        closing(p, 8, faq_max=tr(6, 5)),
+        <div class="incl mt-s"><span class="kicker">{tr('Every POS package includes', 'تشمل كل باقة نقاط بيع')}</span><ul>{incl.replace('SELLO software', 'SELLO Retail').replace('برنامج SELLO', 'برنامج SELLO Retail')}</ul></div>''', 8, p['name'], geo='tr'),
+        closing(p, 9, faq_max=4),
     ]
     return html_doc(tr('SELLO Retail - Product Brochure', 'SELLO Retail - كتيّب المنتج'), ''.join(pages))
 

@@ -732,3 +732,78 @@ footer { margin-top: 130px; border-top: 1px solid var(--line); background: var(-
 .rc-os span { font: 600 .62em/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent);
     border: 1px solid rgba(182, 255, 59, .35); padding: .45em .6em; background: rgba(7, 8, 10, .7); }
 @container (max-aspect-ratio: 5/4) { .rc-toast { width: 62cqw; } }
+
+/* ---------- Product page: multi-counter / multi-shop diagram (build_product_pages.network_section) ---------- */
+.net { --flow: var(--accent); --gap: 22px; display: grid; grid-template-columns: minmax(0, 1fr) clamp(120px, 14vw, 190px) auto;
+    align-items: stretch; margin: 0; padding: 30px; border: 1px solid var(--line-2); background:
+    radial-gradient(circle at 85% 50%, var(--accent-soft), transparent 45%), var(--panel); }
+.net-shops { display: grid; grid-auto-rows: 1fr; gap: var(--gap); }
+.net-shop { position: relative; display: grid; grid-template-columns: auto minmax(90px, 1fr) auto; align-items: stretch;
+    padding: 34px 0 18px 18px; padding-inline: 18px 0; border: 1px dashed var(--line-2); border-radius: 12px; background: rgba(7, 8, 10, .45); }
+.net-shop-tag { position: absolute; top: 10px; inset-inline-start: 14px; font: 600 .68rem/1 var(--font-mono); letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted); }
+.net-counters { display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+.net-node { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    min-width: 104px; padding: 10px 12px; text-align: center; border: 1px solid var(--line-2); border-radius: 10px; background: var(--bg-2); }
+.net-node svg { color: var(--accent); margin-bottom: 2px; }
+.net-node b { font: 600 .82rem/1.2 var(--font-display); color: var(--text); }
+.net-node small { font-size: .7rem; line-height: 1.3; color: var(--muted); }
+.net-counters .net-node { flex-direction: row; gap: 8px; min-width: 0; padding: 7px 12px; text-align: start; }
+.net-counters .net-node svg { width: 20px; height: 20px; margin: 0; flex: none; }
+.net-counters .net-node b { font-size: .76rem; }
+.net-counters .net-node small { display: block; font-size: .64rem; }
+.net-counters .net-node b + small { margin-inline-start: -4px; }
+.net-bo { align-self: center; margin-inline-end: 22px; border-color: rgba(77, 141, 255, .55); box-shadow: 0 0 0 4px rgba(77, 141, 255, .08); }
+.net-bo svg { color: var(--blue); }
+.net-bo::after { content: ""; position: absolute; top: 50%; inset-inline-start: 100%; width: 24px; height: 2px; background: var(--line-2); }
+.net-ho { align-self: center; min-width: 150px; padding: 18px 16px; border-color: var(--accent); box-shadow: 0 0 0 5px var(--accent-soft), 0 0 40px var(--accent-soft); }
+.net-ho svg { width: 34px; height: 34px; }
+.net-ho b { font-size: .95rem; }
+/* links: an animated dashed line with a label above and a note below */
+.net-link { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px;
+    padding: 0 8px; text-align: center; }
+.net-link b { font: 600 .7rem/1.2 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--text); }
+.net-link small { font-size: .68rem; line-height: 1.3; color: var(--muted); }
+.net-flow { position: absolute; top: 50%; inset-inline: 0; height: 2px; margin-top: -1px;
+    background: repeating-linear-gradient(90deg, var(--flow) 0 7px, transparent 7px 15px) 0 0 / 15px 2px;
+    animation: net-flow .9s linear infinite; opacity: .9; }
+[dir="rtl"] .net-flow { animation-direction: reverse; }
+.net-lan { --flow: var(--blue); }
+/* counters -> one line: a bracket joining the first and the last counter */
+.net-lan::before { content: ""; position: absolute; inset-inline-start: 0; width: 12px;
+    top: calc((100% - (var(--n) - 1) * 8px) / var(--n) / 2); bottom: calc((100% - (var(--n) - 1) * 8px) / var(--n) / 2);
+    border: 2px solid var(--line-2); border-inline-start: 0; border-start-end-radius: 8px; border-end-end-radius: 8px; }
+.net-lan .net-flow { inset-inline-start: 12px; }
+/* back offices -> head office: bracket joining both shops */
+.net-wan .net-bracket { position: absolute; inset-inline-start: 0; width: 18px; top: calc((100% - var(--gap)) / 4); bottom: calc((100% - var(--gap)) / 4);
+    border: 2px solid var(--line-2); border-inline-start: 0; border-start-end-radius: 10px; border-end-end-radius: 10px; }
+.net-wan .net-flow { inset-inline-start: 18px; }
+@keyframes net-flow { to { background-position: 15px 0; } }
+/* the three setups */
+.net-tiers-h { margin: 34px 0 14px; font: 600 1.15rem/1.3 var(--font-display); }
+.net-tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.net-tier { padding: 22px; border: 1px solid var(--line-2); background: var(--panel); }
+.net-step { font: 700 .75rem/1 var(--font-mono); color: var(--accent); letter-spacing: .1em; }
+.net-tier h3 { margin: 10px 0 4px; font: 600 1.05rem/1.3 var(--font-display); }
+.net-apps { margin: 0 0 12px; font: 500 .78rem/1.4 var(--font-mono); color: var(--blue); }
+[dir="rtl"] .net-apps { direction: ltr; text-align: right; }
+.net-note { margin-top: 18px; padding: 14px 18px; border-inline-start: 3px solid var(--accent); background: var(--accent-soft);
+    color: var(--muted); font-size: .9rem; }
+.net-note b { color: var(--text); }
+@media (max-width: 980px) { .net-tiers { grid-template-columns: 1fr; } }
+/* phones: top-to-bottom - counters, shop network, back office, internet, head office */
+@media (max-width: 760px) {
+    .net { grid-template-columns: 1fr; padding: 18px; }
+    .net-shop { grid-template-columns: 1fr; padding: 32px 14px 14px; justify-items: center; }
+    .net-counters { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+    .net-bo { margin-inline-end: 0; }
+    .net-bo::after, .net-lan::before, .net-wan .net-bracket { display: none; }
+    .net-link { min-height: 84px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; column-gap: 30px; align-items: center; padding: 6px 0; }
+    .net-link b { text-align: end; } .net-link small { text-align: start; }
+    .net-flow, .net-lan .net-flow, .net-wan .net-flow { top: 0; bottom: 0; inset-inline: auto; left: 50%; width: 2px; height: auto; margin: 0 0 0 -1px;
+        background: repeating-linear-gradient(180deg, var(--flow) 0 7px, transparent 7px 15px) 0 0 / 2px 15px; animation-name: net-flow-v; }
+    [dir="rtl"] .net-flow { animation-direction: normal; }
+    .net-ho { justify-self: center; }
+}
+@keyframes net-flow-v { to { background-position: 0 15px; } }
+@media (prefers-reduced-motion: reduce) { .net-flow { animation: none; } }
